@@ -1,0 +1,25 @@
+{
+  "name": "deal-lang",
+  "displayName": "Deal Lang",
+  "description": "Syntax highlighter for the Deal language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.108.1"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "deal",
+      "aliases": ["Deal", "deal"],
+      "extensions": [".deal"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "deal",
+      "scopeName": "source.deal",
+      "path": "./syntaxes/deal.tmLanguage.json"
+    }]
+  }
+}

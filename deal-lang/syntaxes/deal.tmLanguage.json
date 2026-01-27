@@ -22,6 +22,12 @@
 		},
 		{
 			"include": "#functions"
+		},
+		{
+			"include": "#properties"
+		},
+		{
+			"include": "#ids"
 		}
 	],
 	"repository": {
@@ -65,7 +71,7 @@
 		"players": {
 			"patterns": [
 				{
-					"name": "variable.other.object.deal",
+					"name": "variable.other.deal",
 					"match": "<[^>]*>"
 				}
 			]
@@ -75,6 +81,22 @@
 				{
 					"name": "constant.language.deal",
 					"match": "#[A-Za-z0-9#]+"
+				}
+			]
+		},
+		"properties": {
+			"patterns": [
+				{
+					"name": "support.property-value",
+					"match": "\\.[a-z]+"
+				}
+			]
+		},
+		"ids": {
+			"patterns": [
+				{
+					"name": "variable.other.deal",
+					"match": "[A-Za-z]+"
 				}
 			]
 		}

@@ -7,7 +7,7 @@
     "vscode": "^1.108.1"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
@@ -17,7 +17,18 @@
         "command": "dealer.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "languages": [{
+      "id": "deal",
+      "aliases": ["Deal", "deal"],
+      "extensions": [".deal"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "deal",
+      "scopeName": "source.deal",
+      "path": "./syntaxes/deal.tmLanguage.json"
+    }]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

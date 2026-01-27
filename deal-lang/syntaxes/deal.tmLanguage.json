@@ -10,13 +10,37 @@
 		},
 		{
 			"include": "#comments"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#players"
+		},
+		{
+			"include": "#cards"
+		},
+		{
+			"include": "#functions"
 		}
 	],
 	"repository": {
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.deal",
-				"match": "\\b(if|while|for|return)\\b"
+				"match": "\\b(if|cancel|else|on|define)\\b"
+			}]
+		},
+		"functions": {
+			"patterns": [{
+				"name": "entity.name.function.deal",
+				"match": "\\b(move|deal)\\b"
+			}]
+		},
+		"types": {
+			"patterns": [{
+				"name": "storage.type.deal",
+				"match": "\\b(int|string|card|area|action)\\b"
 			}]
 		},
 		"strings": {
@@ -35,6 +59,22 @@
 				{
 					"name": "comment.line.double-slash",
 					"match": "//.*$"
+				}
+			]
+		},
+		"players": {
+			"patterns": [
+				{
+					"name": "variable.other.object.deal",
+					"match": "<[^>]*>"
+				}
+			]
+		},
+		"cards": {
+			"patterns": [
+				{
+					"name": "constant.language.deal",
+					"match": "#[A-Za-z0-9#]+"
 				}
 			]
 		}

@@ -34,7 +34,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.deal",
-				"match": "\\b(if|cancel|else|on|define|for|in)\\b"
+				"match": "\\b(if|cancel|else|on|define|for|in|empty|return)\\b"
 			}]
 		},
 		"functions": {

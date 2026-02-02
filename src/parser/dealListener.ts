@@ -13,9 +13,11 @@ import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
+import { UpdateTurnContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
+import { PropertyContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { AexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
@@ -141,6 +143,17 @@ export interface dealListener extends ParseTreeListener {
 	exitIf?: (ctx: IfContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `dealParser.updateTurn`.
+	 * @param ctx the parse tree
+	 */
+	enterUpdateTurn?: (ctx: UpdateTurnContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.updateTurn`.
+	 * @param ctx the parse tree
+	 */
+	exitUpdateTurn?: (ctx: UpdateTurnContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `dealParser.arearef`.
 	 * @param ctx the parse tree
 	 */
@@ -172,6 +185,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTerm?: (ctx: TermContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.property`.
+	 * @param ctx the parse tree
+	 */
+	enterProperty?: (ctx: PropertyContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.property`.
+	 * @param ctx the parse tree
+	 */
+	exitProperty?: (ctx: PropertyContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.bexpr`.

@@ -5,25 +5,26 @@ SPACES: [\t\r\n ]+ -> skip;
 NEWLINE: [\r\n]+ -> skip;
 
 prog: stmt* EOF ;
-stmt: (definition | move | on_action | on_move | for | if | assign | 'cancel') ';';
+stmt: (definition | move | on_action | on_move | for | if | assign | updateTurn | 'cancel') ';';
 
 player: '<' ('/' | '.' | '@' | aexpr) '>';
 
 assign: ID '=' term;
 definition: 'define' ('area' | 'action' | 'int' | 'string') ID ;
-move: 'move' (CARD | position) position;
+move: 'move' (CARD | position | positionset) position;
 on_action: 'on' ID '{' stmt* '}';
 on_move: 'on' 'move' move_catch move_catch '{' stmt* '}';
 for: 'for' ID 'in' set '{' stmt* '}';
 if: 'if' bexpr '{' stmt* '}' 'else' '{' stmt* '}'
     | 'if' bexpr '{' stmt* '}';
-
+updateTurn: '<' '.' '>'  ( '++' | '=' player)  ;
 
 
 arearef: ID | player;
 position: arearef '[' aexpr ',' aexpr ']';
 
-term: aexpr | player | position ;
+term: aexpr | player | position | '\\' | '/' | property;
+property: (CARD | player | position) '.' ID;
 
 bexpr: term ('==' | '!=' | '<<' | '<=' | '>=' | '>>') term;
 aexpr: ID | NUMBER;

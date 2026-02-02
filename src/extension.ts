@@ -61,6 +61,9 @@ function runParser(
 			charPositionInLine + 1
 		);
 
+		console.log("offending symbol");
+		console.log(offendingSymbol);
+
 		diagnostics.push(
 			new vscode.Diagnostic(
 				range,

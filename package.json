@@ -9,7 +9,9 @@
   "categories": [
     "Programming Languages"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:deal"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -18,17 +20,26 @@
         "title": "Hello World"
       }
     ],
-    "languages": [{
-      "id": "deal",
-      "aliases": ["Deal", "deal"],
-      "extensions": [".deal"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "deal",
-      "scopeName": "source.deal",
-      "path": "./syntaxes/deal.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "deal",
+        "aliases": [
+          "Deal",
+          "deal"
+        ],
+        "extensions": [
+          ".deal"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "deal",
+        "scopeName": "source.deal",
+        "path": "./syntaxes/deal.tmLanguage.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -39,13 +50,16 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.108.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.52.0",
+    "@types/vscode": "^1.108.1",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.39.2",
     "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "typescript-eslint": "^8.52.0"
+  },
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4"
   }
 }

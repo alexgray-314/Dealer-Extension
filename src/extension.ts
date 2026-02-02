@@ -1,6 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { CharStreams } from 'antlr4ts/CharStreams';
 import * as vscode from 'vscode';
+import { dealLexer } from './parser/dealLexer';
+import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
+import { dealParser } from './parser/dealParser';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -20,7 +24,51 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+	const diagnosticCollection = vscode.languages.createDiagnosticCollection('deal');
+	vscode.workspace.onDidChangeTextDocument(e => {
+      runParser(e.document, diagnosticCollection);
+    });
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+function runParser(
+	document: vscode.TextDocument,
+	collection: vscode.DiagnosticCollection
+) {
+  	const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+  	const tokens = new CommonTokenStream(lexer);
+  	const parser = new dealParser(tokens);
+
+	collection.clear();
+
+	parser.removeErrorListeners();
+	parser.addErrorListener({
+		syntaxError(
+		recognizer,
+		offendingSymbol,
+		line,
+		charPositionInLine,
+		msg
+		) {
+		const range = new vscode.Range(
+			line - 1,
+			charPositionInLine,
+			line - 1,
+			charPositionInLine + 1
+		);
+
+		collection.set(document.uri, [
+			new vscode.Diagnostic(
+			range,
+			msg,
+			vscode.DiagnosticSeverity.Error
+			)
+		]);
+		}
+	});
+
+	parser.prog(); // entry rule
+
+}

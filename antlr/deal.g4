@@ -11,8 +11,9 @@ CARD: '#' ('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs] ;
 
 prog: stmts EOF ;
 stmts: stmt stmts | ; // nullable
-stmt: definition | move | on_action | on_move | for | if | 'cancel';
+stmt: definition | move | on_action | on_move | for | if | assign | 'cancel';
 
+assign: ID '=' term;
 definition: 'define' ('area' | 'action' | 'int' | 'string') ID ;
 move: 'move' (CARD | position) position;
 on_action: 'on' ID '{' stmts '}';
@@ -21,16 +22,19 @@ for: 'for' ID 'in' set '{' stmts '}';
 if: 'if' bexpr '{' stmts '}'
     | 'if' bexpr '{' stmts '}' 'else' '{' stmts '}';
 
-player: '<' (NUMBER | '/' | '.' | '@') '>';
+player: '<' (aexpr | '/' | '.' | '@') '>';
 
 arearef: ID | player;
-position: arearef '[' NUMBER ',' NUMBER ']';
+position: arearef '[' aexpr ',' aexpr ']';
 
-term: NUMBER | position | ID;
+term: aexpr | position | ID | player;
 
 bexpr: term ('==' | '!=' | '<<' | '<=' | '>=' | '>>') term;
+aexpr: ID | NUMBER;
 
-set: intset;
-intset: NUMBER ':' NUMBER;
+set: intset | positionset | playerset;
+intset: aexpr ':' aexpr;
+positionset: arearef '[' aexpr ':' aexpr ',' aexpr ':' aexpr ']';
+playerset: '<' '*' '>';
 
 move_catch: '?' | position ;

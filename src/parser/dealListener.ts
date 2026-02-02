@@ -6,6 +6,7 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { ProgContext } from "./dealParser";
 import { StmtsContext } from "./dealParser";
 import { StmtContext } from "./dealParser";
+import { AssignContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
 import { On_actionContext } from "./dealParser";
@@ -17,8 +18,11 @@ import { ArearefContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
+import { AexprContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
+import { PositionsetContext } from "./dealParser";
+import { PlayersetContext } from "./dealParser";
 import { Move_catchContext } from "./dealParser";
 
 
@@ -59,6 +63,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStmt?: (ctx: StmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.assign`.
+	 * @param ctx the parse tree
+	 */
+	enterAssign?: (ctx: AssignContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.assign`.
+	 * @param ctx the parse tree
+	 */
+	exitAssign?: (ctx: AssignContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.definition`.
@@ -182,6 +197,17 @@ export interface dealListener extends ParseTreeListener {
 	exitBexpr?: (ctx: BexprContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `dealParser.aexpr`.
+	 * @param ctx the parse tree
+	 */
+	enterAexpr?: (ctx: AexprContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.aexpr`.
+	 * @param ctx the parse tree
+	 */
+	exitAexpr?: (ctx: AexprContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `dealParser.set`.
 	 * @param ctx the parse tree
 	 */
@@ -202,6 +228,28 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIntset?: (ctx: IntsetContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.positionset`.
+	 * @param ctx the parse tree
+	 */
+	enterPositionset?: (ctx: PositionsetContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.positionset`.
+	 * @param ctx the parse tree
+	 */
+	exitPositionset?: (ctx: PositionsetContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.playerset`.
+	 * @param ctx the parse tree
+	 */
+	enterPlayerset?: (ctx: PlayersetContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.playerset`.
+	 * @param ctx the parse tree
+	 */
+	exitPlayerset?: (ctx: PlayersetContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.move_catch`.

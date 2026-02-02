@@ -1,10 +1,19 @@
 grammar deal;	
 
-prog:	expr EOF ;
+prog: stmt EOF ;
+stmt: definition;
+definition: 'define' TYPE ID ;
+
 expr:	expr ('*'|'/') expr
     |	expr ('+'|'-') expr
-    |	INT
+    |	NUMBER
     |	'(' expr ')'
     ;
-NEWLINE : [\r\n]+ -> skip;
-INT     : [0-9]+ ;
+
+TYPE: 'area' | 'action' | 'int' | 'string';
+
+NUMBER: [0-9]+ ;
+ID: [a-zA-Z]+ ;
+
+SPACES: [\t\r\n ]+ -> skip;
+NEWLINE: [\r\n]+ -> skip;

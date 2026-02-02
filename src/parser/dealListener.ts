@@ -4,8 +4,8 @@
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { ProgContext } from "./dealParser";
-import { StmtsContext } from "./dealParser";
 import { StmtContext } from "./dealParser";
+import { PlayerContext } from "./dealParser";
 import { AssignContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
@@ -13,7 +13,6 @@ import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
-import { PlayerContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
 import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
@@ -43,17 +42,6 @@ export interface dealListener extends ParseTreeListener {
 	exitProg?: (ctx: ProgContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `dealParser.stmts`.
-	 * @param ctx the parse tree
-	 */
-	enterStmts?: (ctx: StmtsContext) => void;
-	/**
-	 * Exit a parse tree produced by `dealParser.stmts`.
-	 * @param ctx the parse tree
-	 */
-	exitStmts?: (ctx: StmtsContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `dealParser.stmt`.
 	 * @param ctx the parse tree
 	 */
@@ -63,6 +51,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStmt?: (ctx: StmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.player`.
+	 * @param ctx the parse tree
+	 */
+	enterPlayer?: (ctx: PlayerContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.player`.
+	 * @param ctx the parse tree
+	 */
+	exitPlayer?: (ctx: PlayerContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.assign`.
@@ -140,17 +139,6 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIf?: (ctx: IfContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `dealParser.player`.
-	 * @param ctx the parse tree
-	 */
-	enterPlayer?: (ctx: PlayerContext) => void;
-	/**
-	 * Exit a parse tree produced by `dealParser.player`.
-	 * @param ctx the parse tree
-	 */
-	exitPlayer?: (ctx: PlayerContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.arearef`.

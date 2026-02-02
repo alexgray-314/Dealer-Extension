@@ -43,6 +43,8 @@ function runParser(
 
 	collection.clear();
 
+	let diagnostics: vscode.Diagnostic[] = [];
+
 	parser.removeErrorListeners();
 	parser.addErrorListener({
 		syntaxError(
@@ -59,16 +61,19 @@ function runParser(
 			charPositionInLine + 1
 		);
 
-		collection.set(document.uri, [
+		diagnostics.push(
 			new vscode.Diagnostic(
-			range,
-			msg,
-			vscode.DiagnosticSeverity.Error
+				range,
+				msg,
+				vscode.DiagnosticSeverity.Error
 			)
-		]);
+		);
 		}
 	});
 
 	parser.prog(); // entry rule
+	
 
+	collection.set(document.uri, diagnostics);
+	
 }

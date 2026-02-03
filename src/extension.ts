@@ -54,23 +54,24 @@ function runParser(
 		charPositionInLine,
 		msg
 		) {
-		const range = new vscode.Range(
-			line - 1,
-			charPositionInLine,
-			line - 1,
-			charPositionInLine + 1
-		);
 
-		console.log("offending symbol");
-		console.log(offendingSymbol);
+			const length : number = Math.max((((offendingSymbol?.text)??"").length), 1);
 
-		diagnostics.push(
-			new vscode.Diagnostic(
-				range,
-				msg,
-				vscode.DiagnosticSeverity.Error
-			)
-		);
+			const range = new vscode.Range(
+				line - 1,
+				charPositionInLine,
+				line - 1,
+				charPositionInLine + length
+			);
+
+
+			diagnostics.push(
+				new vscode.Diagnostic(
+					range,
+					msg,
+					vscode.DiagnosticSeverity.Error
+				)
+			);
 		}
 	});
 

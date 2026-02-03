@@ -16,8 +16,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "dealer.helloWorld",
-        "title": "Hello World"
+        "command": "dealer.listener",
+        "title": "Walk through the AST for this file"
       }
     ],
     "languages": [

@@ -6,6 +6,9 @@ import { dealLexer } from './parser/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './parser/dealParser';
 import { DebugOutputVisitor } from './debugOutputVisitor';
+import { BasicListener } from './basicListener';
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { dealListener } from './parser/dealListener';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -18,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('dealer.visit', () => {
+	const visitCommand = vscode.commands.registerCommand('dealer.visit', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		const editor = vscode.window.activeTextEditor;
@@ -31,12 +34,29 @@ export function activate(context: vscode.ExtensionContext) {
 			const tree = parser.prog();
 			const visitor : DebugOutputVisitor = new DebugOutputVisitor();
 			visitor.visit(tree);
-			vscode.window.showInformationMessage('Hello World from Dealer!');
 		}
 		
 	});
 
-	context.subscriptions.push(disposable);
+	const listenCommand = vscode.commands.registerCommand('dealer.listener', () => {
+
+		const editor = vscode.window.activeTextEditor;
+
+		if (editor) {
+			const document : vscode.TextDocument = editor.document;
+			const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+			const tokens = new CommonTokenStream(lexer);
+			const parser = new dealParser(tokens);
+			const tree = parser.prog();
+			const listener : dealListener = new BasicListener();
+			ParseTreeWalker.DEFAULT.walk(listener, tree);
+			vscode.window.showInformationMessage('Hello World from Dealer!');
+		}
+
+	});
+
+	context.subscriptions.push(visitCommand);
+	context.subscriptions.push(listenCommand);
 	const diagnosticCollection = vscode.languages.createDiagnosticCollection('deal');
 	vscode.workspace.onDidChangeTextDocument(e => {
       runParser(e.document, diagnosticCollection);

@@ -22,5 +22,11 @@
 			"command": "antlr4ts ${workspaceFolder}/antlr/deal.g4 -o ${workspaceFolder}/src/parser",
 			"problemMatcher": []
 		},
+		{
+			"label": "build-visitor",
+			"type": "shell",
+			"command": "antlr4ts -visitor ${workspaceFolder}/antlr/deal.g4 -o ${workspaceFolder}/src/parser",
+			"problemMatcher": []
+		},
 	]
 }

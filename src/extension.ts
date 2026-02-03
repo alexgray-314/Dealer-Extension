@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { dealLexer } from './parser/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './parser/dealParser';
+import { DebugOutputVisitor } from './debugOutputVisitor';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -17,10 +18,22 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('dealer.helloWorld', () => {
+	const disposable = vscode.commands.registerCommand('dealer.visit', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Dealer!');
+		const editor = vscode.window.activeTextEditor;
+
+		if (editor) {
+			const document : vscode.TextDocument = editor.document;
+			const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+			const tokens = new CommonTokenStream(lexer);
+			const parser = new dealParser(tokens);
+			const tree = parser.prog();
+			const visitor : DebugOutputVisitor = new DebugOutputVisitor();
+			visitor.visit(tree);
+			vscode.window.showInformationMessage('Hello World from Dealer!');
+		}
+		
 	});
 
 	context.subscriptions.push(disposable);

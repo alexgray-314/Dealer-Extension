@@ -43,14 +43,18 @@ export function activate(context: vscode.ExtensionContext) {
 		const editor = vscode.window.activeTextEditor;
 
 		if (editor) {
+		
+			const outputChannel : vscode.OutputChannel = vscode.window.createOutputChannel("Listener");
+
 			const document : vscode.TextDocument = editor.document;
 			const lexer = new dealLexer(CharStreams.fromString(document.getText()));
 			const tokens = new CommonTokenStream(lexer);
 			const parser = new dealParser(tokens);
 			const tree = parser.prog();
-			const listener : dealListener = new BasicListener();
+			const listener : dealListener = new BasicListener(outputChannel);
 			ParseTreeWalker.DEFAULT.walk(listener, tree);
-			vscode.window.showInformationMessage('Hello World from Dealer!');
+
+			outputChannel.show();
 		}
 
 	});

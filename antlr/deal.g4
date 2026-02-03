@@ -8,7 +8,11 @@ stmt:           (definition | move | on_action | on_move | for | if | 'cancel' |
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
 
 definition:     'define' ('area' | 'action' | 'int' | 'card') ID args? ;
-move:           'move' (CARD | position | positionset) position;
+
+move:           'move' source destination;
+source:         (CARD | position | positionset) ;
+destination:    position;
+
 on_action:      'on' ID '{' stmt* '}';
 on_move:        'on' 'move' move_catch move_catch '{' stmt* '}';
 for:            'for' ID 'in' set '{' stmt* '}';

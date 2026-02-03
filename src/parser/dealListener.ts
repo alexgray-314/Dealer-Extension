@@ -8,6 +8,8 @@ import { StmtContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
+import { SourceContext } from "./dealParser";
+import { DestinationContext } from "./dealParser";
 import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
@@ -90,6 +92,28 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitMove?: (ctx: MoveContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.source`.
+	 * @param ctx the parse tree
+	 */
+	enterSource?: (ctx: SourceContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.source`.
+	 * @param ctx the parse tree
+	 */
+	exitSource?: (ctx: SourceContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.destination`.
+	 * @param ctx the parse tree
+	 */
+	enterDestination?: (ctx: DestinationContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.destination`.
+	 * @param ctx the parse tree
+	 */
+	exitDestination?: (ctx: DestinationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.on_action`.

@@ -1,30 +1,21 @@
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { dealListener } from "./parser/dealListener";
-import { MoveContext } from "./parser/dealParser";
+import { MoveContext, SourceContext } from "./parser/dealParser";
+import { OutputChannel } from "vscode";
 
 export class BasicListener implements dealListener {
 
-    // Only override exitExpr if you want to print when leaving
-    exitMove(ctx: MoveContext) {
-        console.log(ctx.CARD()?.text);
-        this.printChildren(ctx);
+    output: OutputChannel;
+
+    constructor(outputChannel: OutputChannel) {
+        this.output = outputChannel;
     }
 
-    // Helper method to print children recursively
-    private printChildren(ctx: any) {
-        const children = ctx.children;
-        if (!children) {
-            console.log("No children");
-            return;
-        }
-
-        children.forEach((child: any, index: number) => {
-            if (child instanceof TerminalNode) {
-                console.log(`Child ${index}: Terminal = '${child.text}'`);
-            } else {
-                console.log(`Child ${index}: Non-terminal = '${child.text ?? child.constructor.name}'`);
-            }
-        });
+    // Only override exitExpr if you want to print when leaving
+    exitMove(ctx: MoveContext) {
+        this.output.appendLine("Moving");
+        this.output.appendLine("Source: " + ctx.source().text);
+        this.output.appendLine("Destination: " + ctx.destination().position().arearef()?.text);
     }
 
 }

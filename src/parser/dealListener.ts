@@ -1,4 +1,4 @@
-// Generated from deal.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from C:\Users\alexj\University\dealer/antlr/deal.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
@@ -13,6 +13,7 @@ import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
+import { UpdateTurnContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
@@ -142,6 +143,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIf?: (ctx: IfContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.updateTurn`.
+	 * @param ctx the parse tree
+	 */
+	enterUpdateTurn?: (ctx: UpdateTurnContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.updateTurn`.
+	 * @param ctx the parse tree
+	 */
+	exitUpdateTurn?: (ctx: UpdateTurnContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.args`.

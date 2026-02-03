@@ -15,6 +15,12 @@
 				"kind": "build",
 				"isDefault": true
 			}
-		}
+		},
+		{
+			"label": "build-parser",
+			"type": "shell",
+			"command": "antlr4ts ${workspaceFolder}/antlr/deal.g4 -o ${workspaceFolder}/src/parser",
+			"problemMatcher": []
+		},
 	]
 }

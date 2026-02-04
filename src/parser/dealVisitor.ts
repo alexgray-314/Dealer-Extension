@@ -28,6 +28,7 @@ import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
 import { AexprContext } from "./dealParser";
+import { AtermContext } from "./dealParser";
 import { SetContext } from "./dealParser";
 import { IntsetContext } from "./dealParser";
 import { PositionsetContext } from "./dealParser";
@@ -217,6 +218,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitAexpr?: (ctx: AexprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.aterm`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAterm?: (ctx: AtermContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.set`.

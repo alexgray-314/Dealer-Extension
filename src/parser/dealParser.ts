@@ -24,6 +24,8 @@ import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 import * as Utils from "antlr4ts/misc/Utils";
 
 import { dealListener } from "./dealListener";
+import { dealVisitor } from "./dealVisitor";
+
 
 export class dealParser extends Parser {
 	public static readonly T__0 = 1;
@@ -1785,6 +1787,14 @@ export class ProgContext extends ParserRuleContext {
 			listener.exitProg(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitProg) {
+			return visitor.visitProg(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -1833,6 +1843,14 @@ export class StmtContext extends ParserRuleContext {
 			listener.exitStmt(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitStmt) {
+			return visitor.visitStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -1855,6 +1873,14 @@ export class PlayerContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitPlayer) {
 			listener.exitPlayer(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitPlayer) {
+			return visitor.visitPlayer(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -1883,6 +1909,14 @@ export class DefinitionContext extends ParserRuleContext {
 			listener.exitDefinition(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitDefinition) {
+			return visitor.visitDefinition(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -1908,6 +1942,14 @@ export class MoveContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitMove) {
 			listener.exitMove(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitMove) {
+			return visitor.visitMove(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -1938,6 +1980,14 @@ export class SourceContext extends ParserRuleContext {
 			listener.exitSource(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitSource) {
+			return visitor.visitSource(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -1960,6 +2010,14 @@ export class DestinationContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitDestination) {
 			listener.exitDestination(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitDestination) {
+			return visitor.visitDestination(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -1991,6 +2049,14 @@ export class On_actionContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitOn_action) {
 			listener.exitOn_action(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitOn_action) {
+			return visitor.visitOn_action(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2032,6 +2098,14 @@ export class On_moveContext extends ParserRuleContext {
 			listener.exitOn_move(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitOn_move) {
+			return visitor.visitOn_move(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2064,6 +2138,14 @@ export class ForContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitFor) {
 			listener.exitFor(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitFor) {
+			return visitor.visitFor(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2099,6 +2181,14 @@ export class IfContext extends ParserRuleContext {
 			listener.exitIf(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitIf) {
+			return visitor.visitIf(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2126,6 +2216,14 @@ export class AssignContext extends ParserRuleContext {
 			listener.exitAssign(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitAssign) {
+			return visitor.visitAssign(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2149,6 +2247,14 @@ export class Function_callContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitFunction_call) {
 			listener.exitFunction_call(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitFunction_call) {
+			return visitor.visitFunction_call(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2175,6 +2281,14 @@ export class UpdateTurnContext extends ParserRuleContext {
 			listener.exitUpdateTurn(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitUpdateTurn) {
+			return visitor.visitUpdateTurn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2195,6 +2309,14 @@ export class VariableContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitVariable) {
 			listener.exitVariable(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitVariable) {
+			return visitor.visitVariable(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2227,6 +2349,14 @@ export class ArgsContext extends ParserRuleContext {
 			listener.exitArgs(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitArgs) {
+			return visitor.visitArgs(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2249,6 +2379,14 @@ export class ArgContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitArg) {
 			listener.exitArg(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitArg) {
+			return visitor.visitArg(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2276,6 +2414,14 @@ export class ArearefContext extends ParserRuleContext {
 			listener.exitArearef(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitArearef) {
+			return visitor.visitArearef(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2298,6 +2444,14 @@ export class AreaContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitArea) {
 			listener.exitArea(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitArea) {
+			return visitor.visitArea(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2325,6 +2479,14 @@ export class StackContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitStack) {
 			listener.exitStack(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitStack) {
+			return visitor.visitStack(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2360,6 +2522,14 @@ export class PositionContext extends ParserRuleContext {
 			listener.exitPosition(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitPosition) {
+			return visitor.visitPosition(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2389,6 +2559,14 @@ export class TermContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitTerm) {
 			listener.exitTerm(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitTerm) {
+			return visitor.visitTerm(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2426,6 +2604,14 @@ export class PropertyContext extends ParserRuleContext {
 			listener.exitProperty(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitProperty) {
+			return visitor.visitProperty(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2459,6 +2645,14 @@ export class BexprContext extends ParserRuleContext {
 			listener.exitBexpr(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitBexpr) {
+			return visitor.visitBexpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2489,6 +2683,14 @@ export class AexprContext extends ParserRuleContext {
 			listener.exitAexpr(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitAexpr) {
+			return visitor.visitAexpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2515,6 +2717,14 @@ export class AtermContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitAterm) {
 			listener.exitAterm(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitAterm) {
+			return visitor.visitAterm(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2550,6 +2760,14 @@ export class SetContext extends ParserRuleContext {
 			listener.exitSet(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitSet) {
+			return visitor.visitSet(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2578,6 +2796,14 @@ export class IntsetContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitIntset) {
 			listener.exitIntset(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitIntset) {
+			return visitor.visitIntset(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2613,6 +2839,14 @@ export class PositionsetContext extends ParserRuleContext {
 			listener.exitPositionset(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitPositionset) {
+			return visitor.visitPositionset(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2632,6 +2866,14 @@ export class PlayersetContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitPlayerset) {
 			listener.exitPlayerset(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitPlayerset) {
+			return visitor.visitPlayerset(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2659,6 +2901,14 @@ export class Move_catchContext extends ParserRuleContext {
 	public exitRule(listener: dealListener): void {
 		if (listener.exitMove_catch) {
 			listener.exitMove_catch(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: dealVisitor<Result>): Result {
+		if (visitor.visitMove_catch) {
+			return visitor.visitMove_catch(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }

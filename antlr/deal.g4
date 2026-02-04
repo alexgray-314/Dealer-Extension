@@ -27,12 +27,13 @@ args:           '(' (arg (',' arg)*)? ')' ;
 arg:            ID ':' (STRING | NUMBER) ;
 
 arearef:        ID | player;
+area:           arearef '[' ']';
+stack:          arearef '[' aexpr ']';
 position:       arearef '[' aexpr ',' aexpr ']'
                 | '\\' 
                 | '/';
-stack:          arearef '[' aexpr ']';
 
-term:           (aexpr | player | stack | position) property?;
+term:           (aexpr | player | area | stack | position) property?;
 property:       '.' ID;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
@@ -41,8 +42,8 @@ bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
 aexpr:          variable | NUMBER;
 
 set:            (intset | positionset | playerset) property?;
-intset:         aexpr ':' aexpr;
-positionset:    arearef '[' aexpr ':' aexpr ',' aexpr ':' aexpr ']';
+intset:         aexpr ':' aexpr?;
+positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
 move_catch:     '?' | position | positionset;

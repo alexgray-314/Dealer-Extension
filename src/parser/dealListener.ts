@@ -21,8 +21,9 @@ import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
-import { PositionContext } from "./dealParser";
+import { AreaContext } from "./dealParser";
 import { StackContext } from "./dealParser";
+import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
@@ -238,15 +239,15 @@ export interface dealListener extends ParseTreeListener {
 	exitArearef?: (ctx: ArearefContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `dealParser.position`.
+	 * Enter a parse tree produced by `dealParser.area`.
 	 * @param ctx the parse tree
 	 */
-	enterPosition?: (ctx: PositionContext) => void;
+	enterArea?: (ctx: AreaContext) => void;
 	/**
-	 * Exit a parse tree produced by `dealParser.position`.
+	 * Exit a parse tree produced by `dealParser.area`.
 	 * @param ctx the parse tree
 	 */
-	exitPosition?: (ctx: PositionContext) => void;
+	exitArea?: (ctx: AreaContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.stack`.
@@ -258,6 +259,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStack?: (ctx: StackContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.position`.
+	 * @param ctx the parse tree
+	 */
+	enterPosition?: (ctx: PositionContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.position`.
+	 * @param ctx the parse tree
+	 */
+	exitPosition?: (ctx: PositionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.term`.

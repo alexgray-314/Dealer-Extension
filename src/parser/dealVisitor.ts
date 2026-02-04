@@ -21,8 +21,9 @@ import { VariableContext } from "./dealParser";
 import { ArgsContext } from "./dealParser";
 import { ArgContext } from "./dealParser";
 import { ArearefContext } from "./dealParser";
-import { PositionContext } from "./dealParser";
+import { AreaContext } from "./dealParser";
 import { StackContext } from "./dealParser";
+import { PositionContext } from "./dealParser";
 import { TermContext } from "./dealParser";
 import { PropertyContext } from "./dealParser";
 import { BexprContext } from "./dealParser";
@@ -169,11 +170,11 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitArearef?: (ctx: ArearefContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `dealParser.position`.
+	 * Visit a parse tree produced by `dealParser.area`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitPosition?: (ctx: PositionContext) => Result;
+	visitArea?: (ctx: AreaContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.stack`.
@@ -181,6 +182,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitStack?: (ctx: StackContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.position`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPosition?: (ctx: PositionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.term`.

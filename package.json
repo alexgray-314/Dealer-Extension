@@ -9,9 +9,7 @@
   "categories": [
     "Programming Languages"
   ],
-  "activationEvents": [
-    "onLanguage:deal"
-  ],
+  "activationEvents": [ ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [

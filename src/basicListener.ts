@@ -1,21 +1,52 @@
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { dealListener } from "./parser/dealListener";
-import { MoveContext, SourceContext } from "./parser/dealParser";
-import { OutputChannel } from "vscode";
+import { AssignContext, DefinitionContext, MoveContext, SourceContext, VariableContext } from "./parser/dealParser";
+import * as vscode from "vscode";
 
 export class BasicListener implements dealListener {
 
-    output: OutputChannel;
+    output: vscode.OutputChannel;
+    variables: string[];
+    diagnostics: vscode.Diagnostic[];
 
-    constructor(outputChannel: OutputChannel) {
+    constructor(outputChannel: vscode.OutputChannel, diagnostics : vscode.Diagnostic[]) {
         this.output = outputChannel;
+        this.variables = [];
+        this.diagnostics = diagnostics;
     }
 
-    // Only override exitExpr if you want to print when leaving
-    exitMove(ctx: MoveContext) {
-        this.output.appendLine("Moving");
-        this.output.appendLine("Source: " + ctx.source().text);
-        this.output.appendLine("Destination: " + ctx.destination().position().arearef()?.text);
+    enterDefinition(ctx: DefinitionContext) {
+        
+        const type = ctx._type.text;
+        const id = ctx.ID().text;
+        if (type === "int" || type === "card") {
+            this.variables.push(id);
+        }
+
+    }
+
+    enterVariable(ctx: VariableContext) {
+
+        const id = ctx.ID().text;
+        // Check for undeclared variables
+        if (!this.variables.includes(id)) {
+            const length : number = Math.max((id.length), 1);
+            
+            const range = new vscode.Range(
+                ctx._start.line - 1,
+                ctx._start.charPositionInLine,
+                ctx._start.line - 1,
+                ctx._start.charPositionInLine + length
+            );
+            
+            this.diagnostics.push(
+                new vscode.Diagnostic(
+                    range,
+                    "Variable " + id + " has not been declared",
+                    vscode.DiagnosticSeverity.Warning
+                )
+            );
+        }
+
     }
 
 }

@@ -16,8 +16,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "dealer.listener",
-        "title": "Walk through the AST for this file"
+        "command": "dealer.visit",
+        "title": "Dealer: Visit the AST"
       }
     ],
     "languages": [

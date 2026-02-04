@@ -14,9 +14,7 @@ import { dealListener } from './parser/dealListener';
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "dealer" is now active!');
+	const outputChannel : vscode.OutputChannel = vscode.window.createOutputChannel("Listener");
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -38,32 +36,10 @@ export function activate(context: vscode.ExtensionContext) {
 		
 	});
 
-	const listenCommand = vscode.commands.registerCommand('dealer.listener', () => {
-
-		const editor = vscode.window.activeTextEditor;
-
-		if (editor) {
-		
-			const outputChannel : vscode.OutputChannel = vscode.window.createOutputChannel("Listener");
-
-			const document : vscode.TextDocument = editor.document;
-			const lexer = new dealLexer(CharStreams.fromString(document.getText()));
-			const tokens = new CommonTokenStream(lexer);
-			const parser = new dealParser(tokens);
-			const tree = parser.prog();
-			const listener : dealListener = new BasicListener(outputChannel);
-			ParseTreeWalker.DEFAULT.walk(listener, tree);
-
-			outputChannel.show();
-		}
-
-	});
-
 	context.subscriptions.push(visitCommand);
-	context.subscriptions.push(listenCommand);
 	const diagnosticCollection = vscode.languages.createDiagnosticCollection('deal');
 	vscode.workspace.onDidChangeTextDocument(e => {
-      runParser(e.document, diagnosticCollection);
+     	runParser(e.document, diagnosticCollection, outputChannel);
     });
 }
 
@@ -72,7 +48,8 @@ export function deactivate() {}
 
 function runParser(
 	document: vscode.TextDocument,
-	collection: vscode.DiagnosticCollection
+	collection: vscode.DiagnosticCollection,
+	outputChannel : vscode.OutputChannel
 ) {
   	const lexer = new dealLexer(CharStreams.fromString(document.getText()));
   	const tokens = new CommonTokenStream(lexer);
@@ -80,7 +57,7 @@ function runParser(
 
 	collection.clear();
 
-	let diagnostics: vscode.Diagnostic[] = [];
+	const diagnostics: vscode.Diagnostic[] = [];
 
 	parser.removeErrorListeners();
 	parser.addErrorListener({
@@ -112,8 +89,9 @@ function runParser(
 		}
 	});
 
-	parser.prog(); // entry rule
-	
+	const tree = parser.prog(); // entry rule
+	const listener : dealListener = new BasicListener(outputChannel, diagnostics);
+	ParseTreeWalker.DEFAULT.walk(listener, tree);
 
 	collection.set(document.uri, diagnostics);
 	

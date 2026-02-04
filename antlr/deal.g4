@@ -7,7 +7,7 @@ stmt:           (definition | move | on_action | on_move | for | if | 'cancel' |
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
 
-definition:     'define' ('area' | 'action' | 'int' | 'card') ID args? ;
+definition:     'define' type=('area' | 'action' | 'int' | 'card') ID args? ;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
@@ -17,9 +17,11 @@ on_action:      'on' ID '{' stmt* '}';
 on_move:        'on' 'move' move_catch move_catch '{' stmt* '}';
 for:            'for' ID 'in' set '{' stmt* '}';
 if:             'if' bexpr '{' stmt* '}' ('else' '{' stmt* '}')? ;
-assign:         ID '=' term;
+assign:         variable '=' term;
 function_call:  ID args;
 updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ; 
+
+variable:       ID;
 
 args:           '(' (arg (',' arg)*)? ')' ;
 arg:            ID ':' (STRING | NUMBER) ;
@@ -36,7 +38,7 @@ property:       '.' ID;
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
                         | (('=?' | '!?') set)
                         );
-aexpr:          ID | NUMBER;
+aexpr:          variable | NUMBER;
 
 set:            (intset | positionset | playerset) property?;
 intset:         aexpr ':' aexpr;

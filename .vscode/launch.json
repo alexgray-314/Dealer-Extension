@@ -6,16 +6,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
-			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
-			],
+			"name": "Launch Client",
+			"runtimeExecutable": "${execPath}",
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}"],
 			"outFiles": [
-				"${workspaceFolder}/out/**/*.js"
+				"${workspaceRoot}/out/client/**/*.js",
+				"${workspaceRoot}/out/server/**/*.js"
 			],
-			"preLaunchTask": "build-parser"
+			"autoAttachChildProcesses": true,
+			"preLaunchTask": "full-build"
 		}
 	]
 }

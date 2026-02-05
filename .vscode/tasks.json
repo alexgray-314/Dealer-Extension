@@ -4,6 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "npm-build",
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",
@@ -17,16 +18,20 @@
 			}
 		},
 		{
-			"label": "build-parser",
+			"label": "generate-parser",
 			"type": "shell",
-			"command": "antlr4ts ${workspaceFolder}/antlr/deal.g4 -o ${workspaceFolder}/src/parser",
+			"command": "antlr4ts ${workspaceFolder}/src/language/antlr/deal.g4 -o ${workspaceFolder}/src/language",
 			"problemMatcher": []
 		},
 		{
-			"label": "build-visitor",
+			"label": "generate-visitor",
 			"type": "shell",
-			"command": "antlr4ts -visitor ${workspaceFolder}/antlr/deal.g4 -o ${workspaceFolder}/src/parser",
+			"command": "antlr4ts -visitor ${workspaceFolder}/src/language/antlr/deal.g4 -o ${workspaceFolder}/src/language",
 			"problemMatcher": []
 		},
+		{
+			"label": "full-build",
+			"dependsOn": ["generate-visitor", "npm-build"]
+		}
 	]
 }

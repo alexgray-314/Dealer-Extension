@@ -33,15 +33,13 @@ position:       arearef '[' aexpr ',' aexpr ']'
                 | '\\' 
                 | '/';
 
-term:           CARD | player | position | aexpr;
-property:       (CARD | player | area | stack | position) '.' ID;
+term:           (aexpr | player | area | stack | position) property?;
+property:       '.' ID;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
                         | (('=?' | '!?') set)
                         );
-                    
-aexpr:          aterm (('+' | '-' | '*' | '/') aterm)*;
-aterm:          NUMBER | variable | property;
+aexpr:          NUMBER | variable;
 
 set:            (intset | positionset | playerset) property?;
 intset:         aexpr ':' aexpr?;

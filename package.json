@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "dealer.visit",
-        "title": "Dealer: Visit the AST"
+        "command": "dealer.load",
+        "title": "Load up a deal game"
       }
     ],
     "languages": [

@@ -5,10 +5,10 @@ import * as vscode from 'vscode';
 import { dealLexer } from './parser/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './parser/dealParser';
-import { DebugOutputVisitor } from './debugOutputVisitor';
 import { BasicListener } from './basicListener';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './parser/dealListener';
+import { Loader } from './loader';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const visitCommand = vscode.commands.registerCommand('dealer.visit', () => {
+	const visitCommand = vscode.commands.registerCommand('dealer.load', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		const editor = vscode.window.activeTextEditor;
@@ -30,8 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
 			const tokens = new CommonTokenStream(lexer);
 			const parser = new dealParser(tokens);
 			const tree = parser.prog();
-			const visitor : DebugOutputVisitor = new DebugOutputVisitor();
-			visitor.visit(tree);
+			const loader : dealListener = new Loader();
+			ParseTreeWalker.DEFAULT.walk(loader, tree);
 		}
 		
 	});

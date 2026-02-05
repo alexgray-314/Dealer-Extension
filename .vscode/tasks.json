@@ -6,6 +6,19 @@
 		{
 			"label": "npm-build",
 			"type": "npm",
+			"script": "compile",
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "npm-watch",
+			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
@@ -31,7 +44,7 @@
 		},
 		{
 			"label": "full-build",
-			"dependsOn": ["generate-visitor", "npm-build"]
+			"dependsOn": ["generate-visitor", "npm-watch"]
 		}
 	]
 }

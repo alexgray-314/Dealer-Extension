@@ -7,7 +7,7 @@ export class State {
 
     areas : Map<string, Area>;
     actions : Map<string, (state : State) => void>;
-    variables : Map<string, [string, Card|number]>;
+    variables : Map<string, [string, Card|number|undefined]>;
     num_players : number;
     turn : number;
 
@@ -132,7 +132,19 @@ export class State {
 
     }
 
-    define_action() {
+    define_variable(type : string, id : string) {
+        this.variables.set(id, [type, undefined]);
+    }
+
+    define_action(id : string, args: Record<string, string | number>) {
+
+        // default parameters
+        const defaultArgs = {
+            "text": id,
+        };
+        Object.assign(defaultArgs, args);// merge defaults with set parameters
+
+        this.actions.set(id, ()=>{});
 
     }
 

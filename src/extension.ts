@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const tokens = new CommonTokenStream(lexer);
 			const parser = new dealParser(tokens);
 			const tree = parser.prog();
-			const state = new State(1);
+			const state = new State(2);
 			const loader : dealListener = new Loader(state);
 			ParseTreeWalker.DEFAULT.walk(loader, tree);
 			console.log(state);

@@ -1,5 +1,7 @@
+import { CardEvaluator } from "./cardEvaluator";
 import { dealListener } from "./parser/dealListener";
 import { BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
+import { Card } from "./state/card";
 import { State } from "./state/state";
 
 export class Loader implements dealListener {
@@ -31,7 +33,11 @@ export class Loader implements dealListener {
     }
 
     enterMove(ctx: MoveContext) {
-        
+        const evaluator : CardEvaluator = new CardEvaluator(this.state);
+        console.log("source");
+        evaluator.visit(ctx.source());
+        console.log("destination");
+        evaluator.visit(ctx.destination());
     }
 
     enterTerm(ctx: TermContext) {

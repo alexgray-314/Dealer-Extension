@@ -1,5 +1,5 @@
 import { Area } from "./area";
-import { Card, SpecialCards } from "./card";
+import { Card, SpecialCard } from "./card";
 import { Stack } from "./stack";
 
 // This is not to be accessed directly from clients, they must go through the API to validate
@@ -35,6 +35,19 @@ export class State {
 
     }
 
+    // ----------------- Specific players  ------------------
+    get_action_player() {
+        return 0;
+    }
+
+    get_move_player() {
+        return 0;
+    }
+
+    get_turn_player() {
+        return this.turn;
+    }
+
     next_turn() {
         this.turn++;
         if (this.turn >= this.num_players) {
@@ -54,7 +67,7 @@ export class State {
     move_card(source : [string, number, number], destination : [string, number, number]) {
 
         const card : Card = this.get_card(source);
-        if (card !== SpecialCards.Empty) {
+        if (card !== SpecialCard.Empty) {
             this.remove_card(source);
             this.add_card(card, destination);
         }
@@ -62,7 +75,7 @@ export class State {
     }
 
     add_card(card : Card, [a, s, p] : [string, number, number]) {
-        if (card === SpecialCards.Empty) {
+        if (card === SpecialCard.Empty) {
             return;
         }
         if (!this.areas.hasOwnProperty(a)) {
@@ -108,19 +121,19 @@ export class State {
     get_card([a, s, p] : [string, number, number]) {
 
         if (!this.areas.hasOwnProperty(a)) {
-            return SpecialCards.Empty;
+            return SpecialCard.Empty;
         }
 
         const area = this.areas.get(a)!;
 
         if (s >= area.stacks.length) {
-            return SpecialCards.Empty;
+            return SpecialCard.Empty;
         }
 
         const stack = area.stacks[s];
 
         if (p >= stack.cards.length) {
-            return SpecialCards.Empty;
+            return SpecialCard.Empty;
         }
 
         return stack.cards[p];

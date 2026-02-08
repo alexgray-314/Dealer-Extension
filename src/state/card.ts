@@ -1,6 +1,6 @@
-export type Card = StandardCard | SpecialCards.Empty | SpecialCards.Joker;
+export type Card = StandardCard | SpecialCard.Empty | SpecialCard.Joker;
 
-export enum SpecialCards {Empty, Joker}
+export enum SpecialCard {Empty, Joker}
 
 export class StandardCard {
     private rank : string;

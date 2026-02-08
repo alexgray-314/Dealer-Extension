@@ -49,8 +49,20 @@ export class State {
         this.turn = turn;
     }
 
-    add_card(card : Card, [a, s, p] : [string, number, number]) {
+    // ---------------- CARD MOVEMENT -----------------------
+    
+    move_card(source : [string, number, number], destination : [string, number, number]) {
+
+        const card : Card = this.get_card(source);
         if (card !== SpecialCards.Empty) {
+            this.remove_card(source);
+            this.add_card(card, destination);
+        }
+
+    }
+
+    add_card(card : Card, [a, s, p] : [string, number, number]) {
+        if (card === SpecialCards.Empty) {
             return;
         }
         if (!this.areas.hasOwnProperty(a)) {
@@ -77,7 +89,8 @@ export class State {
     remove_card([a, s, p] : [string, number, number]) {
 
         if (!this.areas.hasOwnProperty(a)) {
-            throw new Error("Invalid area id " + a);
+            console.error("invalid area id", a);
+            return;
         }
 
         const area = this.areas.get(a)!;
@@ -93,8 +106,6 @@ export class State {
     }
 
     get_card([a, s, p] : [string, number, number]) {
-
-        // console.log("trying to get", source);
 
         if (!this.areas.hasOwnProperty(a)) {
             return SpecialCards.Empty;
@@ -115,6 +126,8 @@ export class State {
         return stack.cards[p];
 
     }
+
+    // ------------------ DEFINITIONS --------------------
 
     define_area(id : string, args: Record<string, string | number>) {
 

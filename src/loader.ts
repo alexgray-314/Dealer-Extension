@@ -1,5 +1,5 @@
 import { dealListener } from "./parser/dealListener";
-import { DefinitionContext, On_actionContext } from "./parser/dealParser";
+import { BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
 import { State } from "./state/state";
 
 export class Loader implements dealListener {
@@ -30,8 +30,16 @@ export class Loader implements dealListener {
 
     }
 
+    enterMove(ctx: MoveContext) {
+        
+    }
+
+    enterTerm(ctx: TermContext) {
+        console.log("I AM A TERM");
+    }
+
     enterOn_action(ctx: On_actionContext) {
-        ctx.children = [];
+        // ctx.children = [];
     }
 
 }

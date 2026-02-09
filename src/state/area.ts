@@ -1,5 +1,7 @@
 import { Stack } from "./stack";
 
+export type Position = [string, number, number];
+
 export class Area {
     id : string;
     stacks : Stack[];

@@ -1,4 +1,4 @@
-import { Area } from "./area";
+import { Area, Position } from "./area";
 import { Card, SpecialCard } from "./card";
 import { Stack } from "./stack";
 
@@ -64,7 +64,7 @@ export class State {
 
     // ---------------- CARD MOVEMENT -----------------------
     
-    move_card(source : [string, number, number], destination : [string, number, number]) {
+    move_card(source : Position, destination : Position) {
 
         const card : Card = this.get_card(source);
         if (card !== SpecialCard.Empty) {
@@ -74,12 +74,12 @@ export class State {
 
     }
 
-    add_card(card : Card, [a, s, p] : [string, number, number]) {
+    add_card(card : Card, [a, s, p] : Position) {
         if (card === SpecialCard.Empty) {
             return;
         }
         if (!this.areas.hasOwnProperty(a)) {
-            throw new Error("Invalid area id " + a);
+            return;
         }
 
         const area : Area = this.areas.get(a)!;
@@ -96,10 +96,9 @@ export class State {
 
         // add the card to the deck
         stacks[s].cards.splice(p, 0, card);
-        return true;
     }
 
-    remove_card([a, s, p] : [string, number, number]) {
+    remove_card([a, s, p] : Position) {
 
         if (!this.areas.hasOwnProperty(a)) {
             console.error("invalid area id", a);
@@ -118,7 +117,7 @@ export class State {
 
     }
 
-    get_card([a, s, p] : [string, number, number]) {
+    get_card([a, s, p] : Position) {
 
         if (!this.areas.hasOwnProperty(a)) {
             return SpecialCard.Empty;

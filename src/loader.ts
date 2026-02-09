@@ -1,15 +1,21 @@
-import { CardEvaluator } from "./cardEvaluator";
-import { NumberEvaluator } from "./numberEvaluator";
+import { Position } from "vscode";
+import { CardVisitor } from "./eval/cardVisitor";
+import { NumberVisitor } from "./eval/numberVisitor";
 import { dealListener } from "./parser/dealListener";
 import { BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
-import { Card } from "./state/card";
+import { Card, SpecialCard } from "./state/card";
 import { State } from "./state/state";
+import { PositionVisitor } from "./eval/positionVisitor";
 
 export class Loader implements dealListener {
 
     state : State;
+    positionVisitor : PositionVisitor;
+    cardVisitor : CardVisitor;
     constructor(state : State) {
         this.state = state;
+        this.positionVisitor = new PositionVisitor(state);
+        this.cardVisitor = new CardVisitor(this.state);
     }
 
     enterDefinition(ctx: DefinitionContext) {
@@ -34,16 +40,27 @@ export class Loader implements dealListener {
     }
 
     enterMove(ctx: MoveContext) {
-        const evaluator : CardEvaluator = new CardEvaluator(this.state);
-        console.log("source");
-        evaluator.visit(ctx.source());
-        console.log("destination");
-        evaluator.visit(ctx.destination());
+        
+        console.log(ctx.source().text, ctx.destination().text);
+
+        const dest = ctx.destination().accept(this.positionVisitor);
+        console.log(dest);
+
+        if (ctx.source().position !== undefined) {
+            const source = ctx.source().accept(this.positionVisitor);
+            console.log(source);
+            this.state.move_card(source!, dest!);
+        } else {
+            const card = ctx.source().accept(this.cardVisitor);
+            this.state.add_card(card!, dest!);
+        }
+        // TODO move sets
+
     }
 
     enterTerm(ctx: TermContext) {
         console.log("TERM: ",ctx.text);
-        console.log(new NumberEvaluator(this.state).visit(ctx));
+        console.log(new NumberVisitor(this.state).visit(ctx));
     }
 
     enterOn_action(ctx: On_actionContext) {

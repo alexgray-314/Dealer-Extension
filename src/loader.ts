@@ -2,7 +2,7 @@ import { Position } from "vscode";
 import { CardVisitor } from "./eval/cardVisitor";
 import { NumberVisitor } from "./eval/numberVisitor";
 import { dealListener } from "./parser/dealListener";
-import { BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
+import { AssignContext, BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
 import { Card, SpecialCard } from "./state/card";
 import { State } from "./state/state";
 import { PositionVisitor } from "./eval/positionVisitor";
@@ -12,10 +12,12 @@ export class Loader implements dealListener {
     state : State;
     positionVisitor : PositionVisitor;
     cardVisitor : CardVisitor;
+    numberVisitor : NumberVisitor;
     constructor(state : State) {
         this.state = state;
         this.positionVisitor = new PositionVisitor(state);
         this.cardVisitor = new CardVisitor(this.state);
+        this.numberVisitor = new NumberVisitor(this.state);
     }
 
     enterDefinition(ctx: DefinitionContext) {
@@ -64,9 +66,20 @@ export class Loader implements dealListener {
 
     }
 
-    enterTerm(ctx: TermContext) {
-        console.log("TERM: ",ctx.text);
-        console.log(new NumberVisitor(this.state).visit(ctx));
+    enterAssign(ctx: AssignContext)  {
+        const id : string = ctx.variable().text;
+        const [type, _] = this.state.variables.get(id) ?? ["NULL", undefined];
+        switch(type) {
+            case "NULL":
+                break;
+                // It is safe to use forced types (!) from this points on as undefined variables will have type NULL
+            case "INT":
+                this.state.variables.get(id)![1] = ctx.term().accept(this.numberVisitor);
+                break;
+            case "CARD":
+                this.state.variables.get(id)![1] = ctx.term().accept(this.cardVisitor);
+                break;
+        }
     }
 
     enterOn_action(ctx: On_actionContext) {

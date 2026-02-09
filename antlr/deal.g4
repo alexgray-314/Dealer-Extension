@@ -33,7 +33,7 @@ position:       arearef '[' aexpr ',' aexpr ']'
                 | '\\' 
                 | '/';
 
-term:           (aexpr | player | area | stack | position) property?;
+term:           (CARD | aexpr | player | area | stack | position) property?;
 property:       '.' ID;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 

@@ -14,8 +14,7 @@ export class NumberEvaluator implements dealVisitor<number> {
     constructor (state : State) {
         this.state = state;
     }
-    visitProg?: ((ctx: ProgContext) => number) | undefined;
-    visitStmt?: ((ctx: StmtContext) => number) | undefined;
+
     visitPlayer(ctx: PlayerContext) {
         const ID = ctx.getChild(1);
         switch(ID.text) {
@@ -29,17 +28,11 @@ export class NumberEvaluator implements dealVisitor<number> {
                 return ID.accept(this);
         }
     }
-    visitDefinition?: ((ctx: DefinitionContext) => number) | undefined;
-    visitMove?: ((ctx: MoveContext) => number) | undefined;
-    visitSource?: ((ctx: SourceContext) => number) | undefined;
-    visitDestination?: ((ctx: DestinationContext) => number) | undefined;
-    visitOn_action?: ((ctx: On_actionContext) => number) | undefined;
-    visitOn_move?: ((ctx: On_moveContext) => number) | undefined;
-    visitFor?: ((ctx: ForContext) => number) | undefined;
-    visitIf?: ((ctx: IfContext) => number) | undefined;
+
     visitAssign?: ((ctx: AssignContext) => number) | undefined;
     visitFunction_call?: ((ctx: Function_callContext) => number) | undefined;
     visitUpdateTurn?: ((ctx: UpdateTurnContext) => number) | undefined;
+
     visitVariable (ctx: VariableContext) {
         let [_, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
         if (typeof value === typeof 0) {
@@ -47,6 +40,7 @@ export class NumberEvaluator implements dealVisitor<number> {
         }
         return NaN;
     }
+    
     visitArgs?: ((ctx: ArgsContext) => number) | undefined;
     visitArg?: ((ctx: ArgContext) => number) | undefined;
     visitArearef?: ((ctx: ArearefContext) => number) | undefined;
@@ -70,7 +64,10 @@ export class NumberEvaluator implements dealVisitor<number> {
     }
 
     visitChildren(node: RuleNode): number {
-        return NaN;
+        if (node.childCount < 1) {
+            return NaN;
+        }
+        return node.getChild(0).accept(this);
     }
 
     visitTerminal(node: TerminalNode): number {

@@ -1,4 +1,5 @@
 import { CardEvaluator } from "./cardEvaluator";
+import { NumberEvaluator } from "./numberEvaluator";
 import { dealListener } from "./parser/dealListener";
 import { BexprContext, DefinitionContext, MoveContext, On_actionContext, TermContext } from "./parser/dealParser";
 import { Card } from "./state/card";
@@ -41,7 +42,8 @@ export class Loader implements dealListener {
     }
 
     enterTerm(ctx: TermContext) {
-        console.log("I AM A TERM");
+        console.log("TERM: ",ctx.text);
+        console.log(new NumberEvaluator(this.state).visit(ctx));
     }
 
     enterOn_action(ctx: On_actionContext) {

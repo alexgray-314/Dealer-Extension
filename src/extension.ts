@@ -10,6 +10,7 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './parser/dealListener';
 import { Loader } from './loader';
 import { State } from './state/state';
+import { dealVisitor } from './parser/dealVisitor';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -32,8 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
 			const parser = new dealParser(tokens);
 			const tree = parser.prog();
 			const state = new State(2);
-			const loader : dealListener = new Loader(state);
-			ParseTreeWalker.DEFAULT.walk(loader, tree);
+			const loader : dealVisitor<void> = new Loader(state);
+			loader.visit(tree);
 			console.log(state);
 		}
 		

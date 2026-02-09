@@ -40,19 +40,27 @@ export class Loader implements dealListener {
     }
 
     enterMove(ctx: MoveContext) {
-        
-        console.log(ctx.source().text, ctx.destination().text);
 
         const dest = ctx.destination().accept(this.positionVisitor);
-        console.log(dest);
+        if (dest === undefined) {
+            console.log("Destination is undefined: ", ctx.destination().text);
+            return;
+        }
 
-        if (ctx.source().position !== undefined) {
+        if (ctx.source().position() !== undefined) {
             const source = ctx.source().accept(this.positionVisitor);
-            console.log(source);
-            this.state.move_card(source!, dest!);
+            if (source === undefined) {
+                console.log("Source is undefined ", ctx.source().text);
+                return;
+            }
+            this.state.move_card(source, dest);
         } else {
             const card = ctx.source().accept(this.cardVisitor);
-            this.state.add_card(card!, dest!);
+            if (card === undefined) {
+                console.log("Card is undefined ", ctx.source().text);
+                return;
+            }
+            this.state.add_card(card, dest);
         }
         // TODO move sets
 

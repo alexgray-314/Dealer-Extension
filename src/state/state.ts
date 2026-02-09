@@ -78,7 +78,8 @@ export class State {
         if (card === SpecialCard.Empty) {
             return;
         }
-        if (!this.areas.hasOwnProperty(a)) {
+        if (!this.areas.has(a)) {
+            console.error("Invalid area id ", a);
             return;
         }
 
@@ -100,7 +101,7 @@ export class State {
 
     remove_card([a, s, p] : Position) {
 
-        if (!this.areas.hasOwnProperty(a)) {
+        if (!this.areas.has(a)) {
             console.error("invalid area id", a);
             return;
         }
@@ -119,7 +120,7 @@ export class State {
 
     get_card([a, s, p] : Position) {
 
-        if (!this.areas.hasOwnProperty(a)) {
+        if (!this.areas.has(a)) {
             return SpecialCard.Empty;
         }
 

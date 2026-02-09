@@ -20,8 +20,6 @@ export class Loader implements dealListener {
 
     enterDefinition(ctx: DefinitionContext) {
 
-        console.log("Entered Definition");
-
         const type = (ctx._type.text??"").toUpperCase();
         switch(type) {
             case "AREA": 

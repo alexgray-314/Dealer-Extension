@@ -3,13 +3,13 @@ export type Card = StandardCard | SpecialCard.Empty | SpecialCard.Joker;
 export enum SpecialCard {Empty, Joker}
 
 export class StandardCard {
-    private rank : string;
-    private suit : string;
+    private rank : string; // TODO make rank and suit an enum so that it can be converted to a number
+    private suit : string; 
 
     // Value #<rank><suit>
     // E.g. #4S == the 4 of spades
     constructor(value : string) {
-        this.rank = value.slice(0, -1).toUpperCase();
+        this.rank = value.slice(1, -1).toUpperCase();
         const suit = value.slice(-1);
 
         // Convert the suit from a single digit to the full name

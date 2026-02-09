@@ -6,6 +6,8 @@ import { dealVisitor } from "../parser/dealVisitor";
 import { StandardCard, Card } from "../state/card";
 import { dealLexer } from "../parser/dealLexer";
 import { State } from "../state/state";
+import { PositionContext } from "../parser/dealParser";
+import { PositionVisitor } from "./positionVisitor";
 
 // Either get a position or a card from a tree
 export class CardVisitor implements dealVisitor<Card | undefined> {
@@ -13,6 +15,14 @@ export class CardVisitor implements dealVisitor<Card | undefined> {
     state : State;
     constructor(state : State) {
         this.state = state;
+    }
+
+    visitPosition (ctx: PositionContext) {
+        const pos = ctx.accept(new PositionVisitor(this.state));
+        if (pos !== undefined) {
+            return this.state.get_card(pos);
+        }
+        return undefined;
     }
 
     visit(tree: ParseTree): Card | undefined {

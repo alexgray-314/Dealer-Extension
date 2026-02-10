@@ -12,6 +12,9 @@ import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { Comparator, Primitive } from "./logic/comparator";
 import { TermVisitor } from "./eval/termVisitor";
+import { IntSetVisitor } from "./eval/intSetVisitor";
+import { PositionSetVisitor } from "./eval/positionSetVisitor";
+import { Position } from "./state/area";
 
 export class Loader implements dealVisitor<void> {
 
@@ -107,6 +110,31 @@ export class Loader implements dealVisitor<void> {
             if (ctx.childCount > 5) { // this accounts for if statements with no else clause
                 ctx._antecedent.accept(this);
             }
+        }
+
+    }
+
+    visitFor (ctx: ForContext) {
+
+        const loopVar = ctx.ID().text;
+
+        if (ctx.set().intset() !== undefined || ctx.set().playerset() !== undefined) {
+
+            new IntSetVisitor(this.state, (i : number) => {
+                this.state.variables.set(loopVar, ["INT", i]);
+                ctx.block().accept(this);
+                return true;
+            }).visit(ctx.set());
+
+        } else if (ctx.set().positionset() !== undefined) {
+            
+            new PositionSetVisitor(this.state, (pos : Position) => {
+                const c : Card = this.state.get_card(pos);
+                this.state.variables.set(loopVar, ["CARD", c]);
+                ctx.block().accept(this);
+                return true;
+            }).visit(ctx.set());
+
         }
 
     }

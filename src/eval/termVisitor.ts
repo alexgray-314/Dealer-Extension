@@ -8,6 +8,8 @@ import { dealVisitor } from "../parser/dealVisitor";
 import { dealLexer } from "../parser/dealLexer";
 import { State } from "../state/state";
 import { StandardCard } from "../state/card";
+import { NumberVisitor } from "./numberVisitor";
+import { CardVisitor } from "./cardVisitor";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 
@@ -17,36 +19,48 @@ export class TermVisitor implements dealVisitor<Primitive> {
         this.state = state;
     }
 
-    visitProg?: ((ctx: ProgContext) => Primitive) | undefined;
-    visitStmt?: ((ctx: StmtContext) => Primitive) | undefined;
-    visitPlayer?: ((ctx: PlayerContext) => Primitive) | undefined;
-    visitDefinition?: ((ctx: DefinitionContext) => Primitive) | undefined;
-    visitMove?: ((ctx: MoveContext) => Primitive) | undefined;
-    visitSource?: ((ctx: SourceContext) => Primitive) | undefined;
-    visitDestination?: ((ctx: DestinationContext) => Primitive) | undefined;
-    visitOn_action?: ((ctx: On_actionContext) => Primitive) | undefined;
-    visitOn_move?: ((ctx: On_moveContext) => Primitive) | undefined;
-    visitFor?: ((ctx: ForContext) => Primitive) | undefined;
-    visitIf?: ((ctx: IfContext) => Primitive) | undefined;
-    visitAssign?: ((ctx: AssignContext) => Primitive) | undefined;
+    visitPlayer(ctx: PlayerContext) {
+        return new NumberVisitor(this.state).visit(ctx);
+    }
+
     visitFunction_call?: ((ctx: Function_callContext) => Primitive) | undefined;
-    visitUpdateTurn?: ((ctx: UpdateTurnContext) => Primitive) | undefined;
-    visitVariable?: ((ctx: VariableContext) => Primitive) | undefined;
+
+    visitVariable (ctx: VariableContext) : Primitive {
+        let [type, value] = this.state.variables.get(ctx.ID().text) ?? [undefined, undefined];
+        if (typeof value === typeof 0 && type === "INT") {
+            return Number(value);
+        } else if (type === "CARD") {
+            return value;
+        }
+        return undefined;
+    }
+    
     visitArgs?: ((ctx: ArgsContext) => Primitive) | undefined;
     visitArg?: ((ctx: ArgContext) => Primitive) | undefined;
     visitArearef?: ((ctx: ArearefContext) => Primitive) | undefined;
     visitArea?: ((ctx: AreaContext) => Primitive) | undefined;
     visitStack?: ((ctx: StackContext) => Primitive) | undefined;
-    visitPosition?: ((ctx: PositionContext) => Primitive) | undefined;
-    visitTerm?: ((ctx: TermContext) => Primitive) | undefined;
-    visitProperty?: ((ctx: PropertyContext) => Primitive) | undefined;
-    visitBexpr?: ((ctx: BexprContext) => Primitive) | undefined;
+    visitPosition (ctx: PositionContext) {
+        return new CardVisitor(this.state).visit(ctx);
+    }
+    visitTerm (ctx: TermContext) : Primitive {
+        const property : string | undefined = ctx.property()?.ID().text;
+        // NOTE: this will only get primitive properties. TODO deal with complex objects
+        const term = ctx.getChild(0).accept(this);
+        console.log("TERM IS", term);
+        if (property !== undefined && typeof term === 'object') {
+            console.log("trying to get property", property);
+            return (term as any)[property];
+        }
+        return term;
+
+    }
     visitAexpr?: ((ctx: AexprContext) => Primitive) | undefined;
+
     visitSet?: ((ctx: SetContext) => Primitive) | undefined;
     visitIntset?: ((ctx: IntsetContext) => Primitive) | undefined;
     visitPositionset?: ((ctx: PositionsetContext) => Primitive) | undefined;
     visitPlayerset?: ((ctx: PlayersetContext) => Primitive) | undefined;
-    visitMove_catch?: ((ctx: Move_catchContext) => Primitive) | undefined;
     
     visit(tree: ParseTree): Primitive {
         return tree.accept(this);

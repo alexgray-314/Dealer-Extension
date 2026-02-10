@@ -1254,6 +1254,7 @@ public class dealParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class TermContext extends ParserRuleContext {
 		public TerminalNode CARD() { return getToken(dealParser.CARD, 0); }
+		public TerminalNode STRING() { return getToken(dealParser.STRING, 0); }
 		public AexprContext aexpr() {
 			return getRuleContext(AexprContext.class,0);
 		}
@@ -1285,7 +1286,7 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(214);
+			setState(215);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 			case 1:
@@ -1297,40 +1298,46 @@ public class dealParser extends Parser {
 			case 2:
 				{
 				setState(209);
-				aexpr();
+				match(STRING);
 				}
 				break;
 			case 3:
 				{
 				setState(210);
-				player();
+				aexpr();
 				}
 				break;
 			case 4:
 				{
 				setState(211);
-				area();
+				player();
 				}
 				break;
 			case 5:
 				{
 				setState(212);
-				stack();
+				area();
 				}
 				break;
 			case 6:
 				{
 				setState(213);
+				stack();
+				}
+				break;
+			case 7:
+				{
+				setState(214);
 				position();
 				}
 				break;
 			}
-			setState(217);
+			setState(218);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
-				setState(216);
+				setState(217);
 				property();
 				}
 			}
@@ -1363,9 +1370,9 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(219);
-			match(T__4);
 			setState(220);
+			match(T__4);
+			setState(221);
 			match(ID);
 			}
 		}
@@ -1404,9 +1411,9 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(222);
+			setState(223);
 			term();
-			setState(227);
+			setState(228);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__29:
@@ -1417,7 +1424,7 @@ public class dealParser extends Parser {
 			case T__34:
 				{
 				{
-				setState(223);
+				setState(224);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 67645734912L) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -1427,7 +1434,7 @@ public class dealParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(224);
+				setState(225);
 				term();
 				}
 				}
@@ -1436,7 +1443,7 @@ public class dealParser extends Parser {
 			case T__36:
 				{
 				{
-				setState(225);
+				setState(226);
 				_la = _input.LA(1);
 				if ( !(_la==T__35 || _la==T__36) ) {
 				_errHandler.recoverInline(this);
@@ -1446,7 +1453,7 @@ public class dealParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(226);
+				setState(227);
 				set();
 				}
 				}
@@ -1483,20 +1490,20 @@ public class dealParser extends Parser {
 		AexprContext _localctx = new AexprContext(_ctx, getState());
 		enterRule(_localctx, 50, RULE_aexpr);
 		try {
-			setState(231);
+			setState(232);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUMBER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(229);
+				setState(230);
 				match(NUMBER);
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(230);
+				setState(231);
 				variable();
 				}
 				break;
@@ -1542,34 +1549,34 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(236);
+			setState(237);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				{
-				setState(233);
+				setState(234);
 				intset();
 				}
 				break;
 			case 2:
 				{
-				setState(234);
+				setState(235);
 				positionset();
 				}
 				break;
 			case 3:
 				{
-				setState(235);
+				setState(236);
 				playerset();
 				}
 				break;
 			}
-			setState(239);
+			setState(240);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
-				setState(238);
+				setState(239);
 				property();
 				}
 			}
@@ -1608,16 +1615,16 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(241);
-			aexpr();
 			setState(242);
+			aexpr();
+			setState(243);
 			match(T__25);
-			setState(244);
+			setState(245);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NUMBER || _la==ID) {
 				{
-				setState(243);
+				setState(244);
 				aexpr();
 				}
 			}
@@ -1658,17 +1665,17 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(246);
-			arearef();
 			setState(247);
-			match(T__26);
+			arearef();
 			setState(248);
-			intset();
+			match(T__26);
 			setState(249);
-			match(T__23);
-			setState(250);
 			intset();
+			setState(250);
+			match(T__23);
 			setState(251);
+			intset();
+			setState(252);
 			match(T__27);
 			}
 		}
@@ -1697,11 +1704,11 @@ public class dealParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(253);
-			match(T__2);
 			setState(254);
-			match(T__37);
+			match(T__2);
 			setState(255);
+			match(T__37);
+			setState(256);
 			match(T__6);
 			}
 		}
@@ -1734,27 +1741,27 @@ public class dealParser extends Parser {
 		Move_catchContext _localctx = new Move_catchContext(_ctx, getState());
 		enterRule(_localctx, 60, RULE_move_catch);
 		try {
-			setState(260);
+			setState(261);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(257);
+				setState(258);
 				match(T__38);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(258);
+				setState(259);
 				position();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(259);
+				setState(260);
 				positionset();
 				}
 				break;
@@ -1772,7 +1779,7 @@ public class dealParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001.\u0107\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001.\u0108\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -1805,18 +1812,18 @@ public class dealParser extends Parser {
 		"\u0001\u0014\u0001\u0014\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015"+
 		"\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0015\u0003\u0015"+
 		"\u00cf\b\u0015\u0001\u0016\u0001\u0016\u0001\u0016\u0001\u0016\u0001\u0016"+
-		"\u0001\u0016\u0003\u0016\u00d7\b\u0016\u0001\u0016\u0003\u0016\u00da\b"+
-		"\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0018\u0001\u0018\u0001"+
-		"\u0018\u0001\u0018\u0001\u0018\u0003\u0018\u00e4\b\u0018\u0001\u0019\u0001"+
-		"\u0019\u0003\u0019\u00e8\b\u0019\u0001\u001a\u0001\u001a\u0001\u001a\u0003"+
-		"\u001a\u00ed\b\u001a\u0001\u001a\u0003\u001a\u00f0\b\u001a\u0001\u001b"+
-		"\u0001\u001b\u0001\u001b\u0003\u001b\u00f5\b\u001b\u0001\u001c\u0001\u001c"+
-		"\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001d"+
-		"\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001e\u0001\u001e\u0001\u001e"+
-		"\u0003\u001e\u0105\b\u001e\u0001\u001e\u0000\u0000\u001f\u0000\u0002\u0004"+
-		"\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \""+
-		"$&(*,.02468:<\u0000\u0004\u0001\u0000\t\f\u0002\u0000)),,\u0001\u0000"+
-		"\u001e#\u0001\u0000$%\u010d\u0000A\u0001\u0000\u0000\u0000\u0002P\u0001"+
+		"\u0001\u0016\u0001\u0016\u0003\u0016\u00d8\b\u0016\u0001\u0016\u0003\u0016"+
+		"\u00db\b\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0018\u0001\u0018"+
+		"\u0001\u0018\u0001\u0018\u0001\u0018\u0003\u0018\u00e5\b\u0018\u0001\u0019"+
+		"\u0001\u0019\u0003\u0019\u00e9\b\u0019\u0001\u001a\u0001\u001a\u0001\u001a"+
+		"\u0003\u001a\u00ee\b\u001a\u0001\u001a\u0003\u001a\u00f1\b\u001a\u0001"+
+		"\u001b\u0001\u001b\u0001\u001b\u0003\u001b\u00f6\b\u001b\u0001\u001c\u0001"+
+		"\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001c\u0001"+
+		"\u001d\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001e\u0001\u001e\u0001"+
+		"\u001e\u0003\u001e\u0106\b\u001e\u0001\u001e\u0000\u0000\u001f\u0000\u0002"+
+		"\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e"+
+		" \"$&(*,.02468:<\u0000\u0004\u0001\u0000\t\f\u0002\u0000)),,\u0001\u0000"+
+		"\u001e#\u0001\u0000$%\u010f\u0000A\u0001\u0000\u0000\u0000\u0002P\u0001"+
 		"\u0000\u0000\u0000\u0004W\u0001\u0000\u0000\u0000\u0006Z\u0001\u0000\u0000"+
 		"\u0000\bc\u0001\u0000\u0000\u0000\ni\u0001\u0000\u0000\u0000\fp\u0001"+
 		"\u0000\u0000\u0000\u000er\u0001\u0000\u0000\u0000\u0010t\u0001\u0000\u0000"+
@@ -1826,10 +1833,10 @@ public class dealParser extends Parser {
 		"\u001e\u00a5\u0001\u0000\u0000\u0000 \u00a7\u0001\u0000\u0000\u0000\""+
 		"\u00b4\u0001\u0000\u0000\u0000$\u00ba\u0001\u0000\u0000\u0000&\u00bc\u0001"+
 		"\u0000\u0000\u0000(\u00c0\u0001\u0000\u0000\u0000*\u00ce\u0001\u0000\u0000"+
-		"\u0000,\u00d6\u0001\u0000\u0000\u0000.\u00db\u0001\u0000\u0000\u00000"+
-		"\u00de\u0001\u0000\u0000\u00002\u00e7\u0001\u0000\u0000\u00004\u00ec\u0001"+
-		"\u0000\u0000\u00006\u00f1\u0001\u0000\u0000\u00008\u00f6\u0001\u0000\u0000"+
-		"\u0000:\u00fd\u0001\u0000\u0000\u0000<\u0104\u0001\u0000\u0000\u0000>"+
+		"\u0000,\u00d7\u0001\u0000\u0000\u0000.\u00dc\u0001\u0000\u0000\u00000"+
+		"\u00df\u0001\u0000\u0000\u00002\u00e8\u0001\u0000\u0000\u00004\u00ed\u0001"+
+		"\u0000\u0000\u00006\u00f2\u0001\u0000\u0000\u00008\u00f7\u0001\u0000\u0000"+
+		"\u0000:\u00fe\u0001\u0000\u0000\u0000<\u0105\u0001\u0000\u0000\u0000>"+
 		"@\u0003\u0002\u0001\u0000?>\u0001\u0000\u0000\u0000@C\u0001\u0000\u0000"+
 		"\u0000A?\u0001\u0000\u0000\u0000AB\u0001\u0000\u0000\u0000BD\u0001\u0000"+
 		"\u0000\u0000CA\u0001\u0000\u0000\u0000DE\u0005\u0000\u0000\u0001E\u0001"+
@@ -1901,39 +1908,40 @@ public class dealParser extends Parser {
 		"\u0000\u0000\u0000\u00cc\u00cf\u0005\u001d\u0000\u0000\u00cd\u00cf\u0005"+
 		"\u0004\u0000\u0000\u00ce\u00c5\u0001\u0000\u0000\u0000\u00ce\u00cc\u0001"+
 		"\u0000\u0000\u0000\u00ce\u00cd\u0001\u0000\u0000\u0000\u00cf+\u0001\u0000"+
-		"\u0000\u0000\u00d0\u00d7\u0005+\u0000\u0000\u00d1\u00d7\u00032\u0019\u0000"+
-		"\u00d2\u00d7\u0003\u0006\u0003\u0000\u00d3\u00d7\u0003&\u0013\u0000\u00d4"+
-		"\u00d7\u0003(\u0014\u0000\u00d5\u00d7\u0003*\u0015\u0000\u00d6\u00d0\u0001"+
-		"\u0000\u0000\u0000\u00d6\u00d1\u0001\u0000\u0000\u0000\u00d6\u00d2\u0001"+
-		"\u0000\u0000\u0000\u00d6\u00d3\u0001\u0000\u0000\u0000\u00d6\u00d4\u0001"+
-		"\u0000\u0000\u0000\u00d6\u00d5\u0001\u0000\u0000\u0000\u00d7\u00d9\u0001"+
-		"\u0000\u0000\u0000\u00d8\u00da\u0003.\u0017\u0000\u00d9\u00d8\u0001\u0000"+
-		"\u0000\u0000\u00d9\u00da\u0001\u0000\u0000\u0000\u00da-\u0001\u0000\u0000"+
-		"\u0000\u00db\u00dc\u0005\u0005\u0000\u0000\u00dc\u00dd\u0005*\u0000\u0000"+
-		"\u00dd/\u0001\u0000\u0000\u0000\u00de\u00e3\u0003,\u0016\u0000\u00df\u00e0"+
-		"\u0007\u0002\u0000\u0000\u00e0\u00e4\u0003,\u0016\u0000\u00e1\u00e2\u0007"+
-		"\u0003\u0000\u0000\u00e2\u00e4\u00034\u001a\u0000\u00e3\u00df\u0001\u0000"+
-		"\u0000\u0000\u00e3\u00e1\u0001\u0000\u0000\u0000\u00e41\u0001\u0000\u0000"+
-		"\u0000\u00e5\u00e8\u0005)\u0000\u0000\u00e6\u00e8\u0003\u001e\u000f\u0000"+
-		"\u00e7\u00e5\u0001\u0000\u0000\u0000\u00e7\u00e6\u0001\u0000\u0000\u0000"+
-		"\u00e83\u0001\u0000\u0000\u0000\u00e9\u00ed\u00036\u001b\u0000\u00ea\u00ed"+
-		"\u00038\u001c\u0000\u00eb\u00ed\u0003:\u001d\u0000\u00ec\u00e9\u0001\u0000"+
-		"\u0000\u0000\u00ec\u00ea\u0001\u0000\u0000\u0000\u00ec\u00eb\u0001\u0000"+
-		"\u0000\u0000\u00ed\u00ef\u0001\u0000\u0000\u0000\u00ee\u00f0\u0003.\u0017"+
-		"\u0000\u00ef\u00ee\u0001\u0000\u0000\u0000\u00ef\u00f0\u0001\u0000\u0000"+
-		"\u0000\u00f05\u0001\u0000\u0000\u0000\u00f1\u00f2\u00032\u0019\u0000\u00f2"+
-		"\u00f4\u0005\u001a\u0000\u0000\u00f3\u00f5\u00032\u0019\u0000\u00f4\u00f3"+
-		"\u0001\u0000\u0000\u0000\u00f4\u00f5\u0001\u0000\u0000\u0000\u00f57\u0001"+
-		"\u0000\u0000\u0000\u00f6\u00f7\u0003$\u0012\u0000\u00f7\u00f8\u0005\u001b"+
-		"\u0000\u0000\u00f8\u00f9\u00036\u001b\u0000\u00f9\u00fa\u0005\u0018\u0000"+
-		"\u0000\u00fa\u00fb\u00036\u001b\u0000\u00fb\u00fc\u0005\u001c\u0000\u0000"+
-		"\u00fc9\u0001\u0000\u0000\u0000\u00fd\u00fe\u0005\u0003\u0000\u0000\u00fe"+
-		"\u00ff\u0005&\u0000\u0000\u00ff\u0100\u0005\u0007\u0000\u0000\u0100;\u0001"+
-		"\u0000\u0000\u0000\u0101\u0105\u0005\'\u0000\u0000\u0102\u0105\u0003*"+
-		"\u0015\u0000\u0103\u0105\u00038\u001c\u0000\u0104\u0101\u0001\u0000\u0000"+
-		"\u0000\u0104\u0102\u0001\u0000\u0000\u0000\u0104\u0103\u0001\u0000\u0000"+
-		"\u0000\u0105=\u0001\u0000\u0000\u0000\u0014APW_gp\u0094\u00a3\u00ad\u00b0"+
-		"\u00ba\u00ce\u00d6\u00d9\u00e3\u00e7\u00ec\u00ef\u00f4\u0104";
+		"\u0000\u0000\u00d0\u00d8\u0005+\u0000\u0000\u00d1\u00d8\u0005,\u0000\u0000"+
+		"\u00d2\u00d8\u00032\u0019\u0000\u00d3\u00d8\u0003\u0006\u0003\u0000\u00d4"+
+		"\u00d8\u0003&\u0013\u0000\u00d5\u00d8\u0003(\u0014\u0000\u00d6\u00d8\u0003"+
+		"*\u0015\u0000\u00d7\u00d0\u0001\u0000\u0000\u0000\u00d7\u00d1\u0001\u0000"+
+		"\u0000\u0000\u00d7\u00d2\u0001\u0000\u0000\u0000\u00d7\u00d3\u0001\u0000"+
+		"\u0000\u0000\u00d7\u00d4\u0001\u0000\u0000\u0000\u00d7\u00d5\u0001\u0000"+
+		"\u0000\u0000\u00d7\u00d6\u0001\u0000\u0000\u0000\u00d8\u00da\u0001\u0000"+
+		"\u0000\u0000\u00d9\u00db\u0003.\u0017\u0000\u00da\u00d9\u0001\u0000\u0000"+
+		"\u0000\u00da\u00db\u0001\u0000\u0000\u0000\u00db-\u0001\u0000\u0000\u0000"+
+		"\u00dc\u00dd\u0005\u0005\u0000\u0000\u00dd\u00de\u0005*\u0000\u0000\u00de"+
+		"/\u0001\u0000\u0000\u0000\u00df\u00e4\u0003,\u0016\u0000\u00e0\u00e1\u0007"+
+		"\u0002\u0000\u0000\u00e1\u00e5\u0003,\u0016\u0000\u00e2\u00e3\u0007\u0003"+
+		"\u0000\u0000\u00e3\u00e5\u00034\u001a\u0000\u00e4\u00e0\u0001\u0000\u0000"+
+		"\u0000\u00e4\u00e2\u0001\u0000\u0000\u0000\u00e51\u0001\u0000\u0000\u0000"+
+		"\u00e6\u00e9\u0005)\u0000\u0000\u00e7\u00e9\u0003\u001e\u000f\u0000\u00e8"+
+		"\u00e6\u0001\u0000\u0000\u0000\u00e8\u00e7\u0001\u0000\u0000\u0000\u00e9"+
+		"3\u0001\u0000\u0000\u0000\u00ea\u00ee\u00036\u001b\u0000\u00eb\u00ee\u0003"+
+		"8\u001c\u0000\u00ec\u00ee\u0003:\u001d\u0000\u00ed\u00ea\u0001\u0000\u0000"+
+		"\u0000\u00ed\u00eb\u0001\u0000\u0000\u0000\u00ed\u00ec\u0001\u0000\u0000"+
+		"\u0000\u00ee\u00f0\u0001\u0000\u0000\u0000\u00ef\u00f1\u0003.\u0017\u0000"+
+		"\u00f0\u00ef\u0001\u0000\u0000\u0000\u00f0\u00f1\u0001\u0000\u0000\u0000"+
+		"\u00f15\u0001\u0000\u0000\u0000\u00f2\u00f3\u00032\u0019\u0000\u00f3\u00f5"+
+		"\u0005\u001a\u0000\u0000\u00f4\u00f6\u00032\u0019\u0000\u00f5\u00f4\u0001"+
+		"\u0000\u0000\u0000\u00f5\u00f6\u0001\u0000\u0000\u0000\u00f67\u0001\u0000"+
+		"\u0000\u0000\u00f7\u00f8\u0003$\u0012\u0000\u00f8\u00f9\u0005\u001b\u0000"+
+		"\u0000\u00f9\u00fa\u00036\u001b\u0000\u00fa\u00fb\u0005\u0018\u0000\u0000"+
+		"\u00fb\u00fc\u00036\u001b\u0000\u00fc\u00fd\u0005\u001c\u0000\u0000\u00fd"+
+		"9\u0001\u0000\u0000\u0000\u00fe\u00ff\u0005\u0003\u0000\u0000\u00ff\u0100"+
+		"\u0005&\u0000\u0000\u0100\u0101\u0005\u0007\u0000\u0000\u0101;\u0001\u0000"+
+		"\u0000\u0000\u0102\u0106\u0005\'\u0000\u0000\u0103\u0106\u0003*\u0015"+
+		"\u0000\u0104\u0106\u00038\u001c\u0000\u0105\u0102\u0001\u0000\u0000\u0000"+
+		"\u0105\u0103\u0001\u0000\u0000\u0000\u0105\u0104\u0001\u0000\u0000\u0000"+
+		"\u0106=\u0001\u0000\u0000\u0000\u0014APW_gp\u0094\u00a3\u00ad\u00b0\u00ba"+
+		"\u00ce\u00d7\u00da\u00e4\u00e8\u00ed\u00f0\u00f5\u0105";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

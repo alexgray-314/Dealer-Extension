@@ -101,13 +101,11 @@ export class Loader implements dealVisitor<void> {
         const a : Primitive = termA.accept(this.termVisitor);
         const b : Primitive = termB.accept(this.termVisitor);
 
-        console.log(ctx._consequent.text);
-
         if (this.comparator.equals(a, b)) {
-            ctx._consequent.accept(this); // consequent
+            ctx._consequent.accept(this); 
         } else {
             if (ctx.childCount > 5) { // this accounts for if statements with no else clause
-                ctx._antecedent.accept(this); // antecedent
+                ctx._antecedent.accept(this);
             }
         }
 

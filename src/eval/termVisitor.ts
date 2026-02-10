@@ -60,7 +60,6 @@ export class TermVisitor implements dealVisitor<Primitive> {
         if (node.symbol.type === dealLexer.NUMBER) {
             return Number(node.text);
         } else if (node.symbol.type === dealLexer.STRING) {
-            console.log("Tried to get string", node.text.slice(1,-1));
             return node.text.slice(1,-1); // remove double quotes from either end
         } else if (node.symbol.type === dealLexer.CARD) {
             return new StandardCard(node.text);

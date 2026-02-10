@@ -7,6 +7,7 @@ import { dealVisitor } from "../parser/dealVisitor";
 import { Position } from "../state/area";
 import { State } from "../state/state";
 import { NumberVisitor } from "./numberVisitor";
+import { StringVisitor } from "./stringVisitor";
 
 export class PositionVisitor implements dealVisitor<Position | undefined> {
     
@@ -17,16 +18,9 @@ export class PositionVisitor implements dealVisitor<Position | undefined> {
         this.numberEvaluator = new NumberVisitor(this.state);
     }
 
-    private extract_areaID(ctx: ArearefContext) {
-        if (ctx.player() !== undefined) {
-            return this.numberEvaluator.visit(ctx.player()!).toString();
-        } else {
-            return (ctx.ID()??"").toString();
-        }
-    }
 
     visitPosition (ctx: PositionContext) : Position | undefined {
-        const areaID = this.extract_areaID(ctx.arearef()!);
+        const areaID = new StringVisitor(this.state).visit(ctx.arearef()!) ?? "";
         const stack = this.numberEvaluator.visit(ctx.getChild(2));
         const pos = this.numberEvaluator.visit(ctx.getChild(4));
         if (!Number.isNaN(stack) && !Number.isNaN(pos)) {

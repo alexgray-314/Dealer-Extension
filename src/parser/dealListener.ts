@@ -5,6 +5,7 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { ProgContext } from "./dealParser";
 import { StmtContext } from "./dealParser";
+import { BlockContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
@@ -61,6 +62,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStmt?: (ctx: StmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.block`.
+	 * @param ctx the parse tree
+	 */
+	enterBlock?: (ctx: BlockContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.block`.
+	 * @param ctx the parse tree
+	 */
+	exitBlock?: (ctx: BlockContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.player`.

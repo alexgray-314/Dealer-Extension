@@ -2,7 +2,7 @@ import { CardVisitor } from "./eval/cardVisitor";
 import { NumberVisitor } from "./eval/numberVisitor";
 import { dealListener } from "./parser/dealListener";
 import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "./parser/dealParser";
-import { Card, SpecialCard } from "./state/card";
+import { Card, SpecialCard, StandardCard } from "./state/card";
 import { State } from "./state/state";
 import { PositionVisitor } from "./eval/positionVisitor";
 import { dealVisitor } from "./parser/dealVisitor";
@@ -10,6 +10,8 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
+import { Comparator, Primitive } from "./logic/comparator";
+import { TermVisitor } from "./eval/termVisitor";
 
 export class Loader implements dealVisitor<void> {
 
@@ -17,14 +19,18 @@ export class Loader implements dealVisitor<void> {
     positionVisitor : PositionVisitor;
     cardVisitor : CardVisitor;
     numberVisitor : NumberVisitor;
+    termVisitor : TermVisitor;
+    comparator : Comparator;
     constructor(state : State) {
         this.state = state;
         this.positionVisitor = new PositionVisitor(state);
         this.cardVisitor = new CardVisitor(this.state);
         this.numberVisitor = new NumberVisitor(this.state);
+        this.termVisitor = new TermVisitor(this.state);
+        this.comparator = new Comparator();
     }
 
-    visitDefinition(ctx: DefinitionContext) {
+    visitDefinition(ctx: DefinitionContext) : void {
 
         const type = (ctx._type.text??"").toUpperCase();
         switch(type) {
@@ -43,7 +49,7 @@ export class Loader implements dealVisitor<void> {
 
     }
 
-    visitMove(ctx: MoveContext) {
+    visitMove(ctx: MoveContext) : void {
 
         const dest = ctx.destination().accept(this.positionVisitor);
         if (dest === undefined) {
@@ -70,7 +76,7 @@ export class Loader implements dealVisitor<void> {
 
     }
 
-    visitAssign(ctx: AssignContext)  {
+    visitAssign(ctx: AssignContext) : void {
         const id : string = ctx.variable().text;
         const [type, _] = this.state.variables.get(id) ?? ["NULL", undefined];
         switch(type) {
@@ -86,7 +92,27 @@ export class Loader implements dealVisitor<void> {
         }
     }
 
-    
+    visitIf (ctx: IfContext) : void {
+
+        const comparator : string = ctx.bexpr().getChild(1).text;
+        const termA = ctx.bexpr().getChild(0);
+        const termB = ctx.bexpr().getChild(2);
+
+        const a : Primitive = termA.accept(this.termVisitor);
+        const b : Primitive = termB.accept(this.termVisitor);
+
+        console.log(ctx._consequent.text);
+
+        if (this.comparator.equals(a, b)) {
+            ctx._consequent.accept(this); // consequent
+        } else {
+            if (ctx.childCount > 5) { // this accounts for if statements with no else clause
+                ctx._antecedent.accept(this); // antecedent
+            }
+        }
+
+    }
+
     visit(tree: ParseTree): void {
         tree.accept(this);
     }

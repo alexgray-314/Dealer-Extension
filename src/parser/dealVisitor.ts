@@ -5,6 +5,7 @@ import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { ProgContext } from "./dealParser";
 import { StmtContext } from "./dealParser";
+import { BlockContext } from "./dealParser";
 import { PlayerContext } from "./dealParser";
 import { DefinitionContext } from "./dealParser";
 import { MoveContext } from "./dealParser";
@@ -56,6 +57,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitStmt?: (ctx: StmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.block`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBlock?: (ctx: BlockContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.player`.

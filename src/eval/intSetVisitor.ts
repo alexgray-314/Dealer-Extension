@@ -25,7 +25,7 @@ export class IntSetVisitor implements dealVisitor<void> {
     }
 
     visitSet (ctx: SetContext) {
-        ctx.accept(this);
+        ctx.getChild(0).accept(this);
     }
     visitIntset (ctx: IntsetContext) {
         const start : number = ctx.getChild(0).accept(this.numberVisitor);
@@ -46,7 +46,9 @@ export class IntSetVisitor implements dealVisitor<void> {
         }
     }
 
-    visit(tree: ParseTree): void {}
+    visit(tree: ParseTree): void {
+        tree.accept(this);
+    }
     visitChildren(node: RuleNode): void {}
     visitTerminal(node: TerminalNode): void {}
     visitErrorNode(node: ErrorNode): void {}

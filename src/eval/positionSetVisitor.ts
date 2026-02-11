@@ -21,7 +21,7 @@ export class PositionSetVisitor implements dealVisitor<void> {
     }
 
     visitSet (ctx: SetContext) {
-        ctx.accept(this);
+        ctx.getChild(0).accept(this);
     }
 
     visitPositionset (ctx: PositionsetContext) : void {
@@ -38,7 +38,9 @@ export class PositionSetVisitor implements dealVisitor<void> {
         }).visit(ctx.getChild(2));
     }
     
-    visit(tree: ParseTree): void {}
+    visit(tree: ParseTree): void {
+        tree.accept(this);
+    }
     visitChildren(node: RuleNode): void {}
     visitTerminal(node: TerminalNode): void {}
     visitErrorNode(node: ErrorNode): void {}

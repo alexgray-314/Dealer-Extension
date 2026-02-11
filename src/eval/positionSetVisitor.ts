@@ -7,7 +7,6 @@ import { dealVisitor } from "../parser/dealVisitor";
 import { IntSetVisitor } from "./intSetVisitor";
 import { Position } from "../state/area";
 import { State } from "../state/state";
-import { stat } from "fs";
 import { StringVisitor } from "./stringVisitor";
 
 export class PositionSetVisitor implements dealVisitor<void> {

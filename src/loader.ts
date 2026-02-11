@@ -15,6 +15,7 @@ import { TermVisitor } from "./eval/termVisitor";
 import { IntSetVisitor } from "./eval/intSetVisitor";
 import { PositionSetVisitor } from "./eval/positionSetVisitor";
 import { Position } from "./state/area";
+import { MoveCatch } from "./state/move_catch";
 
 export class Loader implements dealVisitor<void> {
 
@@ -97,19 +98,64 @@ export class Loader implements dealVisitor<void> {
 
     visitIf (ctx: IfContext) : void {
 
-        const comparator : string = ctx.bexpr().getChild(1).text;
+        const symbol : string = ctx.bexpr().getChild(1).text;
         const termA = ctx.bexpr().getChild(0);
         const termB = ctx.bexpr().getChild(2);
 
-        const a : Primitive = termA.accept(this.termVisitor);
-        const b : Primitive = termB.accept(this.termVisitor);
+        switch(symbol) {
+            case "==": 
+                if (this.comparator.equals(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case "!=":
+                if (!this.comparator.equals(termA.accept(this.termVisitor), termB.accept(this.termVisitor))) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case "<<":
+                if (termA.accept(this.numberVisitor) < termB.accept(this.numberVisitor)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case ">>":
+                if (termA.accept(this.numberVisitor) > termB.accept(this.numberVisitor)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case ">=":
+                if (termA.accept(this.numberVisitor) >= termB.accept(this.numberVisitor)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case "<=":
+                if (termA.accept(this.numberVisitor) <= termB.accept(this.numberVisitor)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case "=?":
+                if (this.comparator.contains(termA.accept(this.termVisitor), termB)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+            case "!?":
+                if (!this.comparator.contains(termA.accept(this.termVisitor), termB)) {
+                    ctx._consequent.accept(this); 
+                    return;
+                }
+                break;
+        }
 
-        if (this.comparator.equals(a, b)) {
-            ctx._consequent.accept(this); 
-        } else {
-            if (ctx.childCount > 5) { // this accounts for if statements with no else clause
-                ctx._antecedent.accept(this);
-            }
+        // Accounts for else statement
+        if (ctx.childCount > 5) { // this accounts for if statements with no else clause
+            ctx._antecedent.accept(this);
         }
 
     }
@@ -138,6 +184,25 @@ export class Loader implements dealVisitor<void> {
             }).visit(ctx.set());
 
         }
+
+    }
+
+    visitOn_move (ctx: On_moveContext) : void {
+
+        this.state.move_catches.push(new MoveCatch(
+            ctx.getChild(2),
+            ctx.getChild(3),
+            ctx.block()
+        ));
+
+    }
+
+    visitOn_action (ctx: On_actionContext) {
+
+        this.state.action_catches.set(
+            ctx.ID().text,
+            ctx.block()
+        );
 
     }
 

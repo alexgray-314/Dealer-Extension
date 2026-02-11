@@ -1,6 +1,14 @@
+import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { Area, Position } from "./area";
 import { Card, SpecialCard } from "./card";
+import { MoveCatch } from "./move_catch";
 import { Stack } from "./stack";
+
+export type MoveInfo = {
+    source: undefined | Position,
+    dest: undefined | Position,
+    player: undefined | number
+}
 
 // This is not to be accessed directly from clients, they must go through the API to validate
 export class State {
@@ -10,6 +18,9 @@ export class State {
     variables : Map<string, [string, Card|number|undefined]>;
     num_players : number;
     turn : number;
+    move_catches : MoveCatch[];
+    action_catches : Map<string, ParseTree>;
+    move_info : MoveInfo;
 
     constructor (num_players : number) {
 
@@ -18,6 +29,13 @@ export class State {
         this.variables = new Map<string, [string, Card|number]>();;
         this.num_players = num_players;
         this.turn = 0;
+        this.move_catches = [];
+        this.action_catches = new Map<string, ParseTree>();
+        this.move_info = {
+            source: undefined,
+            dest: undefined,
+            player: undefined
+        };
 
         // Set up the player hands
         for (let i = 0; i < num_players; i++) {
@@ -41,7 +59,7 @@ export class State {
     }
 
     get_move_player() {
-        return 0;
+        return this.move_info.player;
     }
 
     get_turn_player() {

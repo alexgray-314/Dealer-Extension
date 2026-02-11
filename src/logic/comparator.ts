@@ -1,3 +1,4 @@
+import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { Card, StandardCard } from "../state/card";
 
 export type Primitive = string | number | Card | undefined;
@@ -14,6 +15,13 @@ export class Comparator {
         }
 
         return a === b;
+    }
+
+    contains(item : Primitive, set : ParseTree) : boolean {
+
+        // TODO implement set visitor
+        return true;
+
     }
 
 }

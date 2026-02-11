@@ -18,8 +18,13 @@ export class PositionVisitor implements dealVisitor<Position | undefined> {
         this.numberEvaluator = new NumberVisitor(this.state);
     }
 
-
     visitPosition (ctx: PositionContext) : Position | undefined {
+        if (ctx.MOVE_DEST() !== undefined) {
+            return this.state.move_info.dest;
+        }
+        if (ctx.MOVE_SOURCE() !== undefined) {
+            return this.state.move_info.source;
+        }
         const areaID = new StringVisitor(this.state).visit(ctx.arearef()!) ?? "";
         const stack = this.numberEvaluator.visit(ctx.getChild(2));
         const pos = this.numberEvaluator.visit(ctx.getChild(4));

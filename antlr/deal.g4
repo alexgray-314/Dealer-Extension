@@ -31,8 +31,11 @@ arearef:        ID | player;
 area:           arearef '[' ']';
 stack:          arearef '[' aexpr ']';
 position:       arearef '[' aexpr ',' aexpr ']'
-                | '\\' 
-                | '/';
+                | MOVE_SOURCE 
+                | MOVE_DEST;
+
+MOVE_DEST:      '/';
+MOVE_SOURCE:    '\\';
 
 term:           (CARD | STRING | aexpr | player | area | stack | position) property?;
 property:       '.' ID;

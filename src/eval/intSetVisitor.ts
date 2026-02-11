@@ -6,14 +6,12 @@ import { ProgContext, StmtContext, BlockContext, PlayerContext, DefinitionContex
 import { dealVisitor } from "../parser/dealVisitor";
 import { NumberVisitor } from "./numberVisitor";
 import { State } from "../state/state";
-import { Position } from "../state/area";
-import { IntStream } from "antlr4ts";
 
 export class IntSetVisitor implements dealVisitor<void> {
 
     state : State;
     numberVisitor : NumberVisitor;
-    task : ((item: number) => boolean);
+    task : (item: number) => boolean;
     
     /**
     @param task Executed for each item in the set. If it returns [task] returns false, it will completely stop iterating through the set

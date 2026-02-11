@@ -19,7 +19,7 @@ export class NumberVisitor implements dealVisitor<number> {
         const ID = ctx.getChild(1);
         switch(ID.text) {
             case '/':
-                return this.state.get_move_player();
+                return this.state.get_move_player() ?? NaN;
             case '.':
                 return this.state.get_turn_player();
             case '@':
@@ -47,7 +47,15 @@ export class NumberVisitor implements dealVisitor<number> {
     visitArea?: ((ctx: AreaContext) => number) | undefined;
     visitStack?: ((ctx: StackContext) => number) | undefined;
     visitPosition?: ((ctx: PositionContext) => number) | undefined;
-    visitTerm?: ((ctx: TermContext) => number) | undefined;
+    visitTerm (ctx: TermContext) : number {
+        const property : string | undefined = ctx.property()?.ID().text;
+        // NOTE: this will only get primitive properties. TODO deal with complex objects
+        const term = ctx.getChild(0).accept(this);
+        if (property !== undefined && typeof term === 'object') {
+            return Number((term as any)[property]);
+        }
+        return term;
+    }
     visitProperty?: ((ctx: PropertyContext) => number) | undefined;
     visitBexpr?: ((ctx: BexprContext) => number) | undefined;
     visitAexpr (ctx: AexprContext) {

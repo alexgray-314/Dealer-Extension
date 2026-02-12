@@ -31,7 +31,7 @@ export class PositionSetVisitor implements dealVisitor<void> {
                     stack = Infinity; // this is a bit of a hack, to get out of the loop one nest up
                     return false;
                 }
-                return pos < ((this.state.areas.get(areaID)?.stacks[pos].cards.length) ?? -Infinity);
+                return pos < ((this.state.areas.get(areaID)?.stacks[stack]?.cards.length) ?? -Infinity);
             }).visit(ctx.getChild(4));
             return stack < ((this.state.areas.get(areaID)?.stacks.length) ?? -Infinity);
         }).visit(ctx.getChild(2));

@@ -34,7 +34,12 @@ export function activate(context: vscode.ExtensionContext) {
 			const tree = parser.prog();
 			const state = new State(2);
 			const loader : dealVisitor<void> = new Loader(state);
-			loader.visit(tree);
+			try {
+				loader.visit(tree);
+			} catch (error) {
+				console.error(error);
+			}
+			
 			console.log(state);
 		}
 		

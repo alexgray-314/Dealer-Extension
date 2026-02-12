@@ -86,7 +86,6 @@ export class Loader implements dealVisitor<void> {
                 }
             });
             for (let pos of removed) {
-                console.log(pos);
                 this.state.remove_card(pos);
             }
             

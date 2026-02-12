@@ -1,8 +1,8 @@
-import { dealListener } from "./parser/dealListener";
-import { AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, VariableContext } from "./parser/dealParser";
+import { dealListener } from "../parser/dealListener";
+import { AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, VariableContext } from "../parser/dealParser";
 import * as vscode from "vscode";
 
-export class BasicListener implements dealListener {
+export class VariableAnalysis implements dealListener {
 
     output: vscode.OutputChannel;
     variables: string[];

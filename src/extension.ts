@@ -5,12 +5,13 @@ import * as vscode from 'vscode';
 import { dealLexer } from './parser/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './parser/dealParser';
-import { BasicListener } from './basicListener';
+import { VariableAnalysis } from './provider/variableAnalysis';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './parser/dealListener';
 import { Loader } from './loader';
 import { State } from './state/state';
 import { dealVisitor } from './parser/dealVisitor';
+import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -46,6 +47,17 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(visitCommand);
+
+	// INLAY HINTS
+	// const provider: vscode.InlayHintsProvider = new DealInlayHintsProvider();
+
+	// context.subscriptions.push(
+	// 	vscode.languages.registerInlayHintsProvider(
+	// 		{ language: "deal" },
+	// 		provider
+	// 	)
+	// );
+
 	const diagnosticCollection = vscode.languages.createDiagnosticCollection('deal');
 	vscode.workspace.onDidChangeTextDocument(e => {
      	runParser(e.document, diagnosticCollection, outputChannel);
@@ -87,7 +99,6 @@ function runParser(
 				charPositionInLine + length
 			);
 
-
 			diagnostics.push(
 				new vscode.Diagnostic(
 					range,
@@ -95,11 +106,12 @@ function runParser(
 					vscode.DiagnosticSeverity.Error
 				)
 			);
+
 		}
 	});
 
 	const tree = parser.prog(); // entry rule
-	const listener : dealListener = new BasicListener(outputChannel, diagnostics);
+	const listener : dealListener = new VariableAnalysis(outputChannel, diagnostics);
 	ParseTreeWalker.DEFAULT.walk(listener, tree);
 
 	collection.set(document.uri, diagnostics);

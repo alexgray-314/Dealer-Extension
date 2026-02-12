@@ -63,11 +63,12 @@ export class Loader implements dealVisitor<void> {
 
         if (ctx.source().position() !== undefined) {
             const source = ctx.source().accept(this.positionVisitor);
-            if (source === undefined) {
-                console.log("Source is undefined ", ctx.source().text);
-                return;
-            }
             this.state.move_card(source, dest);
+        } else if (ctx.source().positionset() !== undefined) {
+            new PositionSetVisitor(this.state, (source : Position) => {
+                this.state.move_card(source, dest);
+                return true;
+            }).visit(ctx.source().positionset()!);
         } else {
             const card = ctx.source().accept(this.cardVisitor);
             if (card === undefined) {

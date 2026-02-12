@@ -82,7 +82,11 @@ export class State {
 
     // ---------------- CARD MOVEMENT -----------------------
     
-    move_card(source : Position, destination : Position) {
+    move_card(source : Position | undefined, destination : Position | undefined) {
+
+        if (source === undefined || destination === undefined) {
+            return;
+        }
 
         const card : Card = this.get_card(source);
         if (card !== SpecialCard.Empty) {

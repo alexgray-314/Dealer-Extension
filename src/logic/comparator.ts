@@ -1,9 +1,17 @@
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { Card, StandardCard } from "../state/card";
+import { SetVisitor } from "../eval/setVisitor";
+import { State } from "../state/state";
 
 export type Primitive = string | number | Card | undefined;
 
 export class Comparator {
+
+    state : State;
+
+    constructor(state : State) {
+        this.state = state;
+    }
 
     equals(a : Primitive, b : Primitive) : boolean {
         if (a === undefined || b === undefined) {
@@ -17,10 +25,18 @@ export class Comparator {
         return a === b;
     }
 
-    contains(item : Primitive, set : ParseTree) : boolean {
+    contains(left : Primitive, set : ParseTree) : boolean {
 
-        // TODO implement set visitor
-        return true;
+        let contains : boolean = false;
+        new SetVisitor(this.state, (right : Primitive) => {
+            if (this.equals(left, right)) {
+                contains = true;
+                return false;
+            }
+            return true;
+        }).visit(set);
+
+        return contains;
 
     }
 

@@ -31,7 +31,7 @@ export class Loader implements dealVisitor<void> {
         this.cardVisitor = new CardVisitor(this.state);
         this.numberVisitor = new NumberVisitor(this.state);
         this.termVisitor = new TermVisitor(this.state);
-        this.comparator = new Comparator();
+        this.comparator = new Comparator(this.state);
     }
 
     visitDefinition(ctx: DefinitionContext) : void {

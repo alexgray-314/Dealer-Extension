@@ -6,6 +6,10 @@ import { Primitive } from "../logic/comparator";
 import { ProgContext, StmtContext, BlockContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../parser/dealParser";
 import { dealVisitor } from "../parser/dealVisitor";
 import { State } from "../state/state";
+import { IntSetVisitor } from "./intSetVisitor";
+import { PositionSetVisitor } from "./positionSetVisitor";
+import { Position } from "../state/area";
+import { Card, StandardCard } from "../state/card";
 
 export class SetVisitor implements dealVisitor<void> {
 
@@ -20,48 +24,46 @@ export class SetVisitor implements dealVisitor<void> {
         this.task = task;
     }
 
-    visitProg?: ((ctx: ProgContext) => void) | undefined;
-    visitStmt?: ((ctx: StmtContext) => void) | undefined;
-    visitBlock?: ((ctx: BlockContext) => void) | undefined;
-    visitPlayer?: ((ctx: PlayerContext) => void) | undefined;
-    visitDefinition?: ((ctx: DefinitionContext) => void) | undefined;
-    visitMove?: ((ctx: MoveContext) => void) | undefined;
-    visitSource?: ((ctx: SourceContext) => void) | undefined;
-    visitDestination?: ((ctx: DestinationContext) => void) | undefined;
-    visitOn_action?: ((ctx: On_actionContext) => void) | undefined;
-    visitOn_move?: ((ctx: On_moveContext) => void) | undefined;
-    visitFor?: ((ctx: ForContext) => void) | undefined;
-    visitIf?: ((ctx: IfContext) => void) | undefined;
-    visitAssign?: ((ctx: AssignContext) => void) | undefined;
-    visitFunction_call?: ((ctx: Function_callContext) => void) | undefined;
-    visitUpdateTurn?: ((ctx: UpdateTurnContext) => void) | undefined;
-    visitVariable?: ((ctx: VariableContext) => void) | undefined;
-    visitArgs?: ((ctx: ArgsContext) => void) | undefined;
-    visitArg?: ((ctx: ArgContext) => void) | undefined;
-    visitArearef?: ((ctx: ArearefContext) => void) | undefined;
-    visitArea?: ((ctx: AreaContext) => void) | undefined;
-    visitStack?: ((ctx: StackContext) => void) | undefined;
-    visitPosition?: ((ctx: PositionContext) => void) | undefined;
-    visitTerm?: ((ctx: TermContext) => void) | undefined;
-    visitProperty?: ((ctx: PropertyContext) => void) | undefined;
-    visitBexpr?: ((ctx: BexprContext) => void) | undefined;
-    visitAexpr?: ((ctx: AexprContext) => void) | undefined;
-    visitSet?: ((ctx: SetContext) => void) | undefined;
-    visitIntset?: ((ctx: IntsetContext) => void) | undefined;
-    visitPositionset?: ((ctx: PositionsetContext) => void) | undefined;
-    visitPlayerset?: ((ctx: PlayersetContext) => void) | undefined;
-    visitMove_catch?: ((ctx: Move_catchContext) => void) | undefined;
+    visitSet (ctx: SetContext) {
+
+        const property : string | undefined = ctx.property()?.ID().text;
+
+        if (property !== undefined && ctx.positionset() !== undefined) {
+
+            new PositionSetVisitor(this.state, (pos : Position) => {
+                const card : Card = this.state.get_card(pos);
+                if (typeof card === 'object') {
+                    return this.task((card as any)[property]);
+                } else {
+                    return this.task(undefined);
+                }
+                
+            }).visit(ctx.positionset()!);
+            
+            
+        } else {
+            ctx.getChild(0).accept(this);
+        }
+        
+    }
+    visitIntset (ctx: IntsetContext) {
+        new IntSetVisitor(this.state, this.task).visit(ctx);
+    }
+    visitPositionset (ctx: PositionsetContext) {
+        new PositionSetVisitor(this.state, (pos : Position) => {
+            const card : Card = this.state.get_card(pos);
+            return this.task(card);
+        }).visit(ctx);
+    }
+    visitPlayerset (ctx: PlayersetContext) {
+        new IntSetVisitor(this.state, this.task).visit(ctx);
+    }
+
     visit(tree: ParseTree): void {
-        throw new Error("Method not implemented.");
+        tree.accept(this);
     }
-    visitChildren(node: RuleNode): void {
-        throw new Error("Method not implemented.");
-    }
-    visitTerminal(node: TerminalNode): void {
-        throw new Error("Method not implemented.");
-    }
-    visitErrorNode(node: ErrorNode): void {
-        throw new Error("Method not implemented.");
-    }
+    visitChildren(node: RuleNode): void {}
+    visitTerminal(node: TerminalNode): void {}
+    visitErrorNode(node: ErrorNode): void {}
 
 }

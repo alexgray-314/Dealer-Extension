@@ -16,6 +16,7 @@ import { IntSetVisitor } from "./eval/intSetVisitor";
 import { PositionSetVisitor } from "./eval/positionSetVisitor";
 import { Position } from "./state/area";
 import { MoveCatch } from "./state/move_catch";
+import { deepEqual } from "assert";
 
 export class Loader implements dealVisitor<void> {
 
@@ -65,10 +66,30 @@ export class Loader implements dealVisitor<void> {
             const source = ctx.source().accept(this.positionVisitor);
             this.state.move_card(source, dest);
         } else if (ctx.source().positionset() !== undefined) {
+            const removed : Position[] = [];
+            // First of all, add all the cards to the destination
             new PositionSetVisitor(this.state, (source : Position) => {
-                this.state.move_card(source, dest);
+                const card : Card = this.state.get_card(source);
+                if (card !== SpecialCard.Empty) {
+                    this.state.add_card(card, dest);
+                    removed.push(source);
+                }
                 return true;
             }).visit(ctx.source().positionset()!);
+
+            // Now go back and remove the cards in reverse order of position so that card shifting isn't an issue
+            removed.sort(([, s0, p0] : Position, [, s1, p1] : Position) => {
+                if (s0 === s1) {
+                    return p1-p0;
+                } else {
+                    return s1-s0;
+                }
+            });
+            for (let pos of removed) {
+                console.log(pos);
+                this.state.remove_card(pos);
+            }
+            
         } else {
             const card = ctx.source().accept(this.cardVisitor);
             if (card === undefined) {
@@ -77,7 +98,6 @@ export class Loader implements dealVisitor<void> {
             }
             this.state.add_card(card, dest);
         }
-        // TODO move sets
 
     }
 

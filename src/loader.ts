@@ -226,6 +226,19 @@ export class Loader implements dealVisitor<void> {
 
     }
 
+    visitUpdateTurn (ctx: UpdateTurnContext) {
+
+        if (ctx.player() !== undefined) {
+            this.state.turn = new NumberVisitor(this.state).visit(ctx.player()!);
+        } else {
+            this.state.turn = this.state.turn + 1;
+            if (this.state.turn >= this.state.num_players) {
+                this.state.turn = 0;
+            }
+        }
+
+    }
+
     visit(tree: ParseTree): void {
         tree.accept(this);
     }

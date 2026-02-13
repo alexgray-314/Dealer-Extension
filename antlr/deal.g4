@@ -3,8 +3,8 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | 'cancel' | assign | function_call | updateTurn) ';';
-block:          stmt*;
+stmt:           (definition | move | on_action | on_move | for | if | 'cancel' | assign | function_call | updateTurn) ';' ;
+block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
 

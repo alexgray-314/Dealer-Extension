@@ -2,15 +2,15 @@
 // Import the module and reference it with the alias vscode in your code below
 import { CharStreams } from 'antlr4ts/CharStreams';
 import * as vscode from 'vscode';
-import { dealLexer } from './parser/dealLexer';
+import { dealLexer } from './language/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
-import { dealParser } from './parser/dealParser';
+import { dealParser } from './language/dealParser';
 import { VariableAnalysis } from './provider/variableAnalysis';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
-import { dealListener } from './parser/dealListener';
-import { Loader } from './loader';
+import { dealListener } from './language/dealListener';
+import { Interpreter } from './interpreter';
 import { State } from './state/state';
-import { dealVisitor } from './parser/dealVisitor';
+import { dealVisitor } from './language/dealVisitor';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 
 // This method is called when your extension is activated
@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const parser = new dealParser(tokens);
 			const tree = parser.prog();
 			const state = new State(2);
-			const loader : dealVisitor<void> = new Loader(state);
+			const loader : dealVisitor<void> = new Interpreter(state);
 			try {
 				loader.visit(tree);
 			} catch (error) {

@@ -2,14 +2,14 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Primitive } from "../logic/comparator";
-import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../parser/dealParser";
-import { dealVisitor } from "../parser/dealVisitor";
-import { dealLexer } from "../parser/dealLexer";
+import { Primitive } from "../state/comparator";
+import { ProgContext, StmtContext, PlayerContext, DefinitionContext, MoveContext, SourceContext, DestinationContext, On_actionContext, On_moveContext, ForContext, IfContext, AssignContext, Function_callContext, UpdateTurnContext, VariableContext, ArgsContext, ArgContext, ArearefContext, AreaContext, StackContext, PositionContext, TermContext, PropertyContext, BexprContext, AexprContext, SetContext, IntsetContext, PositionsetContext, PlayersetContext, Move_catchContext } from "../language/dealParser";
+import { dealVisitor } from "../language/dealVisitor";
+import { dealLexer } from "../language/dealLexer";
 import { State } from "../state/state";
-import { StandardCard } from "../state/card";
 import { NumberVisitor } from "./numberVisitor";
 import { CardVisitor } from "./cardVisitor";
+import { StandardCard } from "../model/card";
 
 export class TermVisitor implements dealVisitor<Primitive> {
 

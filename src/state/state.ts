@@ -1,8 +1,8 @@
 import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { Area, Position } from "./area";
-import { Card, SpecialCard } from "./card";
+import { Area, Position } from "../model/area";
+import { Card, SpecialCard } from "../model/card";
 import { MoveCatch } from "./move_catch";
-import { Stack } from "./stack";
+import { Stack } from "../model/stack";
 
 export type MoveInfo = {
     source: undefined | Position,

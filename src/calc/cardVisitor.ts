@@ -2,11 +2,11 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { dealVisitor } from "../parser/dealVisitor";
-import { StandardCard, Card } from "../state/card";
-import { dealLexer } from "../parser/dealLexer";
+import { dealVisitor } from "../language/dealVisitor";
+import { StandardCard, Card } from "../model/card";
+import { dealLexer } from "../language/dealLexer";
 import { State } from "../state/state";
-import { PositionContext } from "../parser/dealParser";
+import { PositionContext } from "../language/dealParser";
 import { PositionVisitor } from "./positionVisitor";
 
 // Either get a position or a card from a tree

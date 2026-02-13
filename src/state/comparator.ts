@@ -1,7 +1,7 @@
 import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { Card, StandardCard } from "../state/card";
-import { SetVisitor } from "../eval/setVisitor";
-import { State } from "../state/state";
+import { Card, StandardCard } from "../model/card";
+import { SetVisitor } from "../calc/setVisitor";
+import { State } from "./state";
 
 export type Primitive = string | number | Card | undefined;
 

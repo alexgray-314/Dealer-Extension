@@ -1,9 +1,9 @@
-import { dealListener } from "../parser/dealListener";
+import { dealListener } from "../language/dealListener";
 
 import * as vscode from 'vscode';
-import { dealParser, PositionContext } from "../parser/dealParser";
+import { dealParser, PositionContext } from "../language/dealParser";
 import { CharStreams, CommonTokenStream, ParserRuleContext } from "antlr4ts";
-import { dealLexer } from "../parser/dealLexer";
+import { dealLexer } from "../language/dealLexer";
 import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 
 export class DealInlayHintsProvider implements dealListener, vscode.InlayHintsProvider {

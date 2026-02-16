@@ -7,34 +7,36 @@ import { Stack } from "../model/stack";
 export type MoveInfo = {
     source: undefined | Position,
     dest: undefined | Position,
-    player: undefined | number
+    player: undefined | number,
+    card: undefined | Card
 }
 
 // This is not to be accessed directly from clients, they must go through the API to validate
 export class State {
 
     areas : Map<string, Area>;
-    actions : Map<string, (state : State) => void>;
     variables : Map<string, [string, Card|number|undefined]>;
     num_players : number;
     turn : number;
+    action_player : number;
     move_catches : MoveCatch[];
-    action_catches : Map<string, ParseTree>;
+    action_catches : Map<string, ParseTree | undefined>;
     move_info : MoveInfo;
 
     constructor (num_players : number) {
 
         this.areas = new Map<string, Area>();
-        this.actions = new Map<string, (state: State) => void>();
         this.variables = new Map<string, [string, Card|number]>();;
         this.num_players = num_players;
         this.turn = 0;
+        this.action_player = NaN;
         this.move_catches = [];
-        this.action_catches = new Map<string, ParseTree>();
+        this.action_catches = new Map<string, ParseTree | undefined>();
         this.move_info = {
             source: undefined,
             dest: undefined,
-            player: undefined
+            player: undefined,
+            card: undefined
         };
 
         // Set up the player hands
@@ -55,7 +57,7 @@ export class State {
 
     // ----------------- Specific players  ------------------
     get_action_player() {
-        return 0;
+        return this.action_player;
     }
 
     get_move_player() {
@@ -64,6 +66,13 @@ export class State {
 
     get_turn_player() {
         return this.turn;
+    }
+
+    reset_move_info() {
+        this.move_info.player = undefined;
+        this.move_info.source = undefined;
+        this.move_info.dest = undefined;
+        this.move_info.card = undefined;
     }
 
     next_turn() {
@@ -192,7 +201,7 @@ export class State {
         };
         Object.assign(defaultArgs, args);// merge defaults with set parameters
 
-        this.actions.set(id, ()=>{});
+        this.action_catches.set(id, undefined);
 
     }
 

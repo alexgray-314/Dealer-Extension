@@ -15,6 +15,7 @@ import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
+import { CancelContext } from "./dealParser";
 import { AssignContext } from "./dealParser";
 import { Function_callContext } from "./dealParser";
 import { UpdateTurnContext } from "./dealParser";
@@ -127,6 +128,13 @@ export interface dealVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitIf?: (ctx: IfContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `dealParser.cancel`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCancel?: (ctx: CancelContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `dealParser.assign`.

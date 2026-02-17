@@ -47,7 +47,10 @@ class Handler {
             for (let moveCatch of this.state.move_catches) {
                 if (moveCatch.check(this.state)) {
                     const card : Card = this.state.get_card(this.state.move_info.source);
-                    if (new Comparator(this.state).equals(card, this.state.move_info.card)) {
+                    if (
+                        !this.state.move_info.cancelled &&
+                        new Comparator(this.state).equals(card, this.state.move_info.card
+                        )) {
                         this.state.move_card(
                             this.state.move_info.source,
                             this.state.move_info.dest

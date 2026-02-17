@@ -15,6 +15,7 @@ import { On_actionContext } from "./dealParser";
 import { On_moveContext } from "./dealParser";
 import { ForContext } from "./dealParser";
 import { IfContext } from "./dealParser";
+import { CancelContext } from "./dealParser";
 import { AssignContext } from "./dealParser";
 import { Function_callContext } from "./dealParser";
 import { UpdateTurnContext } from "./dealParser";
@@ -172,6 +173,17 @@ export interface dealListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIf?: (ctx: IfContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `dealParser.cancel`.
+	 * @param ctx the parse tree
+	 */
+	enterCancel?: (ctx: CancelContext) => void;
+	/**
+	 * Exit a parse tree produced by `dealParser.cancel`.
+	 * @param ctx the parse tree
+	 */
+	exitCancel?: (ctx: CancelContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `dealParser.assign`.

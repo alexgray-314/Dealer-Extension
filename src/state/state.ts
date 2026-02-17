@@ -8,7 +8,8 @@ export type MoveInfo = {
     source: undefined | Position,
     dest: undefined | Position,
     player: undefined | number,
-    card: undefined | Card
+    card: undefined | Card,
+    cancelled: boolean
 }
 
 // This is not to be accessed directly from clients, they must go through the API to validate
@@ -36,7 +37,8 @@ export class State {
             source: undefined,
             dest: undefined,
             player: undefined,
-            card: undefined
+            card: undefined,
+            cancelled: false
         };
 
         // Set up the player hands
@@ -73,6 +75,7 @@ export class State {
         this.move_info.source = undefined;
         this.move_info.dest = undefined;
         this.move_info.card = undefined;
+        this.move_info.cancelled = false;
     }
 
     next_turn() {

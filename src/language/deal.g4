@@ -3,7 +3,7 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | 'cancel' | assign | function_call | updateTurn) ';' ;
+stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
@@ -18,6 +18,7 @@ on_action:      'on' ID '{' block '}';
 on_move:        'on' 'move' move_catch move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
 if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block '}')? ;
+cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
 updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ; 

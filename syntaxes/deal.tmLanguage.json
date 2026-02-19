@@ -40,7 +40,7 @@
 		"functions": {
 			"patterns": [{
 				"name": "entity.name.function.deal",
-				"match": "\\b(move|deal|log)\\b"
+				"match": "\\b(move|deal|log|shuffle|show)\\b"
 			}]
 		},
 		"types": {

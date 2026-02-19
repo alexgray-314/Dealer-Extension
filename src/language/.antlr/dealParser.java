@@ -20,9 +20,9 @@ public class dealParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
-		T__38=39, T__39=40, COMMENT=41, MOVE_DEST=42, MOVE_SOURCE=43, EMPTY=44, 
-		WILDCARD=45, NUMBER=46, ID=47, CARD=48, STRING=49, SPACES=50, NEWLINE=51;
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, COMMENT=38, 
+		MOVE_DEST=39, MOVE_SOURCE=40, EMPTY=41, PLUS=42, MINUS=43, TIMES=44, WILDCARD=45, 
+		NUMBER=46, ID=47, CARD=48, STRING=49, SPACES=50, NEWLINE=51;
 	public static final int
 		RULE_prog = 0, RULE_stmt = 1, RULE_block = 2, RULE_player = 3, RULE_definition = 4, 
 		RULE_move = 5, RULE_source = 6, RULE_destination = 7, RULE_on_action = 8, 
@@ -49,7 +49,7 @@ public class dealParser extends Parser {
 			"'int'", "'card'", "'move'", "'on'", "'{'", "'}'", "'for'", "'in'", "'if'", 
 			"'else'", "'cancel'", "'='", "'++'", "'log'", "'..'", "'('", "','", "')'", 
 			"':'", "'['", "']'", "'=='", "'!='", "'<<'", "'<='", "'>='", "'>>'", 
-			"'=?'", "'!?'", "'+'", "'-'", "'*'", null, "'/'", "'\\'", "'empty'", 
+			"'=?'", "'!?'", null, "'/'", "'\\'", "'empty'", "'+'", "'-'", "'*'", 
 			"'?'"
 		};
 	}
@@ -59,8 +59,8 @@ public class dealParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", 
-			"EMPTY", "WILDCARD", "NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE"
+			null, null, "COMMENT", "MOVE_DEST", "MOVE_SOURCE", "EMPTY", "PLUS", "MINUS", 
+			"TIMES", "WILDCARD", "NUMBER", "ID", "CARD", "STRING", "SPACES", "NEWLINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -139,7 +139,7 @@ public class dealParser extends Parser {
 			setState(71);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 153931632777284L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 142386760685636L) != 0)) {
 				{
 				{
 				setState(68);
@@ -330,7 +330,7 @@ public class dealParser extends Parser {
 			setState(95);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 153931632777284L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 142386760685636L) != 0)) {
 				{
 				{
 				setState(92);
@@ -1004,7 +1004,7 @@ public class dealParser extends Parser {
 				setState(179); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1086317488242692L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1059379453362180L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1666,6 +1666,18 @@ public class dealParser extends Parser {
 		public AexprContext aexpr(int i) {
 			return getRuleContext(AexprContext.class,i);
 		}
+		public List<TerminalNode> PLUS() { return getTokens(dealParser.PLUS); }
+		public TerminalNode PLUS(int i) {
+			return getToken(dealParser.PLUS, i);
+		}
+		public List<TerminalNode> MINUS() { return getTokens(dealParser.MINUS); }
+		public TerminalNode MINUS(int i) {
+			return getToken(dealParser.MINUS, i);
+		}
+		public List<TerminalNode> TIMES() { return getTokens(dealParser.TIMES); }
+		public TerminalNode TIMES(int i) {
+			return getToken(dealParser.TIMES, i);
+		}
 		public AexprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1703,7 +1715,7 @@ public class dealParser extends Parser {
 						setState(260);
 						((AexprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1924145348608L) != 0)) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 30786325577728L) != 0)) ) {
 							((AexprContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1907,6 +1919,7 @@ public class dealParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class PlayersetContext extends ParserRuleContext {
+		public TerminalNode TIMES() { return getToken(dealParser.TIMES, 0); }
 		public PlayersetContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1922,7 +1935,7 @@ public class dealParser extends Parser {
 			setState(289);
 			match(T__1);
 			setState(290);
-			match(T__39);
+			match(TIMES);
 			setState(291);
 			match(T__4);
 			}
@@ -2044,7 +2057,7 @@ public class dealParser extends Parser {
 		" \u0001 \u0001 \u0001 \u0001!\u0001!\u0001!\u0003!\u0129\b!\u0001!\u0000"+
 		"\u0000\"\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018"+
 		"\u001a\u001c\u001e \"$&(*,.02468:<>@B\u0000\u0005\u0001\u0000\u0007\n"+
-		"\u0002\u0000..11\u0001\u0000\u001e#\u0001\u0000$%\u0001\u0000&(\u0136"+
+		"\u0002\u0000..11\u0001\u0000\u001e#\u0001\u0000$%\u0001\u0000*,\u0136"+
 		"\u0000G\u0001\u0000\u0000\u0000\u0002X\u0001\u0000\u0000\u0000\u0004_"+
 		"\u0001\u0000\u0000\u0000\u0006b\u0001\u0000\u0000\u0000\bk\u0001\u0000"+
 		"\u0000\u0000\nq\u0001\u0000\u0000\u0000\fx\u0001\u0000\u0000\u0000\u000e"+
@@ -2075,7 +2088,7 @@ public class dealParser extends Parser {
 		"\u0001\u0000\u0000[\u0003\u0001\u0000\u0000\u0000\\^\u0003\u0002\u0001"+
 		"\u0000]\\\u0001\u0000\u0000\u0000^a\u0001\u0000\u0000\u0000_]\u0001\u0000"+
 		"\u0000\u0000_`\u0001\u0000\u0000\u0000`\u0005\u0001\u0000\u0000\u0000"+
-		"a_\u0001\u0000\u0000\u0000bg\u0005\u0002\u0000\u0000ch\u0005*\u0000\u0000"+
+		"a_\u0001\u0000\u0000\u0000bg\u0005\u0002\u0000\u0000ch\u0005\'\u0000\u0000"+
 		"dh\u0005\u0003\u0000\u0000eh\u0005\u0004\u0000\u0000fh\u00038\u001c\u0000"+
 		"gc\u0001\u0000\u0000\u0000gd\u0001\u0000\u0000\u0000ge\u0001\u0000\u0000"+
 		"\u0000gf\u0001\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000ij\u0005\u0005"+
@@ -2139,10 +2152,10 @@ public class dealParser extends Parser {
 		"/\u0001\u0000\u0000\u0000\u00df\u00e0\u0003*\u0015\u0000\u00e0\u00e1\u0005"+
 		"\u001c\u0000\u0000\u00e1\u00e2\u00038\u001c\u0000\u00e2\u00e3\u0005\u0019"+
 		"\u0000\u0000\u00e3\u00e4\u00038\u001c\u0000\u00e4\u00e5\u0005\u001d\u0000"+
-		"\u0000\u00e5\u00e9\u0001\u0000\u0000\u0000\u00e6\u00e9\u0005+\u0000\u0000"+
-		"\u00e7\u00e9\u0005*\u0000\u0000\u00e8\u00df\u0001\u0000\u0000\u0000\u00e8"+
+		"\u0000\u00e5\u00e9\u0001\u0000\u0000\u0000\u00e6\u00e9\u0005(\u0000\u0000"+
+		"\u00e7\u00e9\u0005\'\u0000\u0000\u00e8\u00df\u0001\u0000\u0000\u0000\u00e8"+
 		"\u00e6\u0001\u0000\u0000\u0000\u00e8\u00e7\u0001\u0000\u0000\u0000\u00e9"+
-		"1\u0001\u0000\u0000\u0000\u00ea\u00f4\u0005,\u0000\u0000\u00eb\u00f4\u0005"+
+		"1\u0001\u0000\u0000\u0000\u00ea\u00f4\u0005)\u0000\u0000\u00eb\u00f4\u0005"+
 		"0\u0000\u0000\u00ec\u00f4\u00051\u0000\u0000\u00ed\u00f4\u0003$\u0012"+
 		"\u0000\u00ee\u00f4\u00038\u001c\u0000\u00ef\u00f4\u0003\u0006\u0003\u0000"+
 		"\u00f0\u00f4\u0003,\u0016\u0000\u00f1\u00f4\u0003.\u0017\u0000\u00f2\u00f4"+
@@ -2175,7 +2188,7 @@ public class dealParser extends Parser {
 		"\u011a\u011b\u0003*\u0015\u0000\u011b\u011c\u0005\u001c\u0000\u0000\u011c"+
 		"\u011d\u0003<\u001e\u0000\u011d\u011e\u0005\u0019\u0000\u0000\u011e\u011f"+
 		"\u0003<\u001e\u0000\u011f\u0120\u0005\u001d\u0000\u0000\u0120?\u0001\u0000"+
-		"\u0000\u0000\u0121\u0122\u0005\u0002\u0000\u0000\u0122\u0123\u0005(\u0000"+
+		"\u0000\u0000\u0121\u0122\u0005\u0002\u0000\u0000\u0122\u0123\u0005,\u0000"+
 		"\u0000\u0123\u0124\u0005\u0005\u0000\u0000\u0124A\u0001\u0000\u0000\u0000"+
 		"\u0125\u0129\u0005-\u0000\u0000\u0126\u0129\u00030\u0018\u0000\u0127\u0129"+
 		"\u0003>\u001f\u0000\u0128\u0125\u0001\u0000\u0000\u0000\u0128\u0126\u0001"+

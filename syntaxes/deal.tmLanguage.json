@@ -34,7 +34,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.deal",
-				"match": "\\b(if|cancel|else|on|define|for|in|empty|return)\\b"
+				"match": "\\b(if|cancel|else|on|define|for|in|return)\\b"
 			}]
 		},
 		"functions": {
@@ -46,7 +46,7 @@
 		"types": {
 			"patterns": [{
 				"name": "storage.type.deal",
-				"match": "\\b(int|string|card|area|action)\\b"
+				"match": "\\b(int|string|card|area|action|empty)\\b"
 			}]
 		},
 		"strings": {

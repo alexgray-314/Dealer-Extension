@@ -41,13 +41,14 @@ position:       arearef '[' aexpr ',' aexpr ']'
 MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
 
-term:           (CARD | STRING | variable | aexpr | player | area | stack | position) property?;
+term:           (EMPTY | CARD | STRING | variable | aexpr | player | area | stack | position) property?;
 property:       '.' ID;
+EMPTY:          'empty';
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
                         | (('=?' | '!?') set)
                         );
-aexpr:          NUMBER | variable;
+aexpr:          NUMBER | variable (op=('+'|'-'|'*') aexpr)*;
 
 set:            (intset | positionset | playerset) property?;
 intset:         aexpr ':' aexpr?;

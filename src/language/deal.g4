@@ -3,7 +3,7 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn) ';' ;
+stmt:           (definition | move | on_action | on_move | for | if | cancel | assign | function_call | updateTurn | log) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | aexpr) '>';
@@ -22,6 +22,7 @@ cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
 updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ; 
+log:            'log' (term)+;
 
 variable:       ID;
 
@@ -38,7 +39,7 @@ position:       arearef '[' aexpr ',' aexpr ']'
 MOVE_DEST:      '/';
 MOVE_SOURCE:    '\\';
 
-term:           (CARD | STRING | aexpr | player | area | stack | position) property?;
+term:           (CARD | STRING | variable | aexpr | player | area | stack | position) property?;
 property:       '.' ID;
 
 bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
@@ -51,7 +52,8 @@ intset:         aexpr ':' aexpr?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
 
-move_catch:     '?' | position | positionset;
+move_catch:     WILDCARD | position | positionset;
+WILDCARD:       '?';
 
 NUMBER:         [0-9]+ ;
 ID:             [a-zA-Z]+ ;

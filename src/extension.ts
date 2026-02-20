@@ -12,6 +12,7 @@ import { Interpreter } from './interpreter';
 import { State } from './state/state';
 import { dealVisitor } from './language/dealVisitor';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
+import { TokenProvider } from './provider/tokenProvider';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -47,6 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(visitCommand);
+
+	new TokenProvider(context);
 
 	// INLAY HINTS
 	// const provider: vscode.InlayHintsProvider = new DealInlayHintsProvider();

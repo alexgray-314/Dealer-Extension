@@ -1,6 +1,6 @@
 import { CardVisitor } from "./calc/cardVisitor";
 import { NumberVisitor } from "./calc/numberVisitor";
-import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, CancelContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "./language/dealParser";
+import { AexprContext, AreaContext, ArearefContext, ArgContext, ArgsContext, AssignContext, BexprContext, CancelContext, ConfigContext, DefinitionContext, DestinationContext, ForContext, Function_callContext, IfContext, IntsetContext, Move_catchContext, MoveContext, On_actionContext, On_moveContext, PlayerContext, PlayersetContext, PositionContext, PositionsetContext, ProgContext, PropertyContext, SetContext, SourceContext, StackContext, StmtContext, TermContext, UpdateTurnContext, VariableContext } from "./language/dealParser";
 import { Card, SpecialCard, StandardCard } from "./model/card";
 import { State } from "./state/state";
 import { PositionVisitor } from "./calc/positionVisitor";
@@ -52,6 +52,10 @@ export class Interpreter implements dealVisitor<void> {
 
         }
 
+    }
+
+    visitConfig (ctx: ConfigContext) {
+        
     }
 
     visitMove(ctx: MoveContext) : void {

@@ -41,6 +41,15 @@
         "scopeName": "source.deal",
         "path": "./syntaxes/deal.tmLanguage.json"
       }
+    ],
+    "semanticTokenScopes": [
+      {
+        "language": "deal",
+        "scopes": {
+          "id.config": ["variable.other.constant.property.deal"],
+          "string.condig": ["string.quoted.double.deal"]
+        }
+      }
     ]
   },
   "scripts": {

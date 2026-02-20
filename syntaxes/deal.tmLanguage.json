@@ -25,9 +25,6 @@
 		},
 		{
 			"include": "#properties"
-		},
-		{
-			"include": "#ids"
 		}
 	],
 	"repository": {
@@ -71,7 +68,7 @@
 		"players": {
 			"patterns": [
 				{
-					"name": "variable.other.deal",
+					"name": "support.type.primitive.deal",
 					"match": "<[^>]*>"
 				}
 			]
@@ -89,14 +86,6 @@
 				{
 					"name": "support.property-value",
 					"match": "\\.[a-z]+"
-				}
-			]
-		},
-		"ids": {
-			"patterns": [
-				{
-					"name": "variable.other.deal",
-					"match": "[A-Za-z]+"
 				}
 			]
 		}

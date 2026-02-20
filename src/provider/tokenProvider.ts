@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { dealListener } from "../language/dealListener";
-import { AttributeContext, dealParser } from "../language/dealParser";
+import { AttributeContext, ConfigContext, dealParser } from "../language/dealParser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { dealLexer } from "../language/dealLexer";
 import { CharStreams } from "antlr4ts/CharStreams";
@@ -17,7 +17,7 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
     tokensBuilder: vscode.SemanticTokensBuilder;
 
     constructor(context: vscode.ExtensionContext) {
-        const tokenTypes = ['class', 'interface', 'enum', 'function', 'variable', 'id', 'value', 'string'];
+        const tokenTypes = ['keyword', 'variable', 'id', 'value', 'string', 'attribute'];
         const tokenModifiers = ['declaration', 'documentation', 'config'];
         this.legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
         this.tokensBuilder = new vscode.SemanticTokensBuilder(this.legend);
@@ -69,19 +69,57 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         return new vscode.Range(-1, -1, -1, -1);
     }
 
-    enterAttribute (ctx: AttributeContext) {
-
+    enterConfig (ctx: ConfigContext) {
         this.tokensBuilder.push(
-            this.getRange(ctx.getChild(0)),
-            'id',
+            this.getRange(ctx.ID()),
+            'keyword',
             ['config']
         );
+    }
+
+    enterAttribute (ctx: AttributeContext) {
 
         if(ctx.atts() === undefined) {
 
             this.tokensBuilder.push(
-                this.getRange(ctx.getChild(1)),
-                (ctx.STRING() === undefined) ? 'value' : 'string',
+                this.getRange(ctx.getChild(0)),
+                'attribute',
+                ['config']
+            );
+
+            if (ctx.STRING() !== undefined) {
+                this.tokensBuilder.push(
+                    this.getRange(ctx.STRING()!),
+                    'string',
+                    ['config']
+                );
+            } else {
+                switch (ctx.getChild(1).text) {
+                    case "private":
+                    case "public":
+                    case "hidden": 
+                    case "centre": // centre
+                    case "side": // side
+                    case "hand": // hand
+                    case "north":
+                    case "east":
+                    case "south":
+                    case "west":
+                    case "spread":
+                    case "single":
+                        this.tokensBuilder.push(
+                            this.getRange(ctx.getChild(1)),
+                            'value',
+                            ['config']
+                        );
+                }
+            }
+
+        } else {
+
+            this.tokensBuilder.push(
+                this.getRange(ctx.getChild(0)),
+                'id',
                 ['config']
             );
 

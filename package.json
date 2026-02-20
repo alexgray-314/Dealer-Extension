@@ -46,8 +46,11 @@
       {
         "language": "deal",
         "scopes": {
-          "id.config": ["variable.other.constant.property.deal"],
-          "string.condig": ["string.quoted.double.deal"]
+          "attribute.config": ["variable.other.constant.property.deal"],
+          "id.config": ["variable.other.deal"],
+          "value.config": ["support.type.primitive.deal"],
+          "string.condig": ["string.quoted.double.deal"],
+          "keyword.condig": ["keyword.control.deal"]
         }
       }
     ]

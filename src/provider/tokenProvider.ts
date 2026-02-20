@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { dealListener } from "../language/dealListener";
-import { AttributeContext, ConfigContext, dealParser } from "../language/dealParser";
+import { ArearefContext, AttributeContext, ConfigContext, dealParser, DefinitionContext, ForContext, Function_callContext, VariableContext } from "../language/dealParser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { dealLexer } from "../language/dealLexer";
 import { CharStreams } from "antlr4ts/CharStreams";
@@ -15,12 +15,14 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
 
     legend : vscode.SemanticTokensLegend;
     tokensBuilder: vscode.SemanticTokensBuilder;
+    ids : string[];
 
     constructor(context: vscode.ExtensionContext) {
-        const tokenTypes = ['keyword', 'variable', 'id', 'value', 'string', 'attribute'];
+        const tokenTypes = ['keyword', 'function', 'variable', 'id', 'value', 'string', 'attribute'];
         const tokenModifiers = ['declaration', 'documentation', 'config'];
         this.legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
         this.tokensBuilder = new vscode.SemanticTokensBuilder(this.legend);
+        this.ids = [];
 
         context.subscriptions.push(
             vscode.languages.registerDocumentSemanticTokensProvider(
@@ -44,6 +46,7 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         const tree = parser.prog();
 
         this.tokensBuilder = new vscode.SemanticTokensBuilder(this.legend);
+        this.ids = [];
 
         ParseTreeWalker.DEFAULT.walk(this as dealListener, tree);
 
@@ -67,6 +70,55 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         }
 
         return new vscode.Range(-1, -1, -1, -1);
+    }
+
+    enterDefinition (ctx: DefinitionContext) {
+        this.ids.push(ctx.ID().text);
+        this.tokensBuilder.push(
+            this.getRange(ctx.ID()),
+            'variable',
+            ['declaration']
+        );
+    }
+
+    enterVariable (ctx: VariableContext) {
+        if (this.ids.includes(ctx.ID().text)) {
+            this.tokensBuilder.push(
+                this.getRange(ctx.ID()),
+                'variable',
+                ['declaration']
+            );
+        }
+    }
+
+    enterFor (ctx: ForContext) {
+        this.ids.push(ctx.ID().text);
+        this.tokensBuilder.push(
+            this.getRange(ctx.ID()),
+            'variable',
+            ['declaration']
+        );
+    }
+
+    enterArearef (ctx: ArearefContext) {
+        if (ctx.ID() !== undefined) {
+            if (this.ids.includes(ctx.ID()!.text) || ctx.ID()!.text === "deck") {
+                this.tokensBuilder.push(
+                    this.getRange(ctx.ID()!),
+                    'variable',
+                    ['declaration']
+                );
+            }
+        }
+        
+    }
+
+    enterFunction_call (ctx: Function_callContext) {
+        this.tokensBuilder.push(
+            this.getRange(ctx.ID()),
+            'function',
+            ['declaration']
+        );
     }
 
     enterConfig (ctx: ConfigContext) {

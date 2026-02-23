@@ -12,7 +12,7 @@ VARTYPE:        'int' | 'card';
 definition:     'define' type=('area' | 'action' | VARTYPE) ID ;
 
 define_function:'define' 'function' ID '(' argdef? ')' '{' block '}' ;
-argdef:         VARTYPE ID (',' argdef)?;
+argdef:         VARTYPE ID (',' VARTYPE ID)*;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
@@ -26,7 +26,7 @@ if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block
 cancel:         'cancel';
 assign:         variable '=' term;
 function_call:  ID args;
-updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ; 
+updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ;
 log:            'log' (term)+;
 modify:         position '..' function_call
                 | variable '..' function_call;
@@ -45,7 +45,7 @@ arearef:        ID | player;
 area:           arearef '[' ']';
 stack:          arearef '[' aexpr ']';
 position:       arearef '[' aexpr ',' aexpr ']'
-                | MOVE_SOURCE 
+                | MOVE_SOURCE
                 | MOVE_DEST
                 | INTERACT_CARD;
 
@@ -57,10 +57,10 @@ term:           (EMPTY | CARD | STRING | variable | aexpr | player | area | stac
 property:       '.' ID;
 EMPTY:          'empty';
 
-bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term) 
+bexpr:          term (  (('=='|'!='|'<<'|'<='|'>='|'>>') term)
                         | (('=?' | '!?') set)
                         );
-aexpr:          NUMBER | variable (op=(PLUS|MINUS|TIMES) aexpr)*;
+aexpr:          (NUMBER | variable) (op=(PLUS|MINUS|TIMES) aexpr)*;
 PLUS:           '+';
 MINUS:          '-';
 TIMES:          '*';

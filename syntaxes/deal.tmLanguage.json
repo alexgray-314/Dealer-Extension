@@ -52,8 +52,8 @@
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.deal",
-					"match": "\\\\."
+				"name": "support.type.primitive.deal",
+				"match": "%[as]"
 				}
 			]
 		},

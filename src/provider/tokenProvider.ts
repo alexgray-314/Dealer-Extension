@@ -139,13 +139,7 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
                 ['config']
             );
 
-            if (ctx.STRING() !== undefined) {
-                this.tokensBuilder.push(
-                    this.getRange(ctx.STRING()!),
-                    'string',
-                    ['config']
-                );
-            } else {
+            if (ctx.STRING() === undefined) {
                 switch (ctx.getChild(1).text) {
                     case "private":
                     case "public":

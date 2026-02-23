@@ -35,15 +35,21 @@
 			}]
 		},
 		"functions": {
-			"patterns": [{
-				"name": "entity.name.function.deal",
-				"match": "\\b(move|log|show|interact)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.function.deal",
+					"match": "\\b(move|log|show|interact)\\b"
+				},
+				{
+					"name": "entity.name.function.deal",
+					"match": "(?<=\\s)[A-Za-z_]+(?=\\()"
+				}
+			]
 		},
 		"types": {
 			"patterns": [{
 				"name": "storage.type.deal",
-				"match": "\\b(int|string|card|area|action|empty)\\b"
+				"match": "\\b(int|string|card|area|action|empty|function)\\b"
 			}]
 		},
 		"strings": {

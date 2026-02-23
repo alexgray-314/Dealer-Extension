@@ -1,5 +1,5 @@
 import { dealListener } from "../language/dealListener";
-import { AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, VariableContext } from "../language/dealParser";
+import { ArgdefContext, AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, VariableContext } from "../language/dealParser";
 import * as vscode from "vscode";
 
 export class VariableAnalysis implements dealListener {
@@ -27,6 +27,10 @@ export class VariableAnalysis implements dealListener {
             this.variables.push(id);
         }
 
+    }
+
+    enterArgdef (ctx: ArgdefContext) {
+        this.variables.push(ctx.ID().text);
     }
 
     enterVariable(ctx: VariableContext) {

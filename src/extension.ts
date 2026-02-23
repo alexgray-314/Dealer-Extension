@@ -8,9 +8,6 @@ import { dealParser } from './language/dealParser';
 import { VariableAnalysis } from './provider/variableAnalysis';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './language/dealListener';
-import { Interpreter } from './interpreter';
-import { State } from './state/state';
-import { dealVisitor } from './language/dealVisitor';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 import { TokenProvider } from './provider/tokenProvider';
 
@@ -24,27 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	const visitCommand = vscode.commands.registerCommand('dealer.load', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		const editor = vscode.window.activeTextEditor;
-
-		if (editor) {
-			const document : vscode.TextDocument = editor.document;
-			const lexer = new dealLexer(CharStreams.fromString(document.getText()));
-			const tokens = new CommonTokenStream(lexer);
-			const parser = new dealParser(tokens);
-			const tree = parser.prog();
-			const state = new State(2);
-			const loader : dealVisitor<void> = new Interpreter(state);
-			try {
-				loader.visit(tree);
-			} catch (error) {
-				console.error(error);
-			}
-			
-			console.log(state);
-		}
-		
+		console.log("hello world");
 	});
 
 	context.subscriptions.push(visitCommand);

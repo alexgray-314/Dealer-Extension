@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Deal",
+	"name": "deal",
 	"patterns": [
 		{
 			"include": "#keywords"
@@ -37,7 +37,7 @@
 		"functions": {
 			"patterns": [{
 				"name": "entity.name.function.deal",
-				"match": "\\b(move|log|show)\\b"
+				"match": "\\b(move|log|show|interact)\\b"
 			}]
 		},
 		"types": {

@@ -112,12 +112,14 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
     }
 
     enterArgdef (ctx: ArgdefContext) {
-        this.tokensBuilder.push(
-            getRange(ctx.ID()),
+        for (let id of ctx.ID()) {
+            this.tokensBuilder.push(
+            getRange(id),
             'variable',
             ['declaration']
         );
-        this.ids.push(ctx.ID().text);
+            this.ids.push(id.text);
+        }
     }
 
     enterAttribute (ctx: AttributeContext) {

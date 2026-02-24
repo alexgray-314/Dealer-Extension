@@ -30,7 +30,9 @@ export class VariableAnalysis implements dealListener {
     }
 
     enterArgdef (ctx: ArgdefContext) {
-        this.variables.push(ctx.ID().text);
+        for (let id of ctx.ID()) {
+            this.variables.push(id.text);
+        }
     }
 
     enterVariable(ctx: VariableContext) {

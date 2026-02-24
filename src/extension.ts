@@ -42,6 +42,9 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidChangeTextDocument(e => {
      	runParser(e.document, diagnosticCollection, outputChannel);
     });
+	vscode.workspace.textDocuments.forEach((doc) => {
+		runParser(doc, diagnosticCollection, outputChannel);
+	});
 }
 
 // This method is called when your extension is deactivated

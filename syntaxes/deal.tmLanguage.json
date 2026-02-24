@@ -47,10 +47,16 @@
 			]
 		},
 		"types": {
-			"patterns": [{
-				"name": "storage.type.deal",
-				"match": "\\b(int|string|card|area|action|empty|function)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "storage.type.deal",
+					"match": "\\b(int|string|card|area|action|function)\\b"
+				},
+				{
+					"name": "storage.type.deal",
+					"match": "\\b(empty|jack|queen|king|ace|spades|hearts|diamonds|clubs)\\b"
+				}
+			]
 		},
 		"strings": {
 			"name": "string.quoted.double.deal",

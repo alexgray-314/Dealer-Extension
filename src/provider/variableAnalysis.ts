@@ -1,6 +1,9 @@
 import { dealListener } from "../language/dealListener";
 import { ArgdefContext, AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, VariableContext } from "../language/dealParser";
 import * as vscode from "vscode";
+import { getRange } from "../util/range";
+
+const keyWords = ['empty', 'jack', 'queen','king','ace','spades','hearts','clubs','diamonds','on','move','for','interract','if','define','function','int','card','area','action', 'for','in','else','cancel','log','show'];
 
 export class VariableAnalysis implements dealListener {
 
@@ -40,18 +43,10 @@ export class VariableAnalysis implements dealListener {
         const id = ctx.ID().text;
         // Check for undeclared variables
         if (!this.variables.includes(id)) {
-            const length : number = Math.max((id.length), 1);
-            
-            const range = new vscode.Range(
-                ctx._start.line - 1,
-                ctx._start.charPositionInLine,
-                ctx._start.line - 1,
-                ctx._start.charPositionInLine + length
-            );
             
             this.diagnostics.push(
                 new vscode.Diagnostic(
-                    range,
+                    getRange(ctx.ID()),
                     "Variable " + id + " has not been declared",
                     vscode.DiagnosticSeverity.Warning
                 )

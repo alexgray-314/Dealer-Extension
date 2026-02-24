@@ -52,6 +52,11 @@ function runParser(
 	collection: vscode.DiagnosticCollection,
 	outputChannel : vscode.OutputChannel
 ) {
+
+	if (document.languageId !== 'deal') {
+        return;
+    }
+
   	const lexer = new dealLexer(CharStreams.fromString(document.getText()));
   	const tokens = new CommonTokenStream(lexer);
   	const parser = new dealParser(tokens);

@@ -1,5 +1,5 @@
 import { dealListener } from "../language/dealListener";
-import { ArgdefContext, AssignContext, DefinitionContext, ForContext, MoveContext, SourceContext, TermContext, VariableContext } from "../language/dealParser";
+import { ArgdefContext, AssignContext, Define_functionContext, DefinitionContext, ForContext, MoveContext, SourceContext, TermContext, VariableContext } from "../language/dealParser";
 import * as vscode from "vscode";
 import { getRange } from "../util/range";
 
@@ -84,14 +84,14 @@ export class VariableAnalysis implements dealListener {
         const ids = ctx.ID();
         const types = ctx.VARTYPE();
         for (let i = 0; i < ids.length; i++) {
-            const type = types[i].text;
+            const type = types[i].text.toUpperCase();
             if (type === 'INT' || type === 'CARD') {
                 this.variables.push([type, ids[i].text]);
             }
         }
     }
 
-    enterVariable(ctx: VariableContext) {
+    exitVariable(ctx: VariableContext) {
 
         const id = ctx.ID().text;
         // Check for undeclared variables
@@ -102,7 +102,7 @@ export class VariableAnalysis implements dealListener {
             this.diagnostics.push(
                 new vscode.Diagnostic(
                     getRange(ctx.ID()),
-                    "Variable " + id + " has not been declared",
+                    "Variable " + id + " has not been declared" + this.variables,
                     vscode.DiagnosticSeverity.Warning
                 )
             );

@@ -32,8 +32,24 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         return [
             this.completion("up", vscode.CompletionItemKind.Function, "..up();\n$1", "## {CARD}..up()\nFlips a card to be facing upwards, so it can be seen"),
             this.completion("rank", vscode.CompletionItemKind.Property, ".rank $1", "## {CARD}.rank\n For example: {4 of spades}.rank == 4"),
-            this.style(tree)
+            this.style(tree),
+            ...this.ids(tree)
         ];
+    }
+
+    private ids(tree : ParseTree) : vscode.CompletionItem[] {
+        const ids : string[] = [];
+        const types : string[] = [];
+        const listener : dealListener = {
+            enterDefinition(ctx : DefinitionContext) {
+                ids.push(ctx.ID().text);
+                types.push(ctx._type.text ?? "undefined");
+            }
+        };
+        ParseTreeWalker.DEFAULT.walk(listener, tree);
+        return ids.map((id : string, index : number) : vscode.CompletionItem => {
+            return this.completion(id, vscode.CompletionItemKind.Variable, id, types[index] + ": " + id);
+        });
     }
 
     /**

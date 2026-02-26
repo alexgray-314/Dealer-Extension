@@ -1,13 +1,9 @@
 import * as vscode from "vscode";
-import { dealListener } from "../language/dealListener";
-import { dealParser, DefinitionContext } from "../language/dealParser";
-import { dealLexer } from "../language/dealLexer";
-import { CharStreams, CommonTokenStream } from "antlr4ts";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
+import { TypeChecker } from "../helper/typecheck";
+import * as info from "../docs/info.json";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
-    
+
     constructor(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
             'deal',
@@ -24,51 +20,71 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     ): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> 
     {
 
-        const lexer = new dealLexer(CharStreams.fromString(document.getText()));
-        const tokens = new CommonTokenStream(lexer);
-        const parser = new dealParser(tokens);
-        const tree = parser.prog();
+        const checker : TypeChecker = new TypeChecker(document.getText());
+
+        const previousTerm : string = document.getText(new vscode.Range(
+            document.lineAt(position.line).range.start,
+            position
+        )).split(/\s/).pop()?.replaceAll('.', '') ?? "";
+
+        let previousType = "NONE";
+        try {
+            previousType = checker.typeOf(previousTerm).toUpperCase() ?? "NONE";
+        } catch (e) {}
 
         return [
-            this.completion("up", vscode.CompletionItemKind.Function, "..up();\n$1", "## {CARD}..up()\nFlips a card to be facing upwards, so it can be seen"),
-            this.completion("rank", vscode.CompletionItemKind.Property, ".rank $1", "## {CARD}.rank\n For example: {4 of spades}.rank == 4"),
-            this.style(tree),
-            ...this.ids(tree)
+            ...this.properties(previousType),
+            ...this.style(checker, previousType),
+            ...this.ids(checker, previousType)
         ];
     }
 
-    private ids(tree : ParseTree) : vscode.CompletionItem[] {
-        const ids : string[] = [];
-        const types : string[] = [];
-        const listener : dealListener = {
-            enterDefinition(ctx : DefinitionContext) {
-                ids.push(ctx.ID().text);
-                types.push(ctx._type.text ?? "undefined");
-            }
-        };
-        ParseTreeWalker.DEFAULT.walk(listener, tree);
-        return ids.map((id : string, index : number) : vscode.CompletionItem => {
-            return this.completion(id, vscode.CompletionItemKind.Variable, id, types[index] + ": " + id);
+    private properties(type : string) : vscode.CompletionItem[] {
+        switch(type) {
+            case "CARD":
+                return [
+                    this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
+                    this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
+                ];
+            case "STACK":
+                return [
+                    this.completion("length", vscode.CompletionItemKind.Property, "length", info.length)
+                ];
+        }
+        return [];
+    }
+
+    private ids(checker : TypeChecker, type: string) : vscode.CompletionItem[] {
+
+        if (type !== "NONE") {
+            return [];
+        }
+
+        return [...checker.ids.entries()].map(([id, type], index : number) : vscode.CompletionItem => {
+            return this.completion(id, vscode.CompletionItemKind.Variable, id, "define " + type + " " + id + ";");
         });
     }
 
     /**
      * @returns Code snippet for the $style config
      */
-    private style(tree : ParseTree) : vscode.CompletionItem {
+    private style(checker : TypeChecker, type : string) : vscode.CompletionItem[] {
+
+        if (type !== "NONE") {
+            return [];
+        }
 
         const areas : string[] = [];
         const actions : string[] = [];
-        const listener : dealListener = {
-            enterDefinition(ctx : DefinitionContext) {
-                if (ctx._type.text === "area") {
-                    areas.push(ctx.ID().text);
-                } else if (ctx._type.text === "action") {
-                    actions.push(ctx.ID().text);
-                }
+
+        for (let [id, type] of checker.ids.entries()) {
+            if (type === "AREA") {
+                areas.push(id);
+            } else if (type === "ACTION") {
+                actions.push(id);
             }
-        };
-        ParseTreeWalker.DEFAULT.walk(listener, tree);
+        }
+
 
         let insertText : string =        
 `style {
@@ -103,7 +119,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         insertText = insertText + "\n};";
 
-        return this.completion("$style", vscode.CompletionItemKind.Snippet, insertText, "Styling for the card game");
+        return [this.completion("$style", vscode.CompletionItemKind.Snippet, insertText, "Styling for the card game")];
 
     }
 

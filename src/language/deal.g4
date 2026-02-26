@@ -28,8 +28,7 @@ assign:         variable '=' term;
 function_call:  ID args;
 updateTurn:     '<' '.' '>'  ( '++' | '=' player)  ;
 log:            'log' (term)+;
-modify:         position '..' function_call
-                | variable '..' function_call;
+modify:         (position | variable) '.' function_call;
 show:           'show' (position | CARD | variable) player;
 
 config:         '$' ID atts;
@@ -68,6 +67,8 @@ set:            (intset | positionset | playerset) property?;
 intset:         term ':' term?;
 positionset:    arearef '[' intset ',' intset ']';
 playerset:      '<' '*' '>';
+
+object:         primitives | CARD | STRING | variable | NUMBER | player | area | stack | position | intset | positionset | playerset;
 
 move_catch:     WILDCARD | position | positionset;
 WILDCARD:       '?';

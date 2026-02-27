@@ -33,12 +33,13 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         parser.errorHandler = new CompletionErrorStrategy();
         const tree = parser.prog();
 
+        const checker : TypeChecker = new TypeChecker(tree);
+
         let core = new c3.CodeCompletionCore(parser);
         core.preferredRules = new Set<number>([
-            dealParser.RULE_property,
-            dealParser.RULE_variable,
             dealParser.RULE_term,
-            dealParser.RULE_config
+            dealParser.RULE_config,
+            dealParser.RULE_property
         ]);
 
         const tokenIndex = findCursorTokenIndex(tree, position);
@@ -48,21 +49,25 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         console.log(candidates.rules);
 
         return [
-            // ...this.fromRules(parser, candidates.rules)
+            ...this.fromRules(checker.ids, candidates.rules),
             ...this.fromTokens(parser, candidates.tokens),
         ];
 
     }
 
-    fromRules(parser : dealParser, rules : Map<number, c3.ICandidateRule>) : vscode.CompletionItem[] {
+    fromRules(ids : Map<string, string>, rules : Map<number, c3.ICandidateRule>) : vscode.CompletionItem[] {
 
         const items : vscode.CompletionItem[] = [];
 
         for (const [ruleID, ruleData] of rules) {
-            console.log("ruledata", ruleData);
             switch(ruleID) {
                 case dealParser.RULE_config:
-                    // style
+                    console.log("config");
+                    break;
+                case dealParser.RULE_term:
+                    console.log("term");
+                    return this.ids(ids, "CARD", "INT", "AREA");
+                    break;
             }
         }
 
@@ -100,14 +105,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         return [];
     }
 
-    private ids(checker : TypeChecker, type: string) : vscode.CompletionItem[] {
+    private ids(map : Map<string,string>, ...types : string[]) : vscode.CompletionItem[] {
 
-        if (type !== "NONE") {
-            return [];
-        }
-
-        return [...checker.ids.entries()].map(([id, type], index : number) : vscode.CompletionItem => {
-            return this.completion(id, vscode.CompletionItemKind.Variable, id, "define " + type + " " + id + ";");
+        return [...map.entries()].filter(([id, t]) : boolean => {
+            return types.includes(t);
+        }).map(([id, t], index : number) : vscode.CompletionItem => {
+            return this.completion(id, vscode.CompletionItemKind.Variable, id, "define " + t + " " + id + ";");
         });
     }
 

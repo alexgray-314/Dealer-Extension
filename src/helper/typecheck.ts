@@ -13,15 +13,10 @@ export class TypeChecker implements dealVisitor<string> {
 
     ids : Map<string, string>; // id : type
 
-    constructor(program : string) {
+    constructor(tree : ParseTree) {
         this.ids = new Map<string, string>();
 
         try {
-            const lexer = new dealLexer(CharStreams.fromString(program));
-            const tokens = new CommonTokenStream(lexer);
-            const parser = new dealParser(tokens);
-            const tree = parser.prog();
-
             // Hack to get around "this." changing meaning within scope of anonymous inner class
             const ids = this.ids;
             const listener : dealListener = {

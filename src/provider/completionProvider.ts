@@ -6,6 +6,7 @@ import { CharStreams, CommonTokenStream } from "antlr4ts";
 import { dealParser } from "../language/dealParser";
 import * as c3 from "antlr4-c3";
 import { findCursorTokenIndex } from "../util/cusor";
+import * as keywords from "../docs/keywords.json";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -25,48 +26,61 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     ): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> 
     {
 
-        const checker : TypeChecker = new TypeChecker(document.getText());
-
         const lexer = new dealLexer(CharStreams.fromString(document.getText()));
         const tokens = new CommonTokenStream(lexer);
         const parser = new dealParser(tokens);
         const tree = parser.prog();
 
         let core = new c3.CodeCompletionCore(parser);
-        // core.preferredRules = new Set<number>([
-        //     dealParser.RULE_term
-        // ]);
-        // core.ignoredTokens = new Set([
+        core.preferredRules = new Set<number>([
+            dealParser.RULE_property,
+            dealParser.RULE_variable,
+            dealParser.RULE_term,
+            dealParser.RULE_config
+        ]);
 
-        // ]);
-        
+        const tokenIndex = findCursorTokenIndex(tree, position);
+        console.log(tokenIndex, "token index");
+        let candidates = core.collectCandidates(tokenIndex);
 
-        const i = findCursorTokenIndex(tree, position);
-        let candidates = core.collectCandidates(i);
+        console.log(candidates.rules);
+
+        return [
+            ...this.fromRules(parser, candidates.rules)
+            // ...this.fromTokens(parser, candidates.tokens),
+        ];
+
+    }
+
+    fromRules(parser : dealParser, rules : Map<number, c3.ICandidateRule>) : vscode.CompletionItem[] {
+
+        const items : vscode.CompletionItem[] = [];
+
+        for (const [ruleID, ruleData] of rules) {
+            console.log("ruledata", ruleData);
+            switch(ruleID) {
+                case dealParser.RULE_config:
+                    // style
+            }
+        }
+
+        return items;
+
+    }
+
+    fromTokens(parser : dealParser, tokens : Map<number, c3.TokenList>) : vscode.CompletionItem[] {
 
         let words : string[] = [];
-        for (let candidate of candidates.tokens) {
-            words.push(parser.vocabulary.getDisplayName(candidate[0]).replaceAll('"', "").replaceAll("'", ""));
+        for (let candidate of tokens) {
+            const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "");
+            if (keywords.all.includes(word)) { // get rid of any symbols
+                words.push(word);
+            }
         }
         return words.map((word) : vscode.CompletionItem  => {
             return this.completion(word, vscode.CompletionItemKind.Keyword, word, "");
         }, this);
 
-        const previousTerm : string = document.getText(new vscode.Range(
-            document.lineAt(position.line).range.start,
-            position
-        )).split(/\s/).pop()?.replaceAll('.', '') ?? "";
-
-        let previousType = "NONE";
-        try {
-            previousType = checker.typeOf(previousTerm).toUpperCase() ?? "NONE";
-        } catch (e) {}
-
-        return [
-            ...this.properties(previousType),
-            ...this.style(checker, previousType),
-            ...this.ids(checker, previousType)
-        ];
     }
 
     private properties(type : string) : vscode.CompletionItem[] {
@@ -98,11 +112,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     /**
      * @returns Code snippet for the $style config
      */
-    private style(checker : TypeChecker, type : string) : vscode.CompletionItem[] {
-
-        if (type !== "NONE") {
-            return [];
-        }
+    private style(checker : TypeChecker) : vscode.CompletionItem[] {
 
         const areas : string[] = [];
         const actions : string[] = [];

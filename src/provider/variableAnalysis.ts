@@ -3,8 +3,6 @@ import { ArgdefContext, AssignContext, Define_functionContext, DefinitionContext
 import * as vscode from "vscode";
 import { getRange } from "../util/range";
 
-const keyWords = ['empty', 'jack', 'queen','king','ace','spades','hearts','clubs','diamonds','on','move','for','interract','if','define','function','int','card','area','action', 'for','in','else','cancel','log','show'];
-
 type varDef = ["CARD"|"INT", string];
 
 export class VariableAnalysis implements dealListener {

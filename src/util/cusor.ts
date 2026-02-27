@@ -8,16 +8,22 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 export function findCursorTokenIndex(tree : ParseTree, cursor: vscode.Position) : number {
 
     let tokenIndex = 0;
+    let output : number|undefined;
     const listener : dealListener = {
         visitTerminal(node : TerminalNode) {
-            const position = new vscode.Position(node.symbol.line - 1, node.symbol.charPositionInLine + (node.symbol.text?.length ?? 0));
-            if (position.isBefore(cursor)) {
-                tokenIndex++;
+            if (output === undefined) {
+                const position = new vscode.Position(node.symbol.line - 1, node.symbol.charPositionInLine + (node.symbol.text?.length ?? 0));
+                console.log(node.text);
+                if (position.isAfterOrEqual(cursor)) {
+                    output = tokenIndex;
+                } else {
+                    tokenIndex++;
+                }
             }
         },
     };
 
     ParseTreeWalker.DEFAULT.walk(listener, tree);
-    return tokenIndex;
+    return output ?? 0;
 
 }

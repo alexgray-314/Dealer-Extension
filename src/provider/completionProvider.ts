@@ -7,6 +7,7 @@ import { dealParser } from "../language/dealParser";
 import * as c3 from "antlr4-c3";
 import { findCursorTokenIndex } from "../util/cusor";
 import * as keywords from "../docs/keywords.json";
+import { CompletionErrorStrategy } from "../language/CompletionErrorStrategy";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -29,6 +30,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const lexer = new dealLexer(CharStreams.fromString(document.getText()));
         const tokens = new CommonTokenStream(lexer);
         const parser = new dealParser(tokens);
+        parser.errorHandler = new CompletionErrorStrategy();
         const tree = parser.prog();
 
         let core = new c3.CodeCompletionCore(parser);
@@ -46,8 +48,8 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         console.log(candidates.rules);
 
         return [
-            ...this.fromRules(parser, candidates.rules)
-            // ...this.fromTokens(parser, candidates.tokens),
+            // ...this.fromRules(parser, candidates.rules)
+            ...this.fromTokens(parser, candidates.tokens),
         ];
 
     }

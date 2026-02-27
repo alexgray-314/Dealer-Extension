@@ -1,6 +1,11 @@
 import * as vscode from "vscode";
 import { TypeChecker } from "../helper/typecheck";
 import * as info from "../docs/info.json";
+import { dealLexer } from "../language/dealLexer";
+import { CharStreams, CommonTokenStream } from "antlr4ts";
+import { dealParser } from "../language/dealParser";
+import * as c3 from "antlr4-c3";
+import { findCursorTokenIndex } from "../util/cusor";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -21,6 +26,31 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     {
 
         const checker : TypeChecker = new TypeChecker(document.getText());
+
+        const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+        const tokens = new CommonTokenStream(lexer);
+        const parser = new dealParser(tokens);
+        const tree = parser.prog();
+
+        let core = new c3.CodeCompletionCore(parser);
+        // core.preferredRules = new Set<number>([
+        //     dealParser.RULE_term
+        // ]);
+        // core.ignoredTokens = new Set([
+
+        // ]);
+        
+
+        const i = findCursorTokenIndex(tree, position);
+        let candidates = core.collectCandidates(i);
+
+        let words : string[] = [];
+        for (let candidate of candidates.tokens) {
+            words.push(parser.vocabulary.getDisplayName(candidate[0]).replaceAll('"', "").replaceAll("'", ""));
+        }
+        return words.map((word) : vscode.CompletionItem  => {
+            return this.completion(word, vscode.CompletionItemKind.Keyword, word, "");
+        }, this);
 
         const previousTerm : string = document.getText(new vscode.Range(
             document.lineAt(position.line).range.start,

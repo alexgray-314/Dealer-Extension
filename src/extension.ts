@@ -1,16 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { CharStreams } from 'antlr4ts/CharStreams';
 import * as vscode from 'vscode';
 import { dealLexer } from './language/dealLexer';
-import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './language/dealParser';
 import { VariableAnalysis } from './provider/variableAnalysis';
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './language/dealListener';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 import { TokenProvider } from './provider/tokenProvider';
 import { CompletionProvider } from './provider/completionProvider';
+import { CharStream, CommonTokenStream, ParseTreeWalker } from 'antlr4ng';
+import { SyntaxErrorListener } from './listeners/syntaxErrorListener';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -62,7 +61,7 @@ function runParser(
         return;
     }
 
-  	const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+  	const lexer = new dealLexer(CharStream.fromString(document.getText()));
   	const tokens = new CommonTokenStream(lexer);
   	const parser = new dealParser(tokens);
 
@@ -71,34 +70,7 @@ function runParser(
 	const diagnostics: vscode.Diagnostic[] = [];
 
 	parser.removeErrorListeners();
-	parser.addErrorListener({
-		syntaxError(
-		recognizer,
-		offendingSymbol,
-		line,
-		charPositionInLine,
-		msg
-		) {
-
-			const length : number = Math.max((((offendingSymbol?.text)??"").length), 1);
-
-			const range = new vscode.Range(
-				line - 1,
-				charPositionInLine,
-				line - 1,
-				charPositionInLine + length
-			);
-
-			diagnostics.push(
-				new vscode.Diagnostic(
-					range,
-					msg,
-					vscode.DiagnosticSeverity.Error
-				)
-			);
-
-		}
-	});
+	parser.addErrorListener(new SyntaxErrorListener(diagnostics));
 
 	const tree = parser.prog(); // entry rule
 	const listener : dealListener = new VariableAnalysis(outputChannel, diagnostics);

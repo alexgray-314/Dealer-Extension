@@ -1,19 +1,17 @@
-import { ParserRuleContext } from "antlr4ts";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
+import { ParserRuleContext, ParseTree, TerminalNode } from "antlr4ng";
 import * as vscode from "vscode";
 
 export function getRange(tree : ParseTree) : vscode.Range {
-    const length : number = Math.max((tree.text.length), 1);
+    const length : number = Math.max((tree.getText().length), 1);
 
     const token = (tree as TerminalNode).symbol ?? (tree as ParserRuleContext).start;
 
     try {
         return new vscode.Range(
             token.line - 1,
-            token.charPositionInLine,
+            token.column,
             token.line - 1,
-            token.charPositionInLine + length
+            token.column + length
         );
     } catch (e) {
         console.error((tree as TerminalNode).symbol);

@@ -7,32 +7,33 @@ const keyWords = ['empty', 'jack', 'queen','king','ace','spades','hearts','clubs
 
 type varDef = ["CARD"|"INT", string];
 
-export class VariableAnalysis implements dealListener {
+export class VariableAnalysis extends dealListener {
 
     output: vscode.OutputChannel;
     variables: varDef[];
     diagnostics: vscode.Diagnostic[];
 
     constructor(outputChannel: vscode.OutputChannel, diagnostics : vscode.Diagnostic[]) {
+        super();
         this.output = outputChannel;
         this.variables = [];
         this.diagnostics = diagnostics;
     }
 
-    enterFor(ctx: ForContext){
-        const id = ctx.ID().text;
+    enterFor = (ctx: ForContext) => {
+        const id = ctx.ID().getText();
         const type = (ctx.set().positionset() !== undefined) ? "CARD" : "INT";
         this.variables.push([type,id]);
-    }
+    };
 
 
-    enterTerm (ctx: TermContext) {
+    enterTerm = (ctx: TermContext) => {
 
         // Check for properties
         if (ctx.property() !== undefined) {
             // Stack
             if (ctx.stack() !== undefined) {
-                if (ctx.property()!.ID().text !== "length") {
+                if (ctx.property()!.ID().getText() !== "length") {
                     this.diagnostics.push(
                         new vscode.Diagnostic(
                             getRange(ctx.property()!),
@@ -45,10 +46,10 @@ export class VariableAnalysis implements dealListener {
                 ctx.CARD() !== undefined ||
                 ctx.position() !== undefined ||
                 (ctx.variable() !== undefined && this.variables.some(([type, name]) => {
-                    return name === ctx.variable()?.text && type === "CARD";
+                    return name === ctx.variable()?.getText() && type === "CARD";
                 }))
             ) {
-                if (!["rank", "suit"].includes(ctx.property()!.ID().text)) {
+                if (!["rank", "suit"].includes(ctx.property()!.ID().getText())) {
                     this.diagnostics.push(
                         new vscode.Diagnostic(
                             getRange(ctx.property()!),
@@ -68,32 +69,32 @@ export class VariableAnalysis implements dealListener {
             }
         }
 
-    }
+    };
 
-    enterDefinition(ctx: DefinitionContext) {
+    enterDefinition = (ctx: DefinitionContext) => {
         
-        const type = ctx._type.text?.toUpperCase();
-        const id = ctx.ID().text;
+        const type = ctx._type_?.text?.toUpperCase();
+        const id = ctx.ID().getText();
         if (type === "INT" || type === "CARD") {
             this.variables.push([type, id]);
         }
 
-    }
+    };
 
-    enterArgdef (ctx: ArgdefContext) {
+    enterArgdef = (ctx: ArgdefContext) => {
         const ids = ctx.ID();
         const types = ctx.VARTYPE();
         for (let i = 0; i < ids.length; i++) {
-            const type = types[i].text.toUpperCase();
+            const type = types[i].getText().toUpperCase();
             if (type === 'INT' || type === 'CARD') {
-                this.variables.push([type, ids[i].text]);
+                this.variables.push([type, ids[i].getText()]);
             }
         }
-    }
+    };
 
-    exitVariable(ctx: VariableContext) {
+    exitVariable = (ctx: VariableContext) => {
 
-        const id = ctx.ID().text;
+        const id = ctx.ID().getText();
         // Check for undeclared variables
         if (!this.variables.some(([_, name]) => {
             return id === name;
@@ -108,6 +109,6 @@ export class VariableAnalysis implements dealListener {
             );
         }
 
-    }
+    };
 
 }

@@ -18,15 +18,9 @@
 			}
 		},
 		{
-			"label": "build-parser",
+			"label": "antlr4ng",
 			"type": "shell",
-			"command": "antlr4ts ${workspaceFolder}/src/language/deal.g4 -o ${workspaceFolder}/src/language",
-			"problemMatcher": []
-		},
-		{
-			"label": "build-visitor",
-			"type": "shell",
-			"command": "antlr4ts -visitor ${workspaceFolder}/src/language/deal.g4 -o ${workspaceFolder}/src/language",
+			"command": "antlr-ng -Dlanguage=TypeScript -l -v -o ${workspaceFolder}/src/language ${workspaceFolder}/src/language/deal.g4",
 			"problemMatcher": []
 		},
 	]

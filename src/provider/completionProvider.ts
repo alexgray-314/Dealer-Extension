@@ -1,6 +1,10 @@
 import * as vscode from "vscode";
 import { TypeChecker } from "../helper/typecheck";
 import * as info from "../docs/info.json";
+import { dealLexer } from "../language/dealLexer";
+import { CharStream, CommonTokenStream, Parser } from "antlr4ng";
+import { dealParser } from "../language/dealParser";
+import { CodeCompletionCore } from "antlr4-c3/lib/src/CodeCompletionCore";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -20,23 +24,18 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     ): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> 
     {
 
-        const checker : TypeChecker = new TypeChecker(document.getText());
+        const lexer = new dealLexer(CharStream.fromString(document.getText()));
+        const tokens = new CommonTokenStream(lexer);
+        const parser = new dealParser(tokens);
+        let x : Parser;
 
-        const previousTerm : string = document.getText(new vscode.Range(
-            document.lineAt(position.line).range.start,
-            position
-        )).split(/\s/).pop()?.replaceAll('.', '') ?? "";
+        // const errorListener = new ErrorListener();
+        // parser.addErrorListener(errorListener);
+        let tree = parser.prog();
 
-        let previousType = "NONE";
-        try {
-            previousType = checker.typeOf(previousTerm).toUpperCase() ?? "NONE";
-        } catch (e) {}
-
-        return [
-            ...this.properties(previousType),
-            ...this.style(checker, previousType),
-            ...this.ids(checker, previousType)
-        ];
+        let core = new CodeCompletionCore(parser);
+        let candidates = core.collectCandidates(0);
+        return [];
     }
 
     private properties(type : string) : vscode.CompletionItem[] {

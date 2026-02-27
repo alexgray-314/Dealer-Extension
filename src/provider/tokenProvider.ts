@@ -1,24 +1,18 @@
 import * as vscode from "vscode";
 import { dealListener } from "../language/dealListener";
 import { ArearefContext, ArgdefContext, AttributeContext, ConfigContext, dealParser, DefinitionContext, ForContext, Function_callContext, VariableContext } from "../language/dealParser";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { dealLexer } from "../language/dealLexer";
-import { CharStreams } from "antlr4ts/CharStreams";
-import { CommonTokenStream } from "antlr4ts/CommonTokenStream";
-import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { RuleContext, Token } from "antlr4ts";
 import { getRange } from "../util/range";
+import { dealLexer } from "../language/dealLexer";
+import { CharStream, CommonTokenStream, ParseTreeWalker } from "antlr4ng";
 
-export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dealListener {
+export class TokenProvider extends dealListener implements vscode.DocumentSemanticTokensProvider {
 
     legend : vscode.SemanticTokensLegend;
     tokensBuilder: vscode.SemanticTokensBuilder;
     ids : string[];
 
     constructor(context: vscode.ExtensionContext) {
+        super();
         const tokenTypes = ['keyword', 'function', 'variable', 'id', 'value', 'string', 'attribute'];
         const tokenModifiers = ['declaration', 'documentation', 'config'];
         this.legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
@@ -42,7 +36,7 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         token: vscode.CancellationToken
     ): vscode.ProviderResult<vscode.SemanticTokens> {
 
-        const lexer = new dealLexer(CharStreams.fromString(document.getText()));
+        const lexer = new dealLexer(CharStream.fromString(document.getText()));
         const parser = new dealParser(new CommonTokenStream(lexer));
         const tree = parser.prog();
 
@@ -54,37 +48,37 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         return this.tokensBuilder.build();
     }
 
-    enterDefinition (ctx: DefinitionContext) {
-        this.ids.push(ctx.ID().text);
+    enterDefinition = (ctx: DefinitionContext) => {
+        this.ids.push(ctx.ID().getText());
         this.tokensBuilder.push(
             getRange(ctx.ID()),
             'variable',
             ['declaration']
         );
-    }
+    };
 
-    enterVariable (ctx: VariableContext) {
-        if (this.ids.includes(ctx.ID().text)) {
+    enterVariable = (ctx: VariableContext) => {
+        if (this.ids.includes(ctx.ID().getText())) {
             this.tokensBuilder.push(
                 getRange(ctx.ID()),
                 'variable',
                 ['declaration']
             );
         }
-    }
+    };
 
-    enterFor (ctx: ForContext) {
-        this.ids.push(ctx.ID().text);
+    enterFor = (ctx: ForContext) => {
+        this.ids.push(ctx.ID().getText());
         this.tokensBuilder.push(
             getRange(ctx.ID()),
             'variable',
             ['declaration']
         );
-    }
+    };
 
-    enterArearef (ctx: ArearefContext) {
+    enterArearef = (ctx: ArearefContext) => {
         if (ctx.ID() !== undefined) {
-            if (this.ids.includes(ctx.ID()!.text) || ctx.ID()!.text === "deck") {
+            if (this.ids.includes(ctx.ID()!.getText()) || ctx.ID()!.getText() === "deck") {
                 this.tokensBuilder.push(
                     getRange(ctx.ID()!),
                     'variable',
@@ -93,47 +87,47 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
             }
         }
         
-    }
+    };
 
-    enterFunction_call (ctx: Function_callContext) {
+    enterFunction_call = (ctx: Function_callContext) => {
         this.tokensBuilder.push(
             getRange(ctx.ID()),
             'function',
             ['declaration']
         );
-    }
+    };
 
-    enterConfig (ctx: ConfigContext) {
+    enterConfig = (ctx: ConfigContext) => {
         this.tokensBuilder.push(
             getRange(ctx.ID()),
             'keyword',
             ['config']
         );
-    }
+    };
 
-    enterArgdef (ctx: ArgdefContext) {
+    enterArgdef = (ctx: ArgdefContext) => {
         for (let id of ctx.ID()) {
             this.tokensBuilder.push(
                 getRange(id),
                 'variable',
                 ['declaration']
             );
-            this.ids.push(id.text);
+            this.ids.push(id.getText());
         }
-    }
+    };
 
-    enterAttribute (ctx: AttributeContext) {
+    enterAttribute = (ctx: AttributeContext) => {
 
         if(ctx.atts() === undefined) {
 
             this.tokensBuilder.push(
-                getRange(ctx.getChild(0)),
+                getRange(ctx.getChild(0)!),
                 'attribute',
                 ['config']
             );
 
             if (ctx.STRING() === undefined) {
-                switch (ctx.getChild(1).text) {
+                switch (ctx.getChild(1)!.getText()) {
                     case "private":
                     case "public":
                     case "hidden": 
@@ -147,7 +141,7 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
                     case "spread":
                     case "single":
                         this.tokensBuilder.push(
-                            getRange(ctx.getChild(1)),
+                            getRange(ctx.getChild(1)!),
                             'value',
                             ['config']
                         );
@@ -157,12 +151,12 @@ export class TokenProvider implements vscode.DocumentSemanticTokensProvider, dea
         } else {
 
             this.tokensBuilder.push(
-                getRange(ctx.getChild(0)),
+                getRange(ctx.getChild(0)!),
                 'id',
                 ['config']
             );
 
         }
-    }
+    };
     
 }

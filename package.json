@@ -9,7 +9,7 @@
   "categories": [
     "Programming Languages"
   ],
-  "activationEvents": [ ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -30,9 +30,9 @@
         ],
         "configuration": "./language-configuration.json",
         "icon": {
-           "light": "./icons/logo-light-mode.png",
-           "dark": "./icons/logo-dark-mode.png"
-         }
+          "light": "./icons/logo-light-mode.png",
+          "dark": "./icons/logo-dark-mode.png"
+        }
       }
     ],
     "grammars": [
@@ -46,11 +46,21 @@
       {
         "language": "deal",
         "scopes": {
-          "attribute.config": ["variable.other.constant.property.deal"],
-          "id.config": ["variable.other.deal"],
-          "value.config": ["support.type.primitive.deal"],
-          "string.condig": ["string.quoted.double.deal"],
-          "keyword.condig": ["keyword.control.deal"]
+          "attribute.config": [
+            "variable.other.constant.property.deal"
+          ],
+          "id.config": [
+            "variable.other.deal"
+          ],
+          "value.config": [
+            "support.type.primitive.deal"
+          ],
+          "string.condig": [
+            "string.quoted.double.deal"
+          ],
+          "keyword.condig": [
+            "keyword.control.deal"
+          ]
         }
       }
     ]
@@ -74,6 +84,7 @@
     "typescript-eslint": "^8.52.0"
   },
   "dependencies": {
-    "antlr4ts": "^0.5.0-alpha.4"
+    "antlr4-c3": "^3.4.4",
+    "antlr4ng": "^3.0.16"
   }
 }

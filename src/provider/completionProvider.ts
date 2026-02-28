@@ -46,7 +46,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         console.log(tokenIndex, "token index");
         let candidates = core.collectCandidates(tokenIndex);
 
-        console.log(candidates.rules);
+        console.log(candidates.tokens);
 
         return [
             ...this.fromRules(checker.ids, candidates.rules),

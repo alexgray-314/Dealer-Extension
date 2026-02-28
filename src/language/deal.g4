@@ -3,24 +3,38 @@ grammar deal;
 COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
-stmt:           (definition | define_function | move | on_action | on_move | on_interact | for | if | cancel | assign | function_call | updateTurn | log | modify | show | config) ';' ;
+stmt:           (
+                'define' (definition | define_function) 
+                | move 
+                | 'on' (on_action | on_move | on_interact)
+                | for 
+                | if 
+                | cancel 
+                | assign 
+                | function_call 
+                | updateTurn 
+                | log 
+                | modify 
+                | show 
+                | config
+                ) ';' ;
 block:          stmt* ;
 
 player:         '<' ('/' | '.' | '@' | term) '>';
 VARTYPE:        'int' | 'card';
 
-definition:     'define' type=('area' | 'action' | VARTYPE) ID ;
+definition:     type=('area' | 'action' | VARTYPE) ID ;
 
-define_function:'define' 'function' ID '(' argdef? ')' '{' block '}' ;
+define_function:'function' ID '(' argdef? ')' '{' block '}' ;
 argdef:         VARTYPE ID (',' VARTYPE ID)*;
 
 move:           'move' source destination;
 source:         (CARD | position | positionset) ;
 destination:    position;
 
-on_action:      'on' ID '{' block '}';
-on_move:        'on' 'move' move_catch move_catch '{' block '}';
-on_interact:    'on' 'interact' move_catch '{' block '}';
+on_action:      ID '{' block '}';
+on_move:        'move' move_catch move_catch '{' block '}';
+on_interact:    'interact' move_catch '{' block '}';
 for:            'for' ID 'in' set '{' block '}';
 if:             'if' bexpr '{' consequent=block '}' ('else' '{' antecedent=block '}')? ;
 cancel:         'cancel';

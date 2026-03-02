@@ -15,7 +15,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
             'deal',
             this,
-            '.'
+            '.','$'
         ));
     }
 
@@ -36,12 +36,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const tokenIndex = findCursorTokenIndex(tree, position);
         const core = new c3.CodeCompletionCore(parser);
 
+        const checker : TypeChecker = new TypeChecker(tree);
+
         if (context.triggerCharacter === undefined) {
-            const checker : TypeChecker = new TypeChecker(tree);
 
             core.preferredRules = new Set<number>([
                 dealParser.RULE_term,
-                dealParser.RULE_config,
                 dealParser.RULE_property
             ]);
             const candidates = core.collectCandidates(tokenIndex);
@@ -59,9 +59,14 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 dealParser.RULE_stack,
             ]);
             const candidates = core.collectCandidates(tokenIndex-1);
-            
+            console.log("PROPERTY TOKEN:",tokens.get(tokenIndex-1).text);
             return this.properties(candidates);
             
+        } else if (context.triggerCharacter === '$') {
+            return [
+                this.style(checker),
+                this.config()
+            ];
         }
 
     }
@@ -136,9 +141,25 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     }
 
     /**
+     * @returns Code snippet for $config variables
+     */
+    private config() : vscode.CompletionItem {
+
+        const insertText = 
+`config {
+    title "My Game",
+    players 4,
+    jokers 0
+}`;
+
+        return this.completion('$config', vscode.CompletionItemKind.Snippet, insertText, "Global config attributes for the game");
+
+    }
+
+    /**
      * @returns Code snippet for the $style config
      */
-    private style(checker : TypeChecker) : vscode.CompletionItem[] {
+    private style(checker : TypeChecker) : vscode.CompletionItem {
 
         const areas : string[] = [];
         const actions : string[] = [];
@@ -185,7 +206,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         insertText = insertText + "\n};";
 
-        return [this.completion("$style", vscode.CompletionItemKind.Snippet, insertText, "Styling for the card game")];
+        return this.completion("$style", vscode.CompletionItemKind.Snippet, insertText, "Styling for the card game");
 
     }
 

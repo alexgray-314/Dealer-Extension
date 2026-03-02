@@ -30,28 +30,39 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const lexer = new dealLexer(CharStreams.fromString(document.getText()));
         const tokens = new CommonTokenStream(lexer);
         const parser = new dealParser(tokens);
-        parser.errorHandler = new CompletionErrorStrategy();
+        // parser.errorHandler = new CompletionErrorStrategy();
         const tree = parser.prog();
 
-        const checker : TypeChecker = new TypeChecker(tree);
-
-        let core = new c3.CodeCompletionCore(parser);
-        core.preferredRules = new Set<number>([
-            dealParser.RULE_term,
-            dealParser.RULE_config,
-            dealParser.RULE_property
-        ]);
-
         const tokenIndex = findCursorTokenIndex(tree, position);
-        console.log(tokenIndex, "token index");
-        let candidates = core.collectCandidates(tokenIndex);
+        const core = new c3.CodeCompletionCore(parser);
 
-        console.log(candidates.tokens);
+        if (context.triggerCharacter === undefined) {
+            const checker : TypeChecker = new TypeChecker(tree);
 
-        return [
-            ...this.fromRules(checker.ids, candidates.rules),
-            ...this.fromTokens(parser, candidates.tokens),
-        ];
+            core.preferredRules = new Set<number>([
+                dealParser.RULE_term,
+                dealParser.RULE_config,
+                dealParser.RULE_property
+            ]);
+            const candidates = core.collectCandidates(tokenIndex);
+
+            return [
+                ...this.fromRules(checker.ids, candidates.rules),
+                ...this.fromTokens(parser, candidates.tokens),
+            ];
+        } else if (context.triggerCharacter === '.') {
+
+            core.preferredRules = new Set<number>([
+                dealParser.RULE_variable,
+                dealParser.RULE_position,
+                dealParser.RULE_positionset,
+                dealParser.RULE_stack,
+            ]);
+            const candidates = core.collectCandidates(tokenIndex-1);
+            
+            return this.properties(candidates);
+            
+        }
 
     }
 
@@ -80,7 +91,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         let words : string[] = [];
         for (let candidate of tokens) {
             const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "");
-            if (keywords.all.includes(word)) { // get rid of any symbols
+            if (keywords.all.includes(word.toLowerCase())) { // get rid of any symbols
                 words.push(word);
             }
         }
@@ -90,17 +101,27 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
     }
 
-    private properties(type : string) : vscode.CompletionItem[] {
-        switch(type) {
-            case "CARD":
-                return [
-                    this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
-                    this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
-                ];
-            case "STACK":
-                return [
-                    this.completion("length", vscode.CompletionItemKind.Property, "length", info.length)
-                ];
+    private properties(candidates : c3.CandidatesCollection) : vscode.CompletionItem[] {
+        for (const rule of candidates.rules.keys()) {
+            switch(rule) {
+                case dealParser.RULE_variable:
+                case dealParser.RULE_position:
+                case dealParser.RULE_positionset:
+                    return [
+                        this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
+                        this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
+                    ];
+                case dealParser.RULE_stack:
+                    return [
+                        this.completion("length", vscode.CompletionItemKind.Property, "length", info.length)
+                    ];
+            }
+        }
+        if ([...candidates.tokens.keys()].includes(dealParser.CARD)) {
+            return [
+                this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
+                this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
+            ];
         }
         return [];
     }

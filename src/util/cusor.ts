@@ -13,7 +13,7 @@ export function findCursorTokenIndex(tree : ParseTree, cursor: vscode.Position) 
         visitTerminal(node : TerminalNode) {
             if (output === undefined) {
                 const position = new vscode.Position(node.symbol.line - 1, node.symbol.charPositionInLine + (node.symbol.text?.length ?? 0));
-                console.log(node.text);
+                // console.log(node.text);
                 if (position.isAfterOrEqual(cursor)) {
                     output = tokenIndex;
                 } else {

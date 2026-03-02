@@ -93,16 +93,30 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
     fromTokens(parser : dealParser, tokens : Map<number, c3.TokenList>) : vscode.CompletionItem[] {
 
-        let words : string[] = [];
+        const completions : vscode.CompletionItem[] = [];
+
         for (let candidate of tokens) {
-            const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "");
-            if (keywords.all.includes(word.toLowerCase())) { // get rid of any symbols
-                words.push(word);
+            const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "").toLowerCase();
+
+            if (keywords.control.includes(word)) {
+                completions.push(this.completion(word, vscode.CompletionItemKind.Keyword, word, ""));
             }
+
+            if (keywords.primitives.includes(word)) {
+                completions.push(this.completion(word, vscode.CompletionItemKind.Constant, word, "Constant: " + word));
+            }
+
+            if (keywords.commands.includes(word)) {
+                completions.push(this.completion(word, vscode.CompletionItemKind.Function, word, "Command: " + word));
+            }
+
+            if (keywords.types.includes(word)) {
+                completions.push(this.completion(word, vscode.CompletionItemKind.TypeParameter, word, "Type: " + word));
+            }
+
         }
-        return words.map((word) : vscode.CompletionItem  => {
-            return this.completion(word, vscode.CompletionItemKind.Keyword, word, "");
-        }, this);
+
+        return completions;
 
     }
 

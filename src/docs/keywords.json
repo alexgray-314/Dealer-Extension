@@ -1,28 +1,36 @@
-{"all":[
-    "empty",
-    "jack",
-    "queen",
-    "king",
-    "ace",
-    "spades",
-    "hearts",
-    "clubs",
-    "diamonds",
-    "on",
-    "move",
-    "for",
-    "interact",
-    "if",
-    "define",
-    "function",
-    "int",
-    "card",
-    "area",
-    "action",
-    "for",
-    "in",
-    "else",
-    "cancel",
-    "log",
-    "show"
-]}
+{
+    "control": [
+        "on",
+        "for",
+        "interact",
+        "if",
+        "define",
+        "for",
+        "in",
+        "else",
+        "cancel"
+    ],
+    "types" : [
+        "function",
+        "int",
+        "card",
+        "area",
+        "action"
+    ],
+    "primitives": [
+        "empty",
+        "jack",
+        "queen",
+        "king",
+        "ace",
+        "spades",
+        "hearts",
+        "clubs",
+        "diamonds"
+    ],
+    "commands": [
+        "log",
+        "show",
+        "move"
+    ]
+}

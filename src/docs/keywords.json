@@ -10,12 +10,15 @@
         "else",
         "cancel"
     ],
-    "types" : [
+    "objects" : [
         "function",
-        "int",
-        "card",
         "area",
         "action"
+    ],
+    "types" : [
+        "int",
+        "card",
+        "string"
     ],
     "primitives": [
         "empty",

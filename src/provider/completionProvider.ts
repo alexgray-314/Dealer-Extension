@@ -39,15 +39,14 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         if (context.triggerCharacter === undefined) {
 
-            core.preferredRules = new Set<number>([
-                dealParser.RULE_term,
-                dealParser.RULE_property
-            ]);
+            // core.preferredRules = new Set<number>([
+            //     dealParser.RULE_term,
+            // ]);
             const candidates = core.collectCandidates(tokenIndex);
 
             return [
-                ...this.fromRules(checker.ids, candidates.rules),
                 ...this.fromTokens(parser, candidates.tokens),
+                ...this.fromRules(checker.ids, candidates.rules),
             ];
         } else if (context.triggerCharacter === '.') {
 
@@ -95,7 +94,15 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const completions : vscode.CompletionItem[] = [];
 
         for (let candidate of tokens) {
-            const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "").toLowerCase();
+            const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "");
+            console.log(word);
+
+            // Add all variable types
+            if (candidate[0] === dealParser.VARTYPE) {
+                for (const vartype of keywords.types) {
+                    completions.push(this.completion(vartype, vscode.CompletionItemKind.TypeParameter, vartype, "basic type"));
+                }
+            }
 
             if (keywords.control.includes(word)) {
                 completions.push(this.completion(word, vscode.CompletionItemKind.Keyword, word, ""));
@@ -109,8 +116,8 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 completions.push(this.completion(word, vscode.CompletionItemKind.Function, word, "Command: " + word));
             }
 
-            if (keywords.types.includes(word)) {
-                completions.push(this.completion(word, vscode.CompletionItemKind.TypeParameter, word, "Type: " + word));
+            if (keywords.objects.includes(word)) {
+                completions.push(this.completion(word, vscode.CompletionItemKind.Interface, word, "Type: " + word));
             }
 
         }

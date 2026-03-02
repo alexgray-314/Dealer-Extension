@@ -1,0 +1,17 @@
+{
+    "card": {
+        "attributes": {
+            "rank": "# Rank  \n The rank of a card  \nType: *Int*  \nParent: *Card*  \n### Examples:  \n- ` #kD.rank == king`  \n - `#2H.rank == 2`",
+            "suit": "# Suit  \n The suit of a card  \nType: *String*   \nParent: *Card*  \n### Examples:  \n- `#kD.rank == diamonds`  \n - `#2H.rank == hearts`"
+        },
+        "methods": {
+            "up": "Put the card face up",
+            "down": "Put the card face down"
+        }
+    },
+    "stack": {
+        "attributes" : {
+            "length": "# Length \n How many non-empty cards are currently within a stack  \nType: *Int*    \nParent: *Stack*  \n### Examples:  \n- `centre[0].length == 2`"
+        }
+    }
+}

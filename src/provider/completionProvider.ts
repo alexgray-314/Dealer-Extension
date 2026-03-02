@@ -1,13 +1,12 @@
 import * as vscode from "vscode";
 import { TypeChecker } from "../helper/typecheck";
-import * as info from "../docs/info.json";
+import * as info from "../docs/properties.json";
 import { dealLexer } from "../language/dealLexer";
 import { CharStreams, CommonTokenStream } from "antlr4ts";
 import { dealParser } from "../language/dealParser";
 import * as c3 from "antlr4-c3";
 import { findCursorTokenIndex } from "../util/cusor";
 import * as keywords from "../docs/keywords.json";
-import { CompletionErrorStrategy } from "../language/CompletionErrorStrategy";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -121,25 +120,53 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     }
 
     private properties(candidates : c3.CandidatesCollection) : vscode.CompletionItem[] {
-        for (const rule of candidates.rules.keys()) {
-            switch(rule) {
-                case dealParser.RULE_variable:
-                case dealParser.RULE_position:
-                case dealParser.RULE_positionset:
-                    return [
-                        this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
-                        this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
-                    ];
-                case dealParser.RULE_stack:
-                    return [
-                        this.completion("length", vscode.CompletionItemKind.Property, "length", info.length)
-                    ];
-            }
+        
+        if ([...candidates.rules.keys()].includes(dealParser.RULE_variable)) {
+            const ruleList = candidates.rules.get(dealParser.RULE_variable)?.ruleList ?? [];
+            return this.cardProperties(ruleList);
         }
-        if ([...candidates.tokens.keys()].includes(dealParser.CARD)) {
+
+        if ([...candidates.rules.keys()].includes(dealParser.RULE_stack)) {
+            const ruleList = candidates.rules.get(dealParser.RULE_stack)?.ruleList ?? [];
+            return this.stackProperties(ruleList);
+        }
+
+        if ([...candidates.rules.keys()].includes(dealParser.RULE_position)) {
+            const ruleList = candidates.rules.get(dealParser.RULE_position)?.ruleList ?? [];
+            return this.cardProperties(ruleList);
+        }
+
+        if ([...candidates.rules.keys()].includes(dealParser.RULE_positionset)) {
+            const ruleList = candidates.rules.get(dealParser.RULE_positionset)?.ruleList ?? [];
+            return this.cardProperties(ruleList);
+        }
+
+        return[];
+    }
+
+    private cardProperties(ruleList : c3.RuleList) : vscode.CompletionItem[] {
+        if (ruleList.includes(dealParser.RULE_bexpr)) {
+            // Attributes
             return [
-                this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.rank),
-                this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.suit)
+                this.completion("rank", vscode.CompletionItemKind.Property, "rank", info.card.attributes.rank),
+                this.completion("suit", vscode.CompletionItemKind.Property, "suit", info.card.attributes.suit)
+            ];
+        } else if (ruleList.includes(dealParser.RULE_modify)) {
+            // Methods
+            return [
+                this.completion("up()", vscode.CompletionItemKind.Method, "up()", info.card.methods.up),
+                this.completion("down()", vscode.CompletionItemKind.Method, "down()", info.card.methods.down),
+            ];
+
+        }
+        return [];
+    }
+
+    private stackProperties(ruleList : c3.RuleList) : vscode.CompletionItem[] {
+        if (ruleList.includes(dealParser.RULE_bexpr)) {
+            // Attributes
+            return [
+                this.completion("length", vscode.CompletionItemKind.Property, "length", info.stack.attributes.length)
             ];
         }
         return [];

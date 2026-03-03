@@ -39,9 +39,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         if (context.triggerCharacter === undefined) {
 
-            // core.preferredRules = new Set<number>([
-            //     dealParser.RULE_term,
-            // ]);
+            core.preferredRules = new Set<number>([
+                dealParser.RULE_variable,
+                dealParser.RULE_position,
+                dealParser.RULE_positionset,
+                dealParser.RULE_on_action
+            ]);
             const candidates = core.collectCandidates(tokenIndex);
 
             return [
@@ -72,17 +75,18 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     fromRules(ids : Map<string, string>, rules : Map<number, c3.ICandidateRule>) : vscode.CompletionItem[] {
 
         const items : vscode.CompletionItem[] = [];
+        const keys = [...rules.keys()]
 
-        for (const [ruleID, ruleData] of rules) {
-            switch(ruleID) {
-                case dealParser.RULE_config:
-                    console.log("config");
-                    break;
-                case dealParser.RULE_term:
-                    console.log("term");
-                    return this.ids(ids, "CARD", "INT", "AREA");
-                    break;
-            }
+        switch(true) {
+            case keys.includes(dealParser.RULE_variable):
+                items.push(...this.ids(ids, "CARD", "INT", "STRING"));
+            case keys.includes(dealParser.RULE_position):
+            case keys.includes(dealParser.RULE_positionset):
+                items.push(...this.ids(ids, "AREA"));
+                break;
+            case keys.includes(dealParser.RULE_on_action):
+                items.push(...this.ids(ids, "ACTION"));
+                break;
         }
 
         return items;
@@ -131,19 +135,13 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         if ([...candidates.rules.keys()].includes(dealParser.RULE_variable)) {
             const ruleList = candidates.rules.get(dealParser.RULE_variable)?.ruleList ?? [];
             return this.cardProperties(ruleList);
-        }
-
-        if ([...candidates.rules.keys()].includes(dealParser.RULE_stack)) {
+        } else if ([...candidates.rules.keys()].includes(dealParser.RULE_stack)) {
             const ruleList = candidates.rules.get(dealParser.RULE_stack)?.ruleList ?? [];
             return this.stackProperties(ruleList);
-        }
-
-        if ([...candidates.rules.keys()].includes(dealParser.RULE_position)) {
+        } else if ([...candidates.rules.keys()].includes(dealParser.RULE_position)) {
             const ruleList = candidates.rules.get(dealParser.RULE_position)?.ruleList ?? [];
             return this.cardProperties(ruleList);
-        }
-
-        if ([...candidates.rules.keys()].includes(dealParser.RULE_positionset)) {
+        } else if ([...candidates.rules.keys()].includes(dealParser.RULE_positionset)) {
             const ruleList = candidates.rules.get(dealParser.RULE_positionset)?.ruleList ?? [];
             return this.cardProperties(ruleList);
         }

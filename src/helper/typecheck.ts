@@ -1,6 +1,6 @@
 import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { dealListener } from "../language/dealListener";
-import { AreaContext, dealParser, DefinitionContext, ObjectContext, PositionContext, PositionsetContext, StackContext, VariableContext } from "../language/dealParser";
+import { AreaContext, dealParser, Define_functionContext, DefinitionContext, ObjectContext, PositionContext, PositionsetContext, StackContext, VariableContext } from "../language/dealParser";
 import { dealLexer } from "../language/dealLexer";
 import { CharStreams, CommonTokenStream } from "antlr4ts";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
@@ -22,7 +22,10 @@ export class TypeChecker implements dealVisitor<string> {
             const listener : dealListener = {
                 enterDefinition(ctx : DefinitionContext) {
                     ids.set(ctx.ID().text, ctx._type.text?.toUpperCase() ?? "NONE");
-                }
+                },
+                enterDefine_function(ctx : Define_functionContext) {
+                    ids.set(ctx.ID().text, "FUNCTION");
+                },
             };
             ParseTreeWalker.DEFAULT.walk(listener, tree);
         } catch (e) {};

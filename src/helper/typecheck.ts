@@ -15,6 +15,7 @@ export class TypeChecker implements dealVisitor<string> {
 
     constructor(tree : ParseTree) {
         this.ids = new Map<string, string>();
+        this.ids.set("deck", "AREA");
 
         try {
             // Hack to get around "this." changing meaning within scope of anonymous inner class

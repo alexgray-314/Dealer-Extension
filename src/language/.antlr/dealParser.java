@@ -23,8 +23,8 @@ public class dealParser extends Parser {
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, COMMENT=38, 
 		VARTYPE=39, MOVE_DEST=40, MOVE_SOURCE=41, INTERACT_CARD=42, PLUS=43, MINUS=44, 
 		TIMES=45, WILDCARD=46, EMPTY=47, SPADES=48, HEARTS=49, CLUBS=50, DIAMONDS=51, 
-		JACK=52, QUEEN=53, KING=54, ACE=55, NUMBER=56, ID=57, CARD=58, STRING=59, 
-		SPACES=60, NEWLINE=61;
+		JACK=52, QUEEN=53, KING=54, ACE=55, NUMBER=56, ID=57, CARD=58, JOKER=59, 
+		STRING=60, SPACES=61, NEWLINE=62;
 	public static final int
 		RULE_prog = 0, RULE_stmt = 1, RULE_block = 2, RULE_player = 3, RULE_definition = 4, 
 		RULE_define_function = 5, RULE_argdef = 6, RULE_move = 7, RULE_source = 8, 
@@ -67,8 +67,8 @@ public class dealParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, "COMMENT", "VARTYPE", "MOVE_DEST", "MOVE_SOURCE", "INTERACT_CARD", 
 			"PLUS", "MINUS", "TIMES", "WILDCARD", "EMPTY", "SPADES", "HEARTS", "CLUBS", 
-			"DIAMONDS", "JACK", "QUEEN", "KING", "ACE", "NUMBER", "ID", "CARD", "STRING", 
-			"SPACES", "NEWLINE"
+			"DIAMONDS", "JACK", "QUEEN", "KING", "ACE", "NUMBER", "ID", "CARD", "JOKER", 
+			"STRING", "SPACES", "NEWLINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1214,7 +1214,7 @@ public class dealParser extends Parser {
 				setState(227); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1152788463699886096L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1729249216003309584L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1504,7 +1504,7 @@ public class dealParser extends Parser {
 			setState(268);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1152788463699886096L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1729249216003309584L) != 0)) {
 				{
 				setState(260);
 				attribute();
@@ -1598,7 +1598,7 @@ public class dealParser extends Parser {
 			setState(283);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1152788463699886096L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1729249216003309584L) != 0)) {
 				{
 				setState(275);
 				arg();
@@ -2588,7 +2588,7 @@ public class dealParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001=\u0184\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001>\u0184\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -2754,7 +2754,7 @@ public class dealParser extends Parser {
 		"8\u0000\u0000\u00fa\u00fc\u0003J%\u0000\u00fb\u00f8\u0001\u0000\u0000"+
 		"\u0000\u00fb\u00f9\u0001\u0000\u0000\u0000\u00fb\u00fa\u0001\u0000\u0000"+
 		"\u0000\u00fc\u0101\u0001\u0000\u0000\u0000\u00fd\u0102\u00059\u0000\u0000"+
-		"\u00fe\u0102\u0005;\u0000\u0000\u00ff\u0102\u00058\u0000\u0000\u0100\u0102"+
+		"\u00fe\u0102\u0005<\u0000\u0000\u00ff\u0102\u00058\u0000\u0000\u0100\u0102"+
 		"\u00030\u0018\u0000\u0101\u00fd\u0001\u0000\u0000\u0000\u0101\u00fe\u0001"+
 		"\u0000\u0000\u0000\u0101\u00ff\u0001\u0000\u0000\u0000\u0101\u0100\u0001"+
 		"\u0000\u0000\u0000\u0102/\u0001\u0000\u0000\u0000\u0103\u010c\u0005\f"+
@@ -2788,7 +2788,7 @@ public class dealParser extends Parser {
 		"\u0000\u0138\u0135\u0001\u0000\u0000\u0000\u0138\u0136\u0001\u0000\u0000"+
 		"\u0000\u0138\u0137\u0001\u0000\u0000\u0000\u0139?\u0001\u0000\u0000\u0000"+
 		"\u013a\u0144\u0003D\"\u0000\u013b\u0144\u0005:\u0000\u0000\u013c\u0144"+
-		"\u0005;\u0000\u0000\u013d\u0144\u00032\u0019\u0000\u013e\u0144\u00058"+
+		"\u0005<\u0000\u0000\u013d\u0144\u00032\u0019\u0000\u013e\u0144\u00058"+
 		"\u0000\u0000\u013f\u0144\u0003\u0006\u0003\u0000\u0140\u0144\u0003:\u001d"+
 		"\u0000\u0141\u0144\u0003<\u001e\u0000\u0142\u0144\u0003>\u001f\u0000\u0143"+
 		"\u013a\u0001\u0000\u0000\u0000\u0143\u013b\u0001\u0000\u0000\u0000\u0143"+
@@ -2819,7 +2819,7 @@ public class dealParser extends Parser {
 		"\u0001\u0000\u0000\u0000\u016c\u016d\u0005\u0004\u0000\u0000\u016d\u016e"+
 		"\u0005-\u0000\u0000\u016e\u016f\u0005\u0006\u0000\u0000\u016fO\u0001\u0000"+
 		"\u0000\u0000\u0170\u017d\u0003D\"\u0000\u0171\u017d\u0005:\u0000\u0000"+
-		"\u0172\u017d\u0005;\u0000\u0000\u0173\u017d\u00032\u0019\u0000\u0174\u017d"+
+		"\u0172\u017d\u0005<\u0000\u0000\u0173\u017d\u00032\u0019\u0000\u0174\u017d"+
 		"\u00058\u0000\u0000\u0175\u017d\u0003\u0006\u0003\u0000\u0176\u017d\u0003"+
 		":\u001d\u0000\u0177\u017d\u0003<\u001e\u0000\u0178\u017d\u0003>\u001f"+
 		"\u0000\u0179\u017d\u0003J%\u0000\u017a\u017d\u0003L&\u0000\u017b\u017d"+

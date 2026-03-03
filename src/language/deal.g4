@@ -4,18 +4,18 @@ COMMENT:        '//' ~[\r\n]* -> skip;
 
 prog:           stmt* EOF ;
 stmt:           (
-                'define' (definition | define_function) 
-                | move 
+                'define' (definition | define_function)
+                | move
                 | 'on' (on_action | on_move | on_interact)
-                | for 
-                | if 
-                | cancel 
-                | assign 
-                | function_call 
-                | updateTurn 
-                | log 
-                | modify 
-                | show 
+                | for
+                | if
+                | cancel
+                | assign
+                | function_call
+                | updateTurn
+                | log
+                | modify
+                | show
                 | config
                 ) ';' ;
 block:          stmt* ;
@@ -99,8 +99,9 @@ ACE:            'ace';
 
 NUMBER:         ('-')? [0-9]+ ;
 ID:             [a-zA-Z_]+ ;
-CARD:           '#' ('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs] ;
-STRING          : '"' ~["]* '"' ;
+CARD:           '#' ((('10'|[2-9]|[JjQqKkAa]) [CcHhDdSs]) | JOKER) ;
+JOKER:          [jJ][oO][kK][eE][rR];
+STRING:         '"' ~["]* '"' ;
 
 SPACES:         [\t\r\n ]+ -> skip;
 NEWLINE:        [\r\n]+ -> skip;

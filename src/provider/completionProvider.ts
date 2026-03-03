@@ -53,6 +53,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
             ];
         } else if (context.triggerCharacter === '.') {
 
+            // Stop from triggering within players
+            console.log(tokens.get(tokenIndex).text);
+            if (tokens.get(tokenIndex).text === '<') {
+                return [];
+            }
+
             core.preferredRules = new Set<number>([
                 dealParser.RULE_variable,
                 dealParser.RULE_position,
@@ -75,7 +81,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     fromRules(ids : Map<string, string>, rules : Map<number, c3.ICandidateRule>) : vscode.CompletionItem[] {
 
         const items : vscode.CompletionItem[] = [];
-        const keys = [...rules.keys()]
+        const keys = [...rules.keys()];
 
         switch(true) {
             case keys.includes(dealParser.RULE_variable):

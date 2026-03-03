@@ -86,9 +86,10 @@ export class dealParser extends Parser {
 	public static readonly NUMBER = 56;
 	public static readonly ID = 57;
 	public static readonly CARD = 58;
-	public static readonly STRING = 59;
-	public static readonly SPACES = 60;
-	public static readonly NEWLINE = 61;
+	public static readonly JOKER = 59;
+	public static readonly STRING = 60;
+	public static readonly SPACES = 61;
+	public static readonly NEWLINE = 62;
 	public static readonly RULE_prog = 0;
 	public static readonly RULE_stmt = 1;
 	public static readonly RULE_block = 2;
@@ -159,7 +160,7 @@ export class dealParser extends Parser {
 		undefined, undefined, undefined, "COMMENT", "VARTYPE", "MOVE_DEST", "MOVE_SOURCE", 
 		"INTERACT_CARD", "PLUS", "MINUS", "TIMES", "WILDCARD", "EMPTY", "SPADES", 
 		"HEARTS", "CLUBS", "DIAMONDS", "JACK", "QUEEN", "KING", "ACE", "NUMBER", 
-		"ID", "CARD", "STRING", "SPACES", "NEWLINE",
+		"ID", "CARD", "JOKER", "STRING", "SPACES", "NEWLINE",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(dealParser._LITERAL_NAMES, dealParser._SYMBOLIC_NAMES, []);
 
@@ -2191,7 +2192,7 @@ export class dealParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03?\u0186\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03@\u0186\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -2309,7 +2310,7 @@ export class dealParser extends Parser {
 		"\x02\x02\x02\xFA\xFE\x07;\x02\x02\xFB\xFE\x07:\x02\x02\xFC\xFE\x05L\'" +
 		"\x02\xFD\xFA\x03\x02\x02\x02\xFD\xFB\x03\x02\x02\x02\xFD\xFC\x03\x02\x02" +
 		"\x02\xFE\u0103\x03\x02\x02\x02\xFF\u0104\x07;\x02\x02\u0100\u0104\x07" +
-		"=\x02\x02\u0101\u0104\x07:\x02\x02\u0102\u0104\x052\x1A\x02\u0103\xFF" +
+		">\x02\x02\u0101\u0104\x07:\x02\x02\u0102\u0104\x052\x1A\x02\u0103\xFF" +
 		"\x03\x02\x02\x02\u0103\u0100\x03\x02\x02\x02\u0103\u0101\x03\x02\x02\x02" +
 		"\u0103\u0102\x03\x02\x02\x02\u01041\x03\x02\x02\x02\u0105\u010E\x07\x0E" +
 		"\x02\x02\u0106\u010B\x050\x19\x02\u0107\u0108\x07\x10\x02\x02\u0108\u010A" +
@@ -2336,7 +2337,7 @@ export class dealParser extends Parser {
 		"\x07,\x02\x02\u013A\u0130\x03\x02\x02\x02\u013A\u0137\x03\x02\x02\x02" +
 		"\u013A\u0138\x03\x02\x02\x02\u013A\u0139\x03\x02\x02\x02\u013BA\x03\x02" +
 		"\x02\x02\u013C\u0146\x05F$\x02\u013D\u0146\x07<\x02\x02\u013E\u0146\x07" +
-		"=\x02\x02\u013F\u0146\x054\x1B\x02\u0140\u0146\x07:\x02\x02\u0141\u0146" +
+		">\x02\x02\u013F\u0146\x054\x1B\x02\u0140\u0146\x07:\x02\x02\u0141\u0146" +
 		"\x05\b\x05\x02\u0142\u0146\x05<\x1F\x02\u0143\u0146\x05> \x02\u0144\u0146" +
 		"\x05@!\x02\u0145\u013C\x03\x02\x02\x02\u0145\u013D\x03\x02\x02\x02\u0145" +
 		"\u013E\x03\x02\x02\x02\u0145\u013F\x03\x02\x02\x02\u0145\u0140\x03\x02" +
@@ -2360,7 +2361,7 @@ export class dealParser extends Parser {
 		"\x05L\'\x02\u016A\u016B\x07\x10\x02\x02\u016B\u016C\x05L\'\x02\u016C\u016D" +
 		"\x07\x1E\x02\x02\u016DO\x03\x02\x02\x02\u016E\u016F\x07\x06\x02\x02\u016F" +
 		"\u0170\x07/\x02\x02\u0170\u0171\x07\b\x02\x02\u0171Q\x03\x02\x02\x02\u0172" +
-		"\u017F\x05F$\x02\u0173\u017F\x07<\x02\x02\u0174\u017F\x07=\x02\x02\u0175" +
+		"\u017F\x05F$\x02\u0173\u017F\x07<\x02\x02\u0174\u017F\x07>\x02\x02\u0175" +
 		"\u017F\x054\x1B\x02\u0176\u017F\x07:\x02\x02\u0177\u017F\x05\b\x05\x02" +
 		"\u0178\u017F\x05<\x1F\x02\u0179\u017F\x05> \x02\u017A\u017F\x05@!\x02" +
 		"\u017B\u017F\x05L\'\x02\u017C\u017F\x05N(\x02\u017D\u017F\x05P)\x02\u017E" +

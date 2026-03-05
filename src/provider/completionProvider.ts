@@ -54,8 +54,8 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         } else if (context.triggerCharacter === '.') {
 
             // Stop from triggering within players
-            console.log(tokens.get(tokenIndex).text);
-            if (tokens.get(tokenIndex).text === '<') {
+            const previousChar : string = document.getText(new vscode.Range(position.translate(0, -2), position.translate(0,-1)));
+            if (previousChar === '<' || previousChar === ' ') {
                 return [];
             }
 

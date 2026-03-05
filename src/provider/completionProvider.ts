@@ -200,8 +200,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const insertText = 
 `config {
     title "My Game",
-    players 4,
-    jokers 0
+    num_players 4
 }`;
 
         return this.completion('$config', vscode.CompletionItemKind.Snippet, insertText, "Global config attributes for the game");

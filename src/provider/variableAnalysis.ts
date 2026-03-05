@@ -59,7 +59,7 @@ export class VariableAnalysis implements dealListener {
                 this.diagnostics.push(
                     new vscode.Diagnostic(
                         getRange(ctx.property()!),
-                        "No such property exists",
+                        "Object " + ctx.getChild(0).text + " does not have property: " + (ctx.property()?.ID()?.text ?? "undefined"),
                         vscode.DiagnosticSeverity.Warning
                     )
                 );

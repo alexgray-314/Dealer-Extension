@@ -100,7 +100,7 @@ export class VariableAnalysis implements dealListener {
             this.diagnostics.push(
                 new vscode.Diagnostic(
                     getRange(ctx.ID()),
-                    "Variable " + id + " has not been declared" + this.variables,
+                    "Variable " + id + " has not been declared",
                     vscode.DiagnosticSeverity.Warning
                 )
             );

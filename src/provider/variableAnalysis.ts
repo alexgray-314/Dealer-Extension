@@ -3,7 +3,7 @@ import { ArgdefContext, AssignContext, Define_functionContext, DefinitionContext
 import * as vscode from "vscode";
 import { getRange } from "../util/range";
 
-type varDef = ["CARD"|"INT", string];
+type varDef = ["CARD"|"INT"|"STRING", string];
 
 export class VariableAnalysis implements dealListener {
 
@@ -72,7 +72,7 @@ export class VariableAnalysis implements dealListener {
         
         const type = ctx._type.text?.toUpperCase();
         const id = ctx.ID().text;
-        if (type === "INT" || type === "CARD") {
+        if (type === "INT" || type === "CARD" || type === "STRING") {
             this.variables.push([type, id]);
         }
 
@@ -83,7 +83,7 @@ export class VariableAnalysis implements dealListener {
         const types = ctx.VARTYPE();
         for (let i = 0; i < ids.length; i++) {
             const type = types[i].text.toUpperCase();
-            if (type === 'INT' || type === 'CARD') {
+            if (type === 'INT' || type === 'CARD' || type === 'STRING') {
                 this.variables.push([type, ids[i].text]);
             }
         }

@@ -3,6 +3,11 @@
   "displayName": "Dealer",
   "description": "Syntax highlighting for the Deal language",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexgray-314/Dealer-Extension"
+  },
+  "icon": "./icons/logo.png",
   "engines": {
     "vscode": "^1.108.1"
   },

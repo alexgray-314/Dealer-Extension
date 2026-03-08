@@ -43,7 +43,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 dealParser.RULE_variable,
                 dealParser.RULE_position,
                 dealParser.RULE_positionset,
-                dealParser.RULE_on_action
+                dealParser.RULE_action_ref
             ]);
             const candidates = core.collectCandidates(tokenIndex);
 
@@ -90,9 +90,8 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
             case keys.includes(dealParser.RULE_positionset):
                 items.push(...this.ids(ids, "AREA"));
                 break;
-            case keys.includes(dealParser.RULE_on_action):
+            case keys.includes(dealParser.RULE_action_ref):
                 items.push(...this.ids(ids, "ACTION"));
-                break;
         }
 
         return items;

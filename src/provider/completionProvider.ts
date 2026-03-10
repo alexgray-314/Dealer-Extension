@@ -7,6 +7,7 @@ import { dealParser } from "../language/dealParser";
 import * as c3 from "antlr4-c3";
 import { findCursorTokenIndex } from "../util/cusor";
 import * as keywords from "../docs/keywords.json";
+import * as functions from "../docs/functions.json";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -40,6 +41,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         if (context.triggerCharacter === undefined) {
 
             core.preferredRules = new Set<number>([
+                dealParser.RULE_function_call,
                 dealParser.RULE_variable,
                 dealParser.RULE_position,
                 dealParser.RULE_positionset,
@@ -82,8 +84,11 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         const items : vscode.CompletionItem[] = [];
         const keys = [...rules.keys()];
+        console.log("keys", keys);
 
         switch(true) {
+            case keys.includes(dealParser.RULE_function_call):
+                items.push(...this.functions(ids));
             case keys.includes(dealParser.RULE_variable):
                 items.push(...this.ids(ids, "CARD", "INT", "STRING"));
             case keys.includes(dealParser.RULE_position):
@@ -122,16 +127,31 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
             }
 
             if (keywords.commands.includes(word)) {
-                completions.push(this.completion(word, vscode.CompletionItemKind.Function, word, "Command: " + word));
+                completions.push(this.completion(word, vscode.CompletionItemKind.Interface, word, "Command: " + word));
             }
 
             if (keywords.objects.includes(word)) {
-                completions.push(this.completion(word, vscode.CompletionItemKind.Interface, word, "Type: " + word));
+                completions.push(this.completion(word, vscode.CompletionItemKind.Struct, word, "Type: " + word));
             }
 
         }
 
         return completions;
+
+    }
+
+    private functions(ids : Map<string, string>) : vscode.CompletionItem[] {
+
+
+        return [
+            this.completion("deal()", vscode.CompletionItemKind.Function, 'deal(${1});', functions.deal.docs),
+            this.completion("shuffle()", vscode.CompletionItemKind.Function, "shuffle();", functions.shuffle.docs),
+            ...[...ids.entries()].filter(([id, type]) => {
+                return type === "FUNCTION";
+            }).map(([id, type]) => {
+                return this.completion(id + "()", vscode.CompletionItemKind.Function, id + "(${1});", "User-defined function");
+            })
+        ];
 
     }
 

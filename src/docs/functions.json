@@ -1,0 +1,8 @@
+{
+    "deal": {
+        "docs": "### Examples \n- `deal();` use all default parameters \n- `deal(\"even\");` use default for hand_max \n- `deal(\"all\", 7);`"
+    },
+    "shuffle" : {
+        "docs": "Shuffles the cards inside stack `deck[0]`"
+    }
+}

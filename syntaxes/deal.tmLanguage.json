@@ -54,7 +54,7 @@
 				},
 				{
 					"name": "storage.type.deal",
-					"match": "\\b(empty|jack|queen|king|ace|spades|hearts|diamonds|clubs)\\b"
+					"match": "\\b(empty|jack|queen|king|ace|spades|hearts|diamonds|clubs|source|dest)\\b"
 				}
 			]
 		},

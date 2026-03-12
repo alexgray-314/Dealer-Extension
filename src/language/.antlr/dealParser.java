@@ -55,9 +55,9 @@ public class dealParser extends Parser {
 			"'function'", "'('", "')'", "'{'", "'}'", "','", "'move'", "'interact'", 
 			"'for'", "'in'", "'if'", "'else'", "'cancel'", "'='", "'++'", "'log'", 
 			"'show'", "'$'", "'['", "']'", "'=='", "'!='", "'<='", "'>='", "'=?'", 
-			"'!?'", "'||'", "'&&'", "':'", null, null, "'/'", "'\\'", "'@'", "'+'", 
-			"'-'", "'*'", "'?'", "'empty'", "'spades'", "'hearts'", "'clubs'", "'diamonds'", 
-			"'jack'", "'queen'", "'king'", "'ace'"
+			"'!?'", "'||'", "'&&'", "':'", null, null, "'dest'", "'source'", "'@'", 
+			"'+'", "'-'", "'*'", "'?'", "'empty'", "'spades'", "'hearts'", "'clubs'", 
+			"'diamonds'", "'jack'", "'queen'", "'king'", "'ace'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();

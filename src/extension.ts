@@ -11,6 +11,8 @@ import { dealListener } from './language/dealListener';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 import { TokenProvider } from './provider/tokenProvider';
 import { CompletionProvider } from './provider/completionProvider';
+import { TypeSafety } from './provider/typeSafety';
+import { TypeChecker } from './helper/typecheck';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -101,8 +103,10 @@ function runParser(
 	});
 
 	const tree = parser.prog(); // entry rule
-	const listener : dealListener = new VariableAnalysis(outputChannel, diagnostics);
-	ParseTreeWalker.DEFAULT.walk(listener, tree);
+	const varAnalysis : dealListener = new VariableAnalysis(outputChannel, diagnostics);
+	const typeSafety : dealListener = new TypeSafety(diagnostics, new TypeChecker(tree));
+	ParseTreeWalker.DEFAULT.walk(varAnalysis, tree);
+	ParseTreeWalker.DEFAULT.walk(typeSafety, tree);
 
 	collection.set(document.uri, diagnostics);
 	

@@ -13,6 +13,7 @@ import { TokenProvider } from './provider/tokenProvider';
 import { CompletionProvider } from './provider/completionProvider';
 import { TypeSafety } from './provider/typeSafety';
 import { TypeChecker } from './helper/typecheck';
+import { InfiniteLoop } from './provider/infiniteloop';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -105,8 +106,10 @@ function runParser(
 	const tree = parser.prog(); // entry rule
 	const varAnalysis : dealListener = new VariableAnalysis(outputChannel, diagnostics);
 	const typeSafety : dealListener = new TypeSafety(diagnostics, new TypeChecker(tree));
+	const infiniteLoops : dealListener = new InfiniteLoop(diagnostics);
 	ParseTreeWalker.DEFAULT.walk(varAnalysis, tree);
 	ParseTreeWalker.DEFAULT.walk(typeSafety, tree);
+	ParseTreeWalker.DEFAULT.walk(infiniteLoops, tree);
 
 	collection.set(document.uri, diagnostics);
 	

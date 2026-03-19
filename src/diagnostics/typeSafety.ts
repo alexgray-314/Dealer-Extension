@@ -1,6 +1,6 @@
 import { TypeChecker } from "../helper/typecheck";
 import { dealListener } from "../language/dealListener";
-import { BexprContext, IfContext } from "../language/dealParser";
+import { AssignContext, BexprContext, IfContext } from "../language/dealParser";
 import * as vscode from "vscode";
 import { getRange } from "../util/range";
 
@@ -23,6 +23,20 @@ export class TypeSafety implements dealListener {
                     getRange(ctx.getChild(0)).union(getRange(ctx.getChild(2))),
                     "Cannot compare mismatched types.\n" + ctx.getChild(0).text + " -> " + a + "\n" + ctx.getChild(2).text + " -> " + b,
                     vscode.DiagnosticSeverity.Warning
+                )
+            );
+        }
+    }
+
+    enterAssign (ctx: AssignContext) {
+        const varType = this.check.visit(ctx.variable());
+        const termType = this.check.visit(ctx.term());
+        if (varType !== termType) {
+            this.diagnostics.push(
+                new vscode.Diagnostic(
+                    getRange(ctx.getChild(1)).union(getRange(ctx.getChild(ctx.childCount - 1))),
+                    "Cannot assign " + termType + " to variable of type " + varType + ".",
+                    vscode.DiagnosticSeverity.Error
                 )
             );
         }

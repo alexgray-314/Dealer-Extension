@@ -1,13 +1,18 @@
 import { ParserRuleContext } from "antlr4ts";
 import { ErrorNode, ParseTreeListener, TerminalNode } from "antlr4ts/tree";
 import { dealListener } from "../language/dealListener";
-import { BexprContext, Define_functionContext, DefinitionContext, ForContext, SetContext, TermContext, VariableContext } from "../language/dealParser";
+import { AssignContext, BexprContext, Define_functionContext, DefinitionContext, ForContext, SetContext, TermContext, VariableContext } from "../language/dealParser";
 
+// Runs multiple listeners at the same time to allow for id checking within scope
 export class SynchronisedListener implements dealListener {
   private listeners: dealListener[];
 
   constructor(...listeners: dealListener[]) {
     this.listeners = listeners;
+  }
+
+  enterAssign (ctx: AssignContext) {
+    this.listeners.forEach(l => l.enterAssign?.(ctx));
   }
 
   enterDefinition (ctx: DefinitionContext) {

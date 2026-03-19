@@ -8,6 +8,9 @@ import * as c3 from "antlr4-c3";
 import { findCursorTokenIndex } from "../util/cusor";
 import * as keywords from "../docs/keywords.json";
 import * as functions from "../docs/functions.json";
+import { IDRecord } from "../helper/idRecord";
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
+import { dealListener } from "../language/dealListener";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
 
@@ -36,7 +39,10 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         const tokenIndex = findCursorTokenIndex(tree, position);
         const core = new c3.CodeCompletionCore(parser);
 
-        const checker : TypeChecker = new TypeChecker(tree);
+        const ids = new Map<string,string>();
+        const record : dealListener = new IDRecord(ids);
+        ParseTreeWalker.DEFAULT.walk(record, tree);
+        // TODO only walk up to the point you are currently in the tree
 
         if (context.triggerCharacter === undefined) {
 
@@ -51,7 +57,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
             return [
                 ...this.fromTokens(parser, candidates.tokens),
-                ...this.fromRules(checker.ids, candidates.rules),
+                ...this.fromRules(ids, candidates.rules),
             ];
         } else if (context.triggerCharacter === '.') {
 
@@ -68,12 +74,11 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 dealParser.RULE_stack,
             ]);
             const candidates = core.collectCandidates(tokenIndex-1);
-            console.log("PROPERTY TOKEN:",tokens.get(tokenIndex-1).text);
             return this.properties(candidates);
             
         } else if (context.triggerCharacter === '$') {
             return [
-                this.style(checker),
+                this.style(ids),
                 this.config()
             ];
         }
@@ -84,7 +89,6 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         const items : vscode.CompletionItem[] = [];
         const keys = [...rules.keys()];
-        console.log("keys", keys);
 
         switch(true) {
             case keys.includes(dealParser.RULE_function_call):
@@ -109,7 +113,6 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
         for (let candidate of tokens) {
             const word : string = parser.vocabulary.getDisplayName(candidate[0]).replaceAll("'", "");
-            console.log(word);
 
             // Add all variable types
             if (candidate[0] === dealParser.VARTYPE) {
@@ -229,12 +232,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     /**
      * @returns Code snippet for the $style config
      */
-    private style(checker : TypeChecker) : vscode.CompletionItem {
+    private style(ids : Map<string, string>) : vscode.CompletionItem {
 
         const areas : string[] = [];
         const actions : string[] = [];
 
-        for (let [id, type] of checker.ids.entries()) {
+        for (let [id, type] of ids.entries()) {
             if (type === "AREA") {
                 areas.push(id);
             } else if (type === "ACTION") {

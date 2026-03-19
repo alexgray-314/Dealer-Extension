@@ -9,9 +9,9 @@ export class TypeSafety implements dealListener {
     diagnostics: vscode.Diagnostic[];
     check : TypeChecker;
 
-    constructor(diagnostics: vscode.Diagnostic[], check : TypeChecker) {
+    constructor(diagnostics: vscode.Diagnostic[], ids : Map<string, string>) {
         this.diagnostics = diagnostics;
-        this.check = check;
+        this.check = new TypeChecker(ids);
     }
 
     enterBexpr (ctx: BexprContext) {

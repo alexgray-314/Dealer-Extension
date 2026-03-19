@@ -5,15 +5,17 @@ import * as vscode from 'vscode';
 import { dealLexer } from './language/dealLexer';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { dealParser } from './language/dealParser';
-import { VariableAnalysis } from './provider/variableAnalysis';
+import { VariableAnalysis } from './diagnostics/variableAnalysis';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { dealListener } from './language/dealListener';
 import { DealInlayHintsProvider } from './provider/inlayHintsProvider';
 import { TokenProvider } from './provider/tokenProvider';
 import { CompletionProvider } from './provider/completionProvider';
-import { TypeSafety } from './provider/typeSafety';
+import { TypeSafety } from './diagnostics/typeSafety';
 import { TypeChecker } from './helper/typecheck';
-import { InfiniteLoop } from './provider/infiniteloop';
+import { InfiniteLoop } from './diagnostics/infiniteloop';
+import { IDRecord } from './helper/idRecord';
+import { SynchronisedListener } from './util/synchronisedListener';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -104,12 +106,18 @@ function runParser(
 	});
 
 	const tree = parser.prog(); // entry rule
-	const varAnalysis : dealListener = new VariableAnalysis(outputChannel, diagnostics);
-	const typeSafety : dealListener = new TypeSafety(diagnostics, new TypeChecker(tree));
+
+	// Keep track of types for declared ids
+	// Including nested function definitions and for loops
+	const ids : Map<string,string> = new Map<string,string>();
+	const idTracker : dealListener = new IDRecord(ids);
+	
+	const varAnalysis : dealListener = new VariableAnalysis(diagnostics, ids);
+	const typeSafety : dealListener = new TypeSafety(diagnostics, ids);
 	const infiniteLoops : dealListener = new InfiniteLoop(diagnostics);
-	ParseTreeWalker.DEFAULT.walk(varAnalysis, tree);
-	ParseTreeWalker.DEFAULT.walk(typeSafety, tree);
-	ParseTreeWalker.DEFAULT.walk(infiniteLoops, tree);
+
+	const synListener : dealListener = new SynchronisedListener(idTracker, varAnalysis, typeSafety, infiniteLoops);
+	ParseTreeWalker.DEFAULT.walk(synListener, tree);
 
 	collection.set(document.uri, diagnostics);
 	

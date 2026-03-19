@@ -3,26 +3,15 @@ import { ArgdefContext, AssignContext, Define_functionContext, DefinitionContext
 import * as vscode from "vscode";
 import { getRange } from "../util/range";
 
-type varDef = ["CARD"|"INT"|"STRING", string];
-
 export class VariableAnalysis implements dealListener {
 
-    output: vscode.OutputChannel;
-    variables: varDef[];
+    ids: Map<string,string>;
     diagnostics: vscode.Diagnostic[];
 
-    constructor(outputChannel: vscode.OutputChannel, diagnostics : vscode.Diagnostic[]) {
-        this.output = outputChannel;
-        this.variables = [];
+    constructor(diagnostics : vscode.Diagnostic[], ids : Map<string,string>) {
+        this.ids = ids;
         this.diagnostics = diagnostics;
     }
-
-    enterFor(ctx: ForContext){
-        const id = ctx.ID().text;
-        const type = (ctx.set().positionset() !== undefined) ? "CARD" : "INT";
-        this.variables.push([type,id]);
-    }
-
 
     enterTerm (ctx: TermContext) {
 
@@ -42,9 +31,7 @@ export class VariableAnalysis implements dealListener {
             } else if (
                 ctx.CARD() !== undefined ||
                 ctx.position() !== undefined ||
-                (ctx.variable() !== undefined && this.variables.some(([type, name]) => {
-                    return name === ctx.variable()?.text && type === "CARD";
-                }))
+                (ctx.variable() !== undefined && this.ids.get(ctx.variable()?.text ??"") === "CARD")
             ) {
                 if (!["rank", "suit"].includes(ctx.property()!.ID().text)) {
                     this.diagnostics.push(
@@ -68,42 +55,25 @@ export class VariableAnalysis implements dealListener {
 
     }
 
-    enterDefinition(ctx: DefinitionContext) {
-        
-        const type = ctx._type.text?.toUpperCase();
-        const id = ctx.ID().text;
-        if (type === "INT" || type === "CARD" || type === "STRING") {
-            this.variables.push([type, id]);
-        }
+    
 
-    }
-
-    enterArgdef (ctx: ArgdefContext) {
-        const ids = ctx.ID();
-        const types = ctx.VARTYPE();
-        for (let i = 0; i < ids.length; i++) {
-            const type = types[i].text.toUpperCase();
-            if (type === 'INT' || type === 'CARD' || type === 'STRING') {
-                this.variables.push([type, ids[i].text]);
-            }
-        }
-    }
-
-    exitVariable(ctx: VariableContext) {
+    enterVariable(ctx: VariableContext) {
 
         const id = ctx.ID().text;
         // Check for undeclared variables
-        if (!this.variables.some(([_, name]) => {
-            return id === name;
-        })) {
-            
-            this.diagnostics.push(
-                new vscode.Diagnostic(
-                    getRange(ctx.ID()),
-                    "Variable " + id + " has not been declared",
-                    vscode.DiagnosticSeverity.Warning
-                )
-            );
+        switch(this.ids.get(id)) {
+            case "CARD":
+            case "INT":
+            case "STRING":
+                break;
+            default:
+                this.diagnostics.push(
+                    new vscode.Diagnostic(
+                        getRange(ctx.ID()),
+                        "Variable " + id + " is undefined or out of scope",
+                        vscode.DiagnosticSeverity.Error
+                    )
+                );
         }
 
     }

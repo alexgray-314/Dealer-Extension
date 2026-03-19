@@ -13,7 +13,7 @@ export class InfiniteLoop implements dealListener {
 
     enterSet (ctx: SetContext) {
         if (ctx.intset() !== undefined) {
-            if (ctx.intset()!.term().length < 2) {
+            if (ctx.intset()?.childCount === 2) {
                 this.diagnostics.push(
                     new vscode.Diagnostic(
                         getRange(ctx.intset()!),

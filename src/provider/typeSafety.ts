@@ -22,7 +22,7 @@ export class TypeSafety implements dealListener {
                 new vscode.Diagnostic(
                     getRange(ctx.getChild(0)).union(getRange(ctx.getChild(2))),
                     "Cannot compare mismatched types.\n" + ctx.getChild(0).text + " -> " + a + "\n" + ctx.getChild(2).text + " -> " + b,
-                    vscode.DiagnosticSeverity.Error
+                    vscode.DiagnosticSeverity.Warning
                 )
             );
         }

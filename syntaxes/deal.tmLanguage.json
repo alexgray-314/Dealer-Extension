@@ -38,7 +38,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.function.deal",
-					"match": "\\b(move|log|show|interact)\\b"
+					"match": "\\b(move|log|show|interact|win)\\b"
 				},
 				{
 					"name": "entity.name.function.deal",

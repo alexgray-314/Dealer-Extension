@@ -277,7 +277,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     }`;
         }
 
-        insertText = insertText + "\n};";
+        insertText = insertText + "\n}";
 
         return this.completion("$style", vscode.CompletionItemKind.Snippet, insertText, "Styling for the card game");
 

@@ -17,7 +17,7 @@ stmt:           'define' ((definition ';') | define_function)
                 | modify ';'
                 | show ';'
                 | config 
-                | win;
+                | win ';';
 
 block:          stmt* ;
 

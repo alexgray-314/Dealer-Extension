@@ -1,8 +1,9 @@
 {
   "name": "dealer",
+  "publisher": "alexgray-314",
   "displayName": "Dealer",
   "description": "Syntax highlighting for the Deal language",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/alexgray-314/Dealer-Extension"

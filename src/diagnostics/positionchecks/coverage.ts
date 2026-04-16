@@ -6,7 +6,7 @@ export class Coverage implements dealListener {
     ranges : Range[];
     all : boolean;
     constructor() {
-        this.ranges = [];
+        this.ranges = [new Range("deck",0,0)];
         this.all = false;
     }
 
@@ -27,11 +27,10 @@ export class Coverage implements dealListener {
     enterFunction_call (ctx: Function_callContext) {
         if (ctx.ID().text === "deal") {
             this.add("player", 0, 0);
-            console.log("deal");
         }
     }
 
-    private getArea(ctx : ArearefContext | undefined) : string {
+    getArea(ctx : ArearefContext | undefined) : string {
         if (ctx === undefined) {
             return "none";
         }
@@ -45,8 +44,8 @@ export class Coverage implements dealListener {
     private addPositionSet(ctx : PositionsetContext) {
         const area : string = this.getArea(ctx.arearef());
         const set : IntsetContext = ctx.intset()[0];
-        const start : number | undefined = Number(set.term()[0].NUMBER()?.text);
-        let end : number = Number(set.term()[1].NUMBER()?.text);
+        const start : number | undefined = Number(set.term()[0]?.NUMBER()?.text);
+        let end : number = Number(set.term()[1]?.NUMBER()?.text);
 
         if (set.childCount === 2) {
             end = Infinity;
@@ -61,7 +60,7 @@ export class Coverage implements dealListener {
 
     private addPosition(ctx : PositionContext) {
         const area : string = this.getArea(ctx.arearef());
-        const stack : number = Number(ctx.term()[0].NUMBER()?.text);
+        const stack : number = Number(ctx.term()[0]?.NUMBER()?.text);
         if (!Number.isNaN(stack)) {
             this.add(area, stack, stack);
         }
@@ -77,12 +76,12 @@ export class Coverage implements dealListener {
         }
         this.ranges.push(new Range(area, start_stack, end_stack));
     }
-    check(area : string, stack : number, pos : number) : boolean {
+    check(area : string, stack : number) : boolean {
         if (this.all) {
             return true;
         }
         for (let r of this.ranges) {
-            if (r.covers(area, stack, pos)) {
+            if (r.covers(area, stack)) {
                 return true;
             }
         }

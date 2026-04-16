@@ -10,7 +10,7 @@ export class Range {
         this.end = end_stack;
     }
 
-    covers(area : string, stack : number, pos : number) : boolean {
+    covers(area : string, stack : number) : boolean {
         if (area !== this.area) {
             return false;
         }

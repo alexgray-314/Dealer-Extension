@@ -16,6 +16,8 @@ import { TypeChecker } from './helper/typecheck';
 import { InfiniteLoop } from './diagnostics/infiniteloop';
 import { IDRecord } from './helper/idRecord';
 import { SynchronisedListener } from './util/synchronisedListener';
+import { Coverage } from './diagnostics/positionchecks/coverage';
+import { IndexDiagnostics } from './diagnostics/positionchecks/indexDiagnostics';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -118,6 +120,12 @@ function runParser(
 
 	const synListener : dealListener = new SynchronisedListener(idTracker, varAnalysis, typeSafety, infiniteLoops);
 	ParseTreeWalker.DEFAULT.walk(synListener, tree);
+
+	// Index checking
+	const coverage : Coverage = new Coverage();
+	ParseTreeWalker.DEFAULT.walk(coverage as dealListener, tree);
+	const index : dealListener = new IndexDiagnostics(diagnostics, coverage);
+	ParseTreeWalker.DEFAULT.walk(index, tree);
 
 	collection.set(document.uri, diagnostics);
 	

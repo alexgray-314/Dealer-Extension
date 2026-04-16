@@ -1,6 +1,6 @@
 import { dealListener } from "../../language/dealListener";
 import * as vscode from "vscode";
-import { PositionContext } from "../../language/dealParser";
+import { IntsetContext, PositionContext, PositionsetContext } from "../../language/dealParser";
 import { Coverage } from "./coverage";
 import { getRange } from "../../util/range";
 
@@ -24,6 +24,29 @@ export class IndexDiagnostics implements dealListener {
                 this.diagnostics.push(new vscode.Diagnostic(
                     getRange(ctx),
                     "Reference to uncovered stack. It is impossible for any card to be in this stack. ",
+                    vscode.DiagnosticSeverity.Information
+                ));
+            }
+        }
+    }
+
+    enterPositionset (ctx: PositionsetContext) {
+        const area : string = this.coverage.getArea(ctx.arearef());
+        const set : IntsetContext = ctx.intset()[0];
+        const start : number | undefined = Number(set.term()[0]?.NUMBER()?.text);
+        let end : number = Number(set.term()[1]?.NUMBER()?.text);
+
+        if (set.childCount === 2) {
+            end = Infinity;
+        } else if (set.childCount === 1) {
+            end = start;
+        }
+
+        if (!Number.isNaN(start) && !Number.isNaN(end)) {
+            if (!(this.coverage.check(area, start) || this.coverage.check(area, end))) {
+                this.diagnostics.push(new vscode.Diagnostic(
+                    getRange(ctx),
+                    "Reference to uncovered stack. It is impossible for any card to be within this range of stack. ",
                     vscode.DiagnosticSeverity.Information
                 ));
             }
